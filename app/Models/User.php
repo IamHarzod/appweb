@@ -23,9 +23,6 @@ class User extends Authenticatable
         'phoneNumber',
         'password',
         'IsActive',
-        'created_at',
-        'updated_at'
-
     ];
 
     /**
