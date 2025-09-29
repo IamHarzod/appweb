@@ -24,8 +24,5 @@ class Product extends Model
         'line',
         'style',
         'status',
-
-
-
     ];
 }
