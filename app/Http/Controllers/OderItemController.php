@@ -13,8 +13,7 @@ class OderItemController extends Controller
      */
     public function index()
     {
-        $Table = OderItem::all();
-         return response()->json($items);
+       
     }
 
     /**
