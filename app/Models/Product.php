@@ -14,15 +14,21 @@ class Product extends Model
     //thuộc tính có thể gán hàng loạt
     protected $fillable = [
         'name',
+        'imageURL',
+        'discountPercent',
         'description',
         'price',
         'stockQuantity',
-        'category_id',
-        'discountPercent',
-        'imageURL',
-        'IsActive',
-        'line',
-        'style',
         'status',
-    ];
-}
+        'IsActive',
+        'category_id',
+        'style',
+    ];    
+       
+           // Quan hệ với Category (nếu có bảng categories)
+           public function category()
+           {
+               return $this->belongsTo(\app\Models\Category::class, 'category_id');
+           }
+
+}   
