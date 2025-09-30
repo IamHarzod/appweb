@@ -25,6 +25,7 @@ Route::post('/submit-login-admin', [AdminController::class, 'submit_login']);
 // Brand
 Route::get('/show-brand', [BrandController::class, 'show_brand']);
 Route::post('/create-brand', [BrandController::class, 'create_brand']);
+Route::delete('/brand/{brand}', [BrandController::class, 'destroy'])->name('brand.destroy');
 
 //Product
 Route::get('/show-product', [App\Http\Controllers\ProductController::class, 'show_product']);
