@@ -52,10 +52,10 @@ class BrandController extends Controller
         return redirect("/show-brand");
     }
 
-    public function destroy(Brand $brand)
+    public function destroy($id)
     {
-        DB::beginTransaction();
         try {
+            $brand = Brand::where("id", $id)->first();
             // Xoá file logo (nếu có)
             if ($brand->Logo) {
                 $path = public_path('uploads/brands/' . $brand->Logo);
@@ -64,16 +64,11 @@ class BrandController extends Controller
                 }
             }
 
-            // Nếu có ràng buộc FK (vd: products.brand_id) cân nhắc chặn/xử lý trước
-            // if ($brand->products()->exists()) { return back()->with('error','Thương hiệu đang được dùng.'); }
-
             $brand->delete();
 
-            DB::commit();
-            return back()->with('success', 'Đã xoá thương hiệu thành công.');
+            return true;
         } catch (\Throwable $e) {
-            DB::rollBack();
-            return back()->with('error', 'Xoá thất bại: ' . $e->getMessage());
+            return false;
         }
     }
 }

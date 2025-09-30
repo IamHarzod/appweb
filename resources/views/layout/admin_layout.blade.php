@@ -13,7 +13,8 @@
     <link href="{{ asset('public/admin/vendor/jqvmap/css/jqvmap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/admin/css/style.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/datatables/css/jquery.dataTables.min.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/admin/vendor/toastr/css/toastr.min.css') }}">
 
 
 </head>
@@ -159,7 +160,7 @@
                                 class="icon icon-globe-2"></i><span class="nav-text">Quản lý thương hiệu</span></a>
                     </li>
                     <li>
-                        <a href="{{url('/show-product')}}"aria-expanded="false">
+                        <a href="{{ url('/show-product') }}"aria-expanded="false">
                             <i class="icon icon-globe-2"></i><span class="nav-text">Quản lý sản phẩm</span>
                         </a>
                     </li>
@@ -178,7 +179,7 @@
         </div>
     </div>
 
-    
+
     <!-- Required vendors -->
     <script src="{{ asset('public/admin/vendor/global/global.min.js') }}"></script>
     <script src="{{ asset('public/admin/js/quixnav-init.js') }}"></script>
@@ -210,7 +211,9 @@
 
     <script src="{{ asset('public/admin/js/dashboard/dashboard-1.js') }}"></script>
     <script src="{{ asset('public/admin/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
-    
+    <script src="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('public/admin/vendor/toastr/js/toastr.min.js') }}"></script>
+    <script src="{{ asset('public/admin/js/main.js') }}"></script>
     <script>
         $(function() {
             $('#myTable').DataTable({

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BrandController;
+use App\Models\Product;
+use App\Http\Controllers\ProductController;
 
 // Client
 Route::get('/', [HomeController::class, 'show_home'])->name('home');
@@ -25,8 +27,9 @@ Route::post('/submit-login-admin', [AdminController::class, 'submit_login']);
 // Brand
 Route::get('/show-brand', [BrandController::class, 'show_brand']);
 Route::post('/create-brand', [BrandController::class, 'create_brand']);
-Route::delete('/brand/{brand}', [BrandController::class, 'destroy'])->name('brand.destroy');
+Route::get('/delete-brand/{id}', [BrandController::class, 'destroy'])->name('brand.destroy');
 
 //Product
 Route::get('/show-product', [App\Http\Controllers\ProductController::class, 'show_product']);
 Route::post('/create-product', [App\Http\Controllers\ProductController::class, 'create_product']);
+Route::get('/delete-product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
