@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class BrandController extends Controller
 {
@@ -48,5 +50,30 @@ class BrandController extends Controller
             'TrangThai' => $data['TrangThai'],
         ]);
         return redirect("/show-brand");
+    }
+
+    public function destroy(Brand $brand)
+    {
+        DB::beginTransaction();
+        try {
+            // Xoá file logo (nếu có)
+            if ($brand->Logo) {
+                $path = public_path('uploads/brands/' . $brand->Logo);
+                if (File::exists($path)) {
+                    File::delete($path);
+                }
+            }
+
+            // Nếu có ràng buộc FK (vd: products.brand_id) cân nhắc chặn/xử lý trước
+            // if ($brand->products()->exists()) { return back()->with('error','Thương hiệu đang được dùng.'); }
+
+            $brand->delete();
+
+            DB::commit();
+            return back()->with('success', 'Đã xoá thương hiệu thành công.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->with('error', 'Xoá thất bại: ' . $e->getMessage());
+        }
     }
 }
