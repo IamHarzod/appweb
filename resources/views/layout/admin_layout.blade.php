@@ -171,6 +171,9 @@
             @yield('view-content')
         </div>
     </div>
+    <div class="modal fade" id="ModalEdit" tabindex="-1" data-backdrop="static" aria-labelledby="ModalEditLabel"
+        aria-hidden="true" role="dialog">
+    </div>
 
     <div class="footer">
         <div class="copyright">
@@ -178,6 +181,7 @@
             <p>Distributed by <a href="https://themewagon.com/" target="_blank">Themewagon</a></p>
         </div>
     </div>
+
 
 
     <!-- Required vendors -->
@@ -214,41 +218,14 @@
     <script src="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('public/admin/vendor/toastr/js/toastr.min.js') }}"></script>
     <script src="{{ asset('public/admin/js/main.js') }}"></script>
-    <script>
-        $(function() {
-            $('#myTable').DataTable({
-                // pageLength: 10,
-                // lengthMenu: [5, 10, 25, 50],
-                // order: [
-                //     [0, 'asc']
-                // ],
-                // language: {
-                //     url: '//cdn.datatables.net/plug-ins/1.10.18/i18n/Vietnamese.json'
-                // }
-            });
-        });
-
-
-        function OpenModal(id) {
-            const $m = $('#' + id);
-            // đảm bảo modal nằm trực tiếp trong <body> để backdrop xử lý đúng
-            if (!$m.parent().is('body')) $m.appendTo('body');
-            $m.modal('show');
-        }
-
+    {{-- <script>
         function CloseModal(id) {
-            const $m = $('#' + id);
+            debugger;
+            const $m = $("#" + id);
             // DÙNG plugin của Bootstrap, KHÔNG dùng .hide()
-            $m.modal('hide');
+            $m.modal("hide");
         }
-
-        // Dọn backdrop “kẹt” (đặt một lần khi trang load)
-        $(document).on('hidden.bs.modal', '.modal', function() {
-            // nếu vì lý do nào đó backdrop không bị gỡ, ta ép gỡ
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open').css('padding-right', '');
-        });
-    </script>
+    </script> --}}
 </body>
 
 </html>
