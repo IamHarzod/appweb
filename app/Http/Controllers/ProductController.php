@@ -84,4 +84,62 @@ class ProductController extends Controller
             return false;
         }
     }
+
+    public function show_edit($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('admin.product.edit_product', compact('product'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'stockQuantity' => 'required|integer',
+            'discountPercent' => 'nullable|numeric|min:0|max:100',
+            'description' => 'nullable|string',
+            'status' => 'required|in:0,1',
+            'IsActive' => 'nullable|in:0,1',
+            'style' => 'nullable|string',
+            'imageURL' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+        ]);
+
+        if ($request->hasFile('imageURL') && $request->file('imageURL')->isValid()) {
+            $file = $request->file('imageURL');
+            $destDir = public_path('uploads/products');
+            if (!is_dir($destDir)) {
+                mkdir($destDir, 0755, true);
+            }
+
+            if ($product->imageURL) {
+                $oldPath = $destDir . DIRECTORY_SEPARATOR . $product->imageURL;
+                if (File::exists($oldPath)) {
+                    File::delete($oldPath);
+                }
+            }
+
+            $origNameNoExt = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $ext = strtolower($file->getClientOriginalExtension());
+            $safeBase = Str::slug($origNameNoExt);
+            $filename = time() . '_' . $safeBase . '.' . $ext;
+            $file->move($destDir, $filename);
+            $product->imageURL = $filename;
+        }
+
+        $product->name = $validated['name'];
+        $product->description = $validated['description'] ?? null;
+        $product->price = $validated['price'];
+        $product->stockQuantity = $validated['stockQuantity'];
+        $product->discountPercent = isset($validated['discountPercent']) ? (float) $validated['discountPercent'] : 0;
+        $product->status = $validated['status'];
+        $product->IsActive = $validated['IsActive'] ?? $product->IsActive;
+        $product->style = $validated['style'] ?? null;
+
+        $product->save();
+
+        return redirect('/show-product')->with('success', 'Cập nhật sản phẩm thành công!');
+    }
 }

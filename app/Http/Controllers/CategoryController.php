@@ -60,6 +60,13 @@ class CategoryController extends Controller
         return view("admin.category.edit_category", compact("category"));
     }
 
+    // Hiển thị modal edit để nạp động như Brand
+    public function show_edit_modal($id)
+    {
+        $category = Category::findOrFail($id);
+        return view('admin.category.edit_category_modal', compact('category'));
+    }
+
     // Cập nhật category
     public function update(Request $request, $id)
     {

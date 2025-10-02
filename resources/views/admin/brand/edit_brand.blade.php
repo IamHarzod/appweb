@@ -5,7 +5,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="ModalEditLabel">Chỉnh sửa thương hiệu</h5>
 
-                    <button type="button" class="close" data-dismiss="modal" onclick="CloseModal('ModalEdit')"
+                    <button type="button" class="close" onclick="CloseModal('ModalEdit')"
                         aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -63,8 +63,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="CloseModal('ModalEdit')"
-                        data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-secondary" onclick="CloseModal('ModalEdit')">Đóng</button>
                     <button type="submit" class="btn btn-primary">Lưu</button>
                 </div>
             </form>

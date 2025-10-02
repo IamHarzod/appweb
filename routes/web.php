@@ -43,6 +43,9 @@ Route::post('/update-brand', [BrandController::class, 'update_brand']);
 Route::get('/show-product', [App\Http\Controllers\ProductController::class, 'show_product']);
 Route::post('/create-product', [App\Http\Controllers\ProductController::class, 'create_product']);
 Route::get('/delete-product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+Route::get('/show-edit-product/{id}', [ProductController::class, 'show_edit'])->name('product.show_edit');
+Route::put('/update-product/{id}', [ProductController::class, 'update'])->name('product.update');
+Route::post('/update-product/{id}', [ProductController::class, 'update']);
 
 // Category
 Route::get('/show-category', [CategoryController::class, 'show_category'])->name('category.index');
@@ -50,4 +53,5 @@ Route::post('/create-category', [CategoryController::class, 'create_category'])-
 Route::get('/edit-category/{id}', [CategoryController::class, 'edit'])->name('category.edit');
 Route::post('/update-category/{id}', [CategoryController::class, 'update'])->name('category.update');
 Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
+Route::get('/show-edit-category/{id}', [CategoryController::class, 'show_edit_modal'])->name('category.show_edit_modal');
 

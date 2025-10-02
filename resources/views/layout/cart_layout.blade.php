@@ -166,7 +166,7 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
-                            <a href="index.html" class="nav-item nav-link">Home</a>
+                            <a href="{{route('home')}} " class="nav-item nav-link">Trang chủ</a>
                             <a href="shop.html" class="nav-item nav-link">Shop</a>
                             <a href="single.html" class="nav-item nav-link">Single Page</a>
                             <div class="nav-item dropdown">
@@ -234,8 +234,14 @@
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Giỏ hàng</h1>
         <ol class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay="0.3s">
+<<<<<<< Updated upstream
             <li class="breadcrumb-item"><a href="{{ url('/show-home') }}">Trang chủ</a></li>
             <li class="breadcrumb-item active text-white">Giỏ hàng</li>
+=======
+            <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Pages</a></li>
+            <li class="breadcrumb-item active text-white">Cart Page</li>
+>>>>>>> Stashed changes
         </ol>
     </div>
     <!-- Single Page Header End -->
@@ -392,7 +398,11 @@
                             <p class="mb-0 pe-4">$99.00</p>
                         </div>
                         <button class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4"
+<<<<<<< Updated upstream
                             type="button">Tiến hành thanh toán</button>
+=======
+                            type="button">Xác nhận thanh toán</button>
+>>>>>>> Stashed changes
                     </div>
                 </div>
             </div>

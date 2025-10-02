@@ -1,3 +1,4 @@
+
 function DeleteData(url) {
     Swal.fire({
         title: "Xác nhận",
@@ -78,21 +79,17 @@ $(function () {
 
 window.CloseModal = function (id) {
     const $m = $("#" + id);
-    if (!$m.length) {
-        console.warn("CloseModal: not found #" + id);
-        return;
-    }
-    // Nếu bạn dùng Bootstrap 4 với jQuery:
+    if (!$m.length) return;
     if (typeof $m.modal === "function") {
-        console.log("type: ", typeof $.fn.modal);
         $m.modal("hide");
-    } else {
-        // Bootstrap 5 (không jQuery) – dùng native API
-        const modalEl = $m.get(0);
-        const inst =
-            bootstrap.Modal.getInstance(modalEl) ||
-            new bootstrap.Modal(modalEl);
+    } else if (window.bootstrap && $m.get(0)) {
+        const el = $m.get(0);
+        const inst = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
         inst.hide();
+    } else {
+        $m.removeClass("show").hide();
+        $("body").removeClass("modal-open").css("padding-right", "");
+        $(".modal-backdrop").remove();
     }
 };
 function OpenModal(id, url) {
@@ -107,6 +104,9 @@ function OpenModal(id, url) {
             .done(function (res) {
                 if (res) {
                     modal.html(res);
+                    // Chỉ show sau khi đã inject nội dung modal
+                    if (!modal.parent().is("body")) modal.appendTo("body");
+                    modal.modal("show");
                 }
             })
             .fail(function (xhr) {
@@ -129,6 +129,7 @@ function OpenModal(id, url) {
                     tapToDismiss: !1,
                 });
             });
+        return; // không show trước khi nạp xong
     }
     if (!modal.parent().is("body")) modal.appendTo("body");
     modal.modal("show");

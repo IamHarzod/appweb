@@ -59,7 +59,8 @@
                                                 </button>
                                                 <div class="dropdown-menu" x-placement="bottom-start"
                                                     style="position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                    <a class="dropdown-item" href="#">Sửa</a>
+                                                    <button class="dropdown-item" type="button"
+                                                        onclick="OpenModal(null, '{{ url('/show-edit-product/' . $item->id) }}')">Sửa</button>
                                                     <button type="button" class="dropdown-item text-danger btn-open-delete"
                                                         onclick="DeleteData('{{ url('/delete-product/' . $item->id) }}')">
                                                         Xoá
