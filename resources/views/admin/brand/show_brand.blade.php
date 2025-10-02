@@ -59,7 +59,10 @@
                                                         Thao tác
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#">Sửa</a>
+                                                        <button class="dropdown-item" type="button" href="#"
+                                                            onclick="OpenModal(null, '{{ url('/show-edit-brand/' . $item->id) }}')">
+                                                            Sửa
+                                                        </button>
 
                                                         <button type="button"
                                                             class="dropdown-item text-danger btn-open-delete"
