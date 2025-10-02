@@ -151,34 +151,34 @@
                 </nav>
             </div>
         </div>
-       <div class="quixnav">
-    <div class="quixnav-scroll">
-        <ul class="metismenu" id="menu">
-            <li class="nav-label first">Menu quản lý</li>
+        <div class="quixnav">
+            <div class="quixnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label first">Menu quản lý</li>
 
-            <li>
-                <a href="{{ url('/show-brand') }}" aria-expanded="false">
-                    <i class="icon icon-globe-2"></i>
-                    <span class="nav-text">Quản lý thương hiệu</span>
-                </a>
-            </li>
+                    <li>
+                        <a href="{{ url('/show-brand') }}" aria-expanded="false">
+                            <i class="icon icon-globe-2"></i>
+                            <span class="nav-text">Quản lý thương hiệu</span>
+                        </a>
+                    </li>
 
-            <li>
-                <a href="{{ url('/show-category') }}" aria-expanded="false">
-                    <i class="icon icon-home"></i>
-                    <span class="nav-text">Quản lý danh mục</span>
-                </a>
-            </li>
+                    <li>
+                        <a href="{{ url('/show-category') }}" aria-expanded="false">
+                            <i class="icon icon-home"></i>
+                            <span class="nav-text">Quản lý danh mục</span>
+                        </a>
+                    </li>
 
-            <li>
-                <a href="{{ url('/show-product') }}" aria-expanded="false">
-                    <i class="icon icon-basket"></i>
-                    <span class="nav-text">Quản lý sản phẩm</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
+                    <li>
+                        <a href="{{ url('/show-product') }}" aria-expanded="false">
+                            <i class="icon icon-basket"></i>
+                            <span class="nav-text">Quản lý sản phẩm</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
         <div class="content-body">
             @yield('view-content')
