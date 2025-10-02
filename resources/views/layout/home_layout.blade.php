@@ -50,13 +50,13 @@
             <div class="col-lg-4 text-center text-lg-start mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
                     <a href="#" class="text-muted me-2"> Help</a><small> / </small>
-                    <a href="#" class="text-muted mx-2"> Support</a><small> / </small>
-                    <a href="#" class="text-muted ms-2"> Contact</a>
+                    <a href="#" class="text-muted mx-2"> Hỗ trợ</a><small> / </small>
+                    <a href="#" class="text-muted ms-2"> Liên hệ</a>
 
                 </div>
             </div>
             <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
-                <small class="text-dark">Call Us:</small>
+                <small class="text-dark">Liên hệ chúng tôi:</small>
                 <a href="#" class="text-muted">(+84)373033510</a>
             </div>
 
@@ -82,7 +82,7 @@
                 <div class="d-inline-flex align-items-center">
                     <a href="" class="navbar-brand p-0">
                         <h1 class="display-5 text-primary m-0"><i
-                                class="fas fa-shopping-bag text-secondary me-2"></i>Electro</h1>
+                                class="fas fa-shopping-bag text-secondary me-2"></i>36Shop</h1>
                     </a>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                 <nav class="navbar navbar-light position-relative" style="width: 250px;">
                     <button class="navbar-toggler border-0 fs-4 w-100 px-0 text-start" type="button"
                         data-bs-toggle="collapse" data-bs-target="#allCat">
-                        <h4 class="m-0"><i class="fa fa-bars me-2"></i>All Categories</h4>
+                        <h4 class="m-0"><i class="fa fa-bars me-2"></i>Danh mục</h4>
                     </button>
                     <div class="collapse navbar-collapse rounded-bottom" id="allCat">
                         <div class="navbar-nav ms-auto py-0">
@@ -168,7 +168,7 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Home</a>
+                            <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
                             <a href="shop.html" class="nav-item nav-link">Shop</a>
                             <a href="single.html" class="nav-item nav-link">Single Page</a>
                             <div class="nav-item dropdown">
