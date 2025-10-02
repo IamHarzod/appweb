@@ -7,13 +7,12 @@ use App\Http\Controllers\BrandController;
 use App\Models\Product;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 
 
 // Home
 Route::get('/show-home', [HomeController::class, 'show_home'])->name('home');
 
-// Cart
-Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
 
 
 
@@ -40,3 +39,13 @@ Route::post('/update-brand', [BrandController::class, 'update_brand']);
 Route::get('/show-product', [App\Http\Controllers\ProductController::class, 'show_product']);
 Route::post('/create-product', [App\Http\Controllers\ProductController::class, 'create_product']);
 Route::get('/delete-product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+
+// Category
+Route::get('/show-category', [CategoryController::class, 'show_category'])->name('category.index');
+Route::post('/create-category', [CategoryController::class, 'create_category'])->name('category.create');
+Route::get('/edit-category/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+Route::post('/update-category/{id}', [CategoryController::class, 'update'])->name('category.update');
+Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
+
+// Cart
+Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
