@@ -6,10 +6,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BrandController;
 use App\Models\Product;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
-// Client
-Route::get('/', [HomeController::class, 'show_home'])->name('home');
 
+// Home
+Route::get('/show-home', [HomeController::class, 'show_home'])->name('home');
+
+// Cart
+Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
 
 
 
