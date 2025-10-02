@@ -235,9 +235,12 @@
         <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Giỏ hàng</h1>
         <ol class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay="0.3s">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <li class="breadcrumb-item"><a href="{{ url('/show-home') }}">Trang chủ</a></li>
             <li class="breadcrumb-item active text-white">Giỏ hàng</li>
 =======
+=======
+>>>>>>> Stashed changes
             <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
             <li class="breadcrumb-item"><a href="#">Pages</a></li>
             <li class="breadcrumb-item active text-white">Cart Page</li>
@@ -399,7 +402,11 @@
                         </div>
                         <button class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                             type="button">Tiến hành thanh toán</button>
+=======
+                            type="button">Xác nhận thanh toán</button>
+>>>>>>> Stashed changes
 =======
                             type="button">Xác nhận thanh toán</button>
 >>>>>>> Stashed changes
