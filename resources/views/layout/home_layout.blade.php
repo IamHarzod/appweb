@@ -302,8 +302,8 @@
                     <div class="d-inline-flex align-items-center">
                         <i class="fa fa-sync-alt fa-2x text-primary"></i>
                         <div class="ms-4">
-                            <h6 class="text-uppercase mb-2">Free Return</h6>
-                            <p class="mb-0">30 days money back guarantee!</p>
+                            <h6 class="text-uppercase mb-2">Miễn phí hoàn trả !!</h6>
+                            <p class="mb-0">Trong vòng 30 ngày sau khi mua hàng!</p>
                         </div>
                     </div>
                 </div>
@@ -313,8 +313,8 @@
                     <div class="d-flex align-items-center">
                         <i class="fab fa-telegram-plane fa-2x text-primary"></i>
                         <div class="ms-4">
-                            <h6 class="text-uppercase mb-2">Free Shipping</h6>
-                            <p class="mb-0">Free shipping on all order</p>
+                            <h6 class="text-uppercase mb-2">Miễn phí ship</h6>
+                            <p class="mb-0">Miễn phí ship các đơn hàng của bạn !</p>
                         </div>
                     </div>
                 </div>
@@ -324,8 +324,8 @@
                     <div class="d-flex align-items-center">
                         <i class="fas fa-life-ring fa-2x text-primary"></i>
                         <div class="ms-4">
-                            <h6 class="text-uppercase mb-2">Support 24/7</h6>
-                            <p class="mb-0">We support online 24 hrs a day</p>
+                            <h6 class="text-uppercase mb-2">Hỗ trợ 24/7</h6>
+                            <p class="mb-0">Chúng tôi sẽ luôn hỗ trợ bạn trong 24h </p>
                         </div>
                     </div>
                 </div>
@@ -335,8 +335,8 @@
                     <div class="d-flex align-items-center">
                         <i class="fas fa-credit-card fa-2x text-primary"></i>
                         <div class="ms-4">
-                            <h6 class="text-uppercase mb-2">Receive Gift Card</h6>
-                            <p class="mb-0">Recieve gift all over oder $50</p>
+                            <h6 class="text-uppercase mb-2">Nhận về nhiều mã giảm giá !</h6>
+                            <p class="mb-0">Có thể nhận mã giảm giá lên đến 50% cho mỗi đơn hàng áp dụng !</p>
                         </div>
                     </div>
                 </div>
@@ -346,8 +346,8 @@
                     <div class="d-flex align-items-center">
                         <i class="fas fa-lock fa-2x text-primary"></i>
                         <div class="ms-4">
-                            <h6 class="text-uppercase mb-2">Secure Payment</h6>
-                            <p class="mb-0">We Value Your Security</p>
+                            <h6 class="text-uppercase mb-2">Thanh toán bảo mật</h6>
+                            <p class="mb-0">Chúc tôi đảm bảo bạn luôn được bảo mật</p>
                         </div>
                     </div>
                 </div>
@@ -357,8 +357,8 @@
                     <div class="d-flex align-items-center">
                         <i class="fas fa-blog fa-2x text-primary"></i>
                         <div class="ms-4">
-                            <h6 class="text-uppercase mb-2">Online Service</h6>
-                            <p class="mb-0">Free return products in 30 days</p>
+                            <h6 class="text-uppercase mb-2">Dịch vụ online</h6>
+                            <p class="mb-0">Được hoàn trả hàng trong vòng 30 ngày !!</p>
                         </div>
                     </div>
                 </div>
