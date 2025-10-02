@@ -324,8 +324,8 @@
                     <div class="d-flex align-items-center">
                         <i class="fas fa-life-ring fa-2x text-primary"></i>
                         <div class="ms-4">
-                            <h6 class="text-uppercase mb-2">Support 24/7</h6>
-                            <p class="mb-0">We support online 24 hrs a day</p>
+                            <h6 class="text-uppercase mb-2">Hỗ trợ 24/7</h6>
+                            <p class="mb-0">Chúng tôi sẽ luôn hỗ trợ bạn trong 24h </p>
                         </div>
                     </div>
                 </div>
