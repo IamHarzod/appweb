@@ -49,45 +49,24 @@
             <div class="col-lg-4 text-center text-lg-start mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
                     <a href="#" class="text-muted me-2"> Help</a><small> / </small>
-                    <a href="#" class="text-muted mx-2"> Support</a><small> / </small>
-                    <a href="#" class="text-muted ms-2"> Contact</a>
+                    <a href="#" class="text-muted mx-2"> Hỗ Trợ</a><small> / </small>
+                    <a href="#" class="text-muted ms-2"> Liên hệ</a>
                 </div>
             </div>
             <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
-                <small class="text-dark">Call Us:</small>
-                <a href="#" class="text-muted">(+012) 1234 567890</a>
+                <small class="text-dark">Liên hệ chúng tôi:</small>
+                <a href="#" class="text-muted">(+84) 373033510</a>
             </div>
 
             <div class="col-lg-4 text-center text-lg-end">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
                     <div class="dropdown">
-                        <a href="#" class="dropdown-toggle text-muted me-2" data-bs-toggle="dropdown"><small>
-                                USD</small></a>
-                        <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item"> Euro</a>
-                            <a href="#" class="dropdown-item"> Dolar</a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle text-muted mx-2" data-bs-toggle="dropdown"><small>
-                                English</small></a>
-                        <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item"> English</a>
-                            <a href="#" class="dropdown-item"> Turkish</a>
-                            <a href="#" class="dropdown-item"> Spanol</a>
-                            <a href="#" class="dropdown-item"> Italiano</a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
                         <a href="#" class="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
                                     class="fa fa-home me-2"></i> My Dashboard</small></a>
                         <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item"> Login</a>
-                            <a href="#" class="dropdown-item"> Wishlist</a>
-                            <a href="#" class="dropdown-item"> My Card</a>
-                            <a href="#" class="dropdown-item"> Notifications</a>
-                            <a href="#" class="dropdown-item"> Account Settings</a>
-                            <a href="#" class="dropdown-item"> My Account</a>
+                            <a href="#" class="dropdown-item"> Đăng nhập</a>
+                            <a href="#" class="dropdown-item"> Yêu thích</a>
+                            <a href="#" class="dropdown-item"> Thông tin cá nhân</a>
                             <a href="#" class="dropdown-item"> Log Out</a>
                         </div>
                     </div>
@@ -99,9 +78,9 @@
         <div class="row gx-0 align-items-center text-center">
             <div class="col-md-4 col-lg-3 text-center text-lg-start">
                 <div class="d-inline-flex align-items-center">
-                    <a href="" class="navbar-brand p-0">
+                    <a href="{{ asset('/show-home') }}" class="navbar-brand p-0">
                         <h1 class="display-5 text-primary m-0"><i
-                                class="fas fa-shopping-bag text-secondary me-2"></i>Electro</h1>
+                                class="fas fa-shopping-bag text-secondary me-2"></i>36Shop</h1>
                         <!-- <img src="img/logo.png" alt="Logo"> -->
                     </a>
                 </div>
@@ -111,14 +90,6 @@
                     <div class="d-flex border rounded-pill">
                         <input class="form-control border-0 rounded-pill w-100 py-3" type="text"
                             data-bs-target="#dropdownToggle123" placeholder="Search Looking For?">
-                        <select class="form-select text-dark border-0 border-start rounded-0 p-3"
-                            style="width: 200px;">
-                            <option value="All Category">All Category</option>
-                            <option value="Pest Control-2">Category 1</option>
-                            <option value="Pest Control-3">Category 2</option>
-                            <option value="Pest Control-4">Category 3</option>
-                            <option value="Pest Control-5">Category 4</option>
-                        </select>
                         <button type="button" class="btn btn-primary rounded-pill py-3 px-5" style="border: 0;"><i
                                 class="fas fa-search"></i></button>
                     </div>
@@ -126,13 +97,9 @@
             </div>
             <div class="col-md-4 col-lg-3 text-center text-lg-end">
                 <div class="d-inline-flex align-items-center">
-                    <a href="#" class="text-muted d-flex align-items-center justify-content-center me-3"><span
-                            class="rounded-circle btn-md-square border"><i class="fas fa-random"></i></i></a>
-                    <a href="#" class="text-muted d-flex align-items-center justify-content-center me-3"><span
-                            class="rounded-circle btn-md-square border"><i class="fas fa-heart"></i></a>
                     <a href="#" class="text-muted d-flex align-items-center justify-content-center"><span
                             class="rounded-circle btn-md-square border"><i class="fas fa-shopping-cart"></i></span>
-                        <span class="text-dark ms-2">$0.00</span></a>
+                        <span class="text-dark ms-2">Giỏ hàng</span></a>
                 </div>
             </div>
         </div>
@@ -146,7 +113,7 @@
                 <nav class="navbar navbar-light position-relative" style="width: 250px;">
                     <button class="navbar-toggler border-0 fs-4 w-100 px-0 text-start" type="button"
                         data-bs-toggle="collapse" data-bs-target="#allCat">
-                        <h4 class="m-0"><i class="fa fa-bars me-2"></i>All Categories</h4>
+                        <h4 class="m-0"><i class="fa fa-bars me-2"></i>Danh mục sản phẩm</h4>
                     </button>
                     <div class="collapse navbar-collapse rounded-bottom" id="allCat">
                         <div class="navbar-nav ms-auto py-0">
@@ -265,11 +232,10 @@
 
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Cart Page</h1>
+        <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Giỏ hàng</h1>
         <ol class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay="0.3s">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Pages</a></li>
-            <li class="breadcrumb-item active text-white">Cart Page</li>
+            <li class="breadcrumb-item"><a href="{{ url('/show-home') }}">Trang chủ</a></li>
+            <li class="breadcrumb-item active text-white">Giỏ hàng</li>
         </ol>
     </div>
     <!-- Single Page Header End -->
@@ -281,12 +247,12 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Model</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Danh mục</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Xoá</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -400,21 +366,21 @@
             </div>
             <div class="mt-5">
                 <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4"
-                    placeholder="Coupon Code">
-                <button class="btn btn-primary rounded-pill px-4 py-3" type="button">Apply Coupon</button>
+                    placeholder="Mã giảm giá">
+                <button class="btn btn-primary rounded-pill px-4 py-3" type="button">Nhập mã giảm giá</button>
             </div>
             <div class="row g-4 justify-content-end">
                 <div class="col-8"></div>
                 <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
                     <div class="bg-light rounded">
                         <div class="p-4">
-                            <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                            <h1 class="display-6 mb-4">Tổng đơn hàng<span class="fw-normal"></span></h1>
                             <div class="d-flex justify-content-between mb-4">
-                                <h5 class="mb-0 me-4">Subtotal:</h5>
+                                <h5 class="mb-0 me-4">Tổng phụ:</h5>
                                 <p class="mb-0">$96.00</p>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <h5 class="mb-0 me-4">Shipping</h5>
+                                <h5 class="mb-0 me-4">Phí vận chuyển:</h5>
                                 <div>
                                     <p class="mb-0">Flat rate: $3.00</p>
                                 </div>
@@ -422,11 +388,11 @@
                             <p class="mb-0 text-end">Shipping to Ukraine.</p>
                         </div>
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                            <h5 class="mb-0 ps-4 me-4">Total</h5>
+                            <h5 class="mb-0 ps-4 me-4">Tổng tiền</h5>
                             <p class="mb-0 pe-4">$99.00</p>
                         </div>
                         <button class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4"
-                            type="button">Proceed Checkout</button>
+                            type="button">Tiến hành thanh toán</button>
                     </div>
                 </div>
             </div>
@@ -445,8 +411,8 @@
                             <i class="fas fa-map-marker-alt fa-2x text-primary"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">Address</h4>
-                            <p class="mb-2">123 Street New York.USA</p>
+                            <h4 class="text-white">Địa chỉ</h4>
+                            <p class="mb-2">123 Hà Nội</p>
                         </div>
                     </div>
                 </div>
@@ -457,8 +423,8 @@
                             <i class="fas fa-envelope fa-2x text-primary"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">Mail Us</h4>
-                            <p class="mb-2">info@example.com</p>
+                            <h4 class="text-white">Viết Mail cho chúng tôi</h4>
+                            <p class="mb-2">36shop@gmail.com</p>
                         </div>
                     </div>
                 </div>
@@ -469,8 +435,8 @@
                             <i class="fa fa-phone-alt fa-2x text-primary"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">Telephone</h4>
-                            <p class="mb-2">(+012) 3456 7890</p>
+                            <h4 class="text-white">Số điện thoại</h4>
+                            <p class="mb-2">(+084) 3456 7890</p>
                         </div>
                     </div>
                 </div>
