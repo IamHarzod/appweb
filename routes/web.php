@@ -32,6 +32,8 @@ Route::post('/submit-login-admin', [AdminController::class, 'submit_login']);
 Route::get('/show-brand', [BrandController::class, 'show_brand']);
 Route::post('/create-brand', [BrandController::class, 'create_brand']);
 Route::get('/delete-brand/{id}', [BrandController::class, 'destroy'])->name('brand.destroy');
+Route::get('/show-create-brand', [BrandController::class, 'showCreate']);
+Route::get('/show-edit-brand/{id}', [BrandController::class, 'showEdit']);
 // Edit Brand
 Route::get('/show-edit-brand/{id}', [BrandController::class, 'showEdit']);
 Route::post('/update-brand', [BrandController::class, 'update_brand']);
