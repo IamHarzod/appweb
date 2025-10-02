@@ -531,7 +531,7 @@
                                 <div class="product-item rounded wow fadeInUp" data-wow-delay="0.5s">
                                     <div class="product-item-inner border rounded">
                                         <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/iphone-17.jpg') }}"
+                                            <img src="{{ asset('public/client/img/iphone-17-purple.jpg') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
                                             <div class="product-details">
                                                 <a href="#"><i class="fa fa-eye fa-1x"></i></a>
@@ -1369,7 +1369,7 @@
                 <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
                     <a href="#">
                         <div class="text-center bg-primary rounded position-relative">
-                            <img src="{{ asset('public/client/img/product-banner-2.jpg') }}"
+                            <img src="{{ asset('public/client/img/man-hinh.jpg') }}"
                                 class="img-fluid w-100" alt="">
                             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center rounded p-4"
                                 style="background: rgba(242, 139, 0, 0.5);">
