@@ -13,6 +13,8 @@ use App\Http\Controllers\CategoryController;
 // Home
 Route::get('/show-home', [HomeController::class, 'show_home'])->name('home');
 
+// Cart
+Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
 
 
 
@@ -49,5 +51,3 @@ Route::get('/edit-category/{id}', [CategoryController::class, 'edit'])->name('ca
 Route::post('/update-category/{id}', [CategoryController::class, 'update'])->name('category.update');
 Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
 
-// Cart
-Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
