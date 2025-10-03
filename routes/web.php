@@ -42,6 +42,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/show-edit-brand/{id}', [BrandController::class, 'showEdit']);
     Route::post('/update-brand', [BrandController::class, 'update_brand']);
 
+<<<<<<< Updated upstream
     // Product
     Route::get('/show-product', [App\Http\Controllers\ProductController::class, 'show_product']);
     Route::post('/create-product', [App\Http\Controllers\ProductController::class, 'create_product']);
@@ -49,6 +50,23 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/show-edit-product/{id}', [ProductController::class, 'show_edit'])->name('product.show_edit');
     Route::put('/update-product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::post('/update-product/{id}', [ProductController::class, 'update']);
+=======
+//Product
+Route::get('/show-product', [App\Http\Controllers\ProductController::class, 'show_product']);
+Route::post('/create-product', [App\Http\Controllers\ProductController::class, 'create_product']);
+Route::get('/delete-product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+Route::get('/show-edit-product/{id}', [ProductController::class, 'show_edit'])->name('product.show_edit');
+Route::put('/update-product/{id}', [ProductController::class, 'update'])->name('product.update');
+Route::post('/update-product/{id}', [ProductController::class, 'update']);
+
+// Category
+Route::get('/show-category', [CategoryController::class, 'show_category'])->name('category.index');
+Route::post('/create-category', [CategoryController::class, 'create_category'])->name('category.create');
+Route::get('/edit-category/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+Route::post('/update-category/{id}', [CategoryController::class, 'update'])->name('category.update');
+Route::get('/delete-category/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
+Route::get('/show-edit-category/{id}', [CategoryController::class, 'show_edit_modal'])->name('category.show_edit_modal');
+>>>>>>> Stashed changes
 
     // Category
     Route::post('/create-category', [CategoryController::class, 'create_category'])->name('category.create');
