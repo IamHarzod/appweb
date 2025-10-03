@@ -23,7 +23,7 @@ class ProductController extends Controller
     public function show_create_product()
     {
         $brand = Brand::with([
-            'brand:MoTa',        // chọn đúng cột tên của bạn, ví dụ TenThuongHieu
+            'brand:TenThuongHieu',        // chọn đúng cột tên của bạn, ví dụ TenThuongHieu
             'category:name'      // ví dụ TenDanhMuc
         ])->get();
         $category = Category::get();
