@@ -112,7 +112,7 @@
 
             // Chặn submit nếu có lỗi
             form.addEventListener('submit', function(e) {
-                debugger
+             
 
                 validateMatch();
                 if (!form.checkValidity()) {

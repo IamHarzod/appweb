@@ -23,6 +23,12 @@ class AdminController extends Controller
         return view("layout.admin_layout");
     }
 
+    public function users()
+    {
+        $users = User::orderBy('id','desc')->get(['id','name','email','phoneNumber','role','IsActive','created_at']);
+        return view('admin.auth.users', compact('users'));
+    }
+
     public function submit_login(Request $request)
     {
         // Validate đơn giản
@@ -33,13 +39,25 @@ class AdminController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate(); // bảo mật session
-            return redirect()->route('dashboard');
+            // Cả admin và user đều được chuyển về trang home
+            return redirect()->route('home');
         }
 
         // Sai thông tin → trả về lỗi chung
         return back()
             ->withErrors(['email' => 'Email hoặc mật khẩu không đúng.'])
             ->onlyInput('email');
+    }
+
+    public function update_user_role(Request $request, $id)
+    {
+        $request->validate([
+            'role' => 'required|in:admin,user',
+        ]);
+        $user = User::findOrFail($id);
+        $user->role = $request->role;
+        $user->save();
+        return redirect()->route('admin.users')->with('success', 'Cập nhật quyền thành công');
     }
 
     public function submit_register(Request $request)
