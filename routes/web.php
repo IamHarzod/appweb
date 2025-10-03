@@ -52,11 +52,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/update-product/{id}', [ProductController::class, 'update']);
 
     // Category
-    Route::post('/create-category', [CategoryController::class, 'create_category'])->name('category.create');
     Route::get('/show-category', [CategoryController::class, 'show_category'])->name('category.index');
+    Route::post('/create-category', [CategoryController::class, 'create_category'])->name('category.create');
     Route::get('/edit-category/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
     Route::post('/update-category/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::get('/delete-category/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
     Route::get('/show-edit-category/{id}', [CategoryController::class, 'show_edit_modal'])->name('category.show_edit_modal');
     // Users management
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');

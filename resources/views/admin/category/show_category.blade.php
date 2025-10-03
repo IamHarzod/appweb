@@ -62,21 +62,17 @@
                                                         Thao tác
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        {{-- Sửa --}}
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('category.edit', $item->id) }}">
+                                                        {{-- Sửa (modal) --}}
+                                                        <button class="dropdown-item" type="button"
+                                                            onclick="OpenModal(null, '{{ route('category.show_edit_modal', $item->id) }}')">
                                                             Sửa
-                                                        </a>
+                                                        </button>
 
-                                                        {{-- Xoá --}}
-                                                        <form action="{{ route('delete-category', ['id' => $item->id]) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Bạn có chắc chắn muốn xoá không?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                class="dropdown-item text-danger">Xoá</button>
-                                                        </form>
+                                                        {{-- Xoá (AJAX giống Brand) --}}
+                                                        <button type="button" class="dropdown-item text-danger btn-open-delete"
+                                                            onclick="DeleteData('{{ url('/delete-category/' . $item->id) }}')">
+                                                            Xoá
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </td>
