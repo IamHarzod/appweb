@@ -112,25 +112,21 @@ class CategoryController extends Controller
         return redirect("/show-category")->with("success", "Cập nhật danh mục thành công!");
     }
 
-    // Xoá category
+    // Xoá category (AJAX)
     public function destroy($id)
     {
         try {
             $category = Category::findOrFail($id);
-
-            // Xoá file ảnh (nếu có)
             if (!empty($category->ImageURL)) {
                 $path = public_path('uploads/categories/' . $category->ImageURL);
                 if (File::exists($path)) {
                     File::delete($path);
                 }
             }
-
             $category->delete();
-
-            return redirect("/show-category")->with("success", "Xoá danh mục thành công!");
+            return true;
         } catch (\Throwable $e) {
-            return redirect("/show-category")->with("error", "Xoá thất bại!");
+            return false;
         }
     }
 }
