@@ -7,6 +7,10 @@ use App\Models\Product;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use App\Models\Category;
+
+use App\Models\Brand;
+
 
 class ProductController extends Controller
 {
@@ -14,6 +18,16 @@ class ProductController extends Controller
     {
         $product = Product::get();
         return view("admin.product.show_product")->with("products", $product);
+    }
+
+    public function show_create_product()
+    {
+        $brand = Brand::with([
+            'brand:MoTa',        // chọn đúng cột tên của bạn, ví dụ TenThuongHieu
+            'category:name'      // ví dụ TenDanhMuc
+        ])->get();
+        $category = Category::get();
+        return view("admin.product.add_product")->with(compact("brand", "category"));
     }
 
     public function create_product(Request $request)
@@ -28,6 +42,8 @@ class ProductController extends Controller
             'IsActive' => 'nullable|in:0,1',
             'style' => 'nullable|string',
             'imageURL' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+            'id_brand' => 'required|integer',
+            'category_id' => 'required|integer',
         ]);
 
         $filename = null;
@@ -60,7 +76,8 @@ class ProductController extends Controller
             'status' => $validated['status'],
             'IsActive' => $validated['IsActive'] ?? 1,
             'style' => $validated['style'] ?? null,
-            // 'category_id' => $validated['category_id'] ?? null,
+            'category_id' => $validated['category_id'],
+            'id_brand' => $validated['id_brand'],
         ]);
 
         return redirect("/show-product")->with('success', 'Thêm sản phẩm thành công!');
@@ -88,7 +105,9 @@ class ProductController extends Controller
     public function show_edit($id)
     {
         $product = Product::findOrFail($id);
-        return view('admin.product.edit_product', compact('product'));
+        $brand = Brand::get();
+        $category = Category::get();
+        return view('admin.product.edit_product', compact('product', 'brand', 'category'));
     }
 
     public function update(Request $request, $id)
@@ -105,6 +124,8 @@ class ProductController extends Controller
             'IsActive' => 'nullable|in:0,1',
             'style' => 'nullable|string',
             'imageURL' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+            'id_brand' => 'required|integer',
+            'category_id' => 'required|integer',
         ]);
 
         if ($request->hasFile('imageURL') && $request->file('imageURL')->isValid()) {
@@ -137,6 +158,8 @@ class ProductController extends Controller
         $product->status = $validated['status'];
         $product->IsActive = $validated['IsActive'] ?? $product->IsActive;
         $product->style = $validated['style'] ?? null;
+        $product->category_id = $validated['category_id'];
+        $product->id_brand = $validated['id_brand'];
 
         $product->save();
 

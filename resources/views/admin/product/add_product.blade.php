@@ -1,4 +1,3 @@
-<div class="modal fade" id="ModalCreateProduct" tabindex="-1" aria-labelledby="ModalCreateProductLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="{{ url('/create-product') }}" method="post" enctype="multipart/form-data">
@@ -94,6 +93,37 @@
                                                             <input type="radio" name="IsActive" value="0">
                                                             InActive</label>
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="val-skill">Thương hiệu
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <select class="form-control" id="id_brand" name="id_brand">
+                                                        @foreach ($brand as $item)
+                                                            <option value="{{ $item->id }}">
+                                                                {{ $item->TenThuongHieu }}
+                                                            </option>
+                                                        @endforeach
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="val-skill">Danh mục
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <select class="form-control" id="category_id" name="category_id">
+                                                        @foreach ($category as $item)
+                                                            <option value="{{ $item->id }}">
+                                                                {{ $item->name }}</option>
+                                                        @endforeach
+
+                                                    </select>
                                                 </div>
                                             </div>
                                             <!-- <div class="form-group row">
@@ -238,9 +268,10 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-</div>
-</div>
-<script></script>

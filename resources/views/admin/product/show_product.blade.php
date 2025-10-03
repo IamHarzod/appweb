@@ -1,7 +1,8 @@
 @extends('layout.admin_layout')
 @section('view-content')
     <div class="container-fluid">
-        <button type="button" class="btn btn-primary" onclick="OpenModal('ModalCreateProduct')">Thêm mới</button>
+        <button type="button" class="btn btn-primary" onclick="OpenModal(null, '{{ url('/show-create-product') }}')">Thêm
+            mới</button>
 
         <div class="row">
             <div class="col-12">
@@ -17,12 +18,13 @@
                                 <tr>
                                     <th>STT</th>
                                     <!-- <th>Category ID</th> -->
-                                    <th>Tên sản phẩm</th>
                                     <th>Hình ảnh</th>
+                                    <th>Tên sản phẩm</th>
                                     <th>Giá</th>
                                     <th>Số lượng</th>
                                     <th>Giảm giá (%)</th>
-                                    <th>Dòng sản phẩm</th>
+                                    <th>Thương hiệu</th>
+                                    <th>Danh mục</th>
                                     <th>Kiểu</th>
                                     <th>Mô tả</th>
                                     <th>Hoạt động</th>
@@ -35,16 +37,17 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         {{-- <td>{{$item->category_id}} </td> --}}
-                                        <td>{{ $item->name }} </td>
                                         <td>
                                             <img src="{{ asset('public/uploads/products/' . $item->imageURL) }}"
                                                 width="50" height="50" alt="Ảnh sản phẩm">
                                         </td>
+                                        <td>{{ $item->name }} </td>
                                         <td>{{ $item->price }}</td>
                                         <td>{{ $item->stockQuantity > 0 ? 'Còn hàng (' . $item->stockQuantity . ')' : 'Hết hàng' }}
                                         </td>
                                         <td>{{ $item->discountPercent }}%</td>
-                                        <td>{{ $item->line }}</td>
+                                        <td>{{ $item->brand->TenThuongHieu }}</td>
+                                        <td>{{ $item->category->name }}</td>
                                         <td>{{ $item->style }}</td>
                                         <td>{{ $item->description }} </td>
                                         <td>{{ $item->Status ? 'Đang kinh doan' : 'Ngừng kinh doanh' }}</td>
@@ -79,5 +82,5 @@
     </div>
     </div>
 
-    @include('admin.product.add_product')
+    {{-- @include('admin.product.add_product') --}}
 @endsection

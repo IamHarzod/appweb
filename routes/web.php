@@ -44,6 +44,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // Product
     Route::get('/show-product', [App\Http\Controllers\ProductController::class, 'show_product']);
+    Route::get('/show-create-product', [App\Http\Controllers\ProductController::class, 'show_create_product']);
     Route::post('/create-product', [App\Http\Controllers\ProductController::class, 'create_product']);
     Route::get('/delete-product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::get('/show-edit-product/{id}', [ProductController::class, 'show_edit'])->name('product.show_edit');
