@@ -25,7 +25,7 @@ class AdminController extends Controller
 
     public function users()
     {
-        $users = User::orderBy('id','desc')->get(['id','name','email','phoneNumber','role','IsActive','created_at']);
+        $users = User::orderBy('id', 'desc')->get(['id', 'name', 'email', 'phoneNumber', 'role', 'IsActive', 'created_at']);
         return view('admin.auth.users', compact('users'));
     }
 
