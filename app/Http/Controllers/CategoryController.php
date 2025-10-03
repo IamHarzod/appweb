@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Database\Eloquent\Model;
 
 class CategoryController extends Controller
 {

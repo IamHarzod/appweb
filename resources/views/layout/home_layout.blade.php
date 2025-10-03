@@ -126,30 +126,7 @@
                                         <span>(3)</span>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Electronics & Computer</a>
-                                        <span>(5)</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Laptops & Desktops</a>
-                                        <span>(2)</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Mobiles & Tablets</a>
-                                        <span>(8)</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">SmartPhone & Smart TV</a>
-                                        <span>(5)</span>
-                                    </div>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
@@ -183,38 +160,14 @@
                             </div>
                             <a href="contact.html" class="nav-item nav-link me-2">Contact</a>
                             <div class="nav-item dropdown d-block d-lg-none mb-3">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">All
-                                    Category</a>
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    Danh mục </a>
                                 <div class="dropdown-menu m-0">
                                     <ul class="list-unstyled categories-bars">
                                         <li>
                                             <div class="categories-bars-item">
                                                 <a href="#">Accessories</a>
                                                 <span>(3)</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="categories-bars-item">
-                                                <a href="#">Electronics & Computer</a>
-                                                <span>(5)</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="categories-bars-item">
-                                                <a href="#">Laptops & Desktops</a>
-                                                <span>(2)</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="categories-bars-item">
-                                                <a href="#">Mobiles & Tablets</a>
-                                                <span>(8)</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="categories-bars-item">
-                                                <a href="#">SmartPhone & Smart TV</a>
-                                                <span>(5)</span>
                                             </div>
                                         </li>
                                     </ul>
@@ -244,7 +197,8 @@
                         <div class="col-xl-6 carousel-content p-4">
                             <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
                                 style="letter-spacing: 3px;">Phụ kiện giảm tới 50%</h4>
-                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Thu cũ đổi mới</h1>
+                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Thu cũ
+                                đổi mới</h1>
                             <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Terms and Condition Apply</p>
                             <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
                                 href="#">Shop Now</a>
@@ -258,8 +212,10 @@
                         <div class="col-xl-6 carousel-content p-4">
                             <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
                                 style="letter-spacing: 3px;">Ưu đã tới 50%</h4>
-                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Giải pháp đột phá. Ưu đãi doanh nghiệp</h1>
-                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Tổng ưu đãi lên đến 7 triệu | Trả góp 0% lên đến 12 tháng | Giá chỉ từ 30.99 triệu</p>
+                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Giải pháp
+                                đột phá. Ưu đãi doanh nghiệp</h1>
+                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Tổng ưu đãi lên đến 7 triệu |
+                                Trả góp 0% lên đến 12 tháng | Giá chỉ từ 30.99 triệu</p>
                             <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
                                 href="#">Mua ngay</a>
                         </div>
@@ -416,7 +372,7 @@
                             <li class="nav-item mb-4">
                                 <a class="d-flex py-2 mx-2 bg-light rounded-pill" data-bs-toggle="pill"
                                     href="#tab-2">
-                                    <span class="text-dark" style="width: 130px;">Sản phẩm mới  !</span>
+                                    <span class="text-dark" style="width: 130px;">Sản phẩm mới !</span>
                                 </a>
                             </li>
                             <li class="nav-item mb-4">
@@ -1358,7 +1314,8 @@
                                 class="img-fluid w-100 rounded" alt="">
                             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center rounded p-4"
                                 style="background: rgba(255, 255, 255, 0.5);">
-                                <h3 class="display-5 text-primary">Máy ảnh flagship α1 II  <br> <span>dành cho chuyên gia</span></h3>
+                                <h3 class="display-5 text-primary">Máy ảnh flagship α1 II <br> <span>dành cho chuyên
+                                        gia</span></h3>
                                 <p class="fs-4 text-muted">$899.99</p>
                                 <a href="#"
                                     class="btn btn-primary rounded-pill align-self-start py-2 px-4">Mua ngay</a>

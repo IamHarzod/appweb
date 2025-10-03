@@ -8,137 +8,95 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                         onclick="CloseModal('ModalCreateProduct')" aria-label="Close">X</button>
                 </div>
-                
-                <div class="row">
-            <div class="col-lg-12">
-              <div class="card">
-                <div class="card-header">
-                  <h4 class="card-title">Quản lý sản phẩm</h4>
-                </div>
-                <div class="card-body">
-                  <div class="form-validation">
-                      <div class="row">
-                        <div class="col-xl-6">
-                          <div class="form-group row">
-                            <label
-                              class="col-lg-4 col-form-label"
-                              for="product-name"
-                              >Tên sản phẩm
-                              <span class="text-danger">*</span>
-                            </label>
-                            <div class="col-lg-6">
-                              <input
-                                type="text"
-                                class="form-control"
-                                id="name"
-                                name="name"
-                                placeholder="Nhập tên sản phẩm.."
-                              />
-                            </div>
-                          </div>
-                          <!-- <div>Nhập hình ảnh sản phẩm</div> -->
 
-                          <div class="form-group row">
-                            <label
-                              class="col-lg-4 col-form-label"
-                              for="price"
-                              >Giá <span class="text-danger">*</span>
-                            </label>
-                            <div class="col-lg-6">
-                              <input
-                                type="number"
-                                class="form-control"
-                                id="price"
-                                name="price"
-                                placeholder="Nhập giá của sản phẩm.."
-                              />
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Quản lý sản phẩm</h4>
                             </div>
-                          </div>
-                          <div class="form-group row">
-                            <label
-                              class="col-lg-4 col-form-label"
-                              for="stock-quantity"
-                              >Số lượng tồn kho
-                              <span class="text-danger">*</span>
-                            </label>
-                            <div class="col-lg-6">
-                              <input
-                                type="number"
-                                class="form-control"
-                                id="stockQuantity"
-                                name="stockQuantity"
-                                placeholder="Nhập số lượng tồn kho.."
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label
-                              class="col-lg-4 col-form-label"
-                              for="val-confirm-password"
-                              >Discount percent
-                              <span class="text-danger">*</span>
-                            </label>
-                            <div class="col-lg-6">
-                              <input
-                                type="number"
-                                class="form-control"
-                                id="discountPercent"
-                                name="discountPercent"
-                                placeholder="nhập % giảm giá!"
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label
-                              class="col-lg-4 col-form-label"
-                              for="val-suggestions"
-                              >Mô tả <span class="text-danger">*</span>
-                            </label>
-                            <div class="col-lg-6">
-                              <textarea
-                                class="form-control"
-                                id="description"
-                                name="description"
-                                rows="5"
-                                placeholder="Nhập mô tả..."
-                              ></textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-6">
-                          <div class="form-group row">
-                            <label
-                              class="col-lg-4 col-form-label"
-                              for="val-skill"
-                              >Status
-                              <span class="text-danger">*</span>
-                            </label>
-                            <div class="col-lg-6">
-                              <select
-                                class="form-control"
-                                id="status"
-                                name="status"
-                              >
-                                <option value="1">Đang kinh doanh</option>
-                                <option value="0">Đã ngừng kinh doanh</option>
-                            
-                              </select>
-                            </div>
-                          </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label" >Trạng thái</label>
-                        <div class="col-sm-10">
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="IsActive" value="1"> Active</label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="IsActive" value="0"> InActive</label>
-                            </div>
-                        </div>
-                    </div>
-                          <!-- <div class="form-group row">
+                            <div class="card-body">
+                                <div class="form-validation">
+                                    <div class="row">
+                                        <div class="col-xl-6">
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="product-name">Tên sản phẩm
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input type="text" class="form-control" id="name"
+                                                        name="name" placeholder="Nhập tên sản phẩm.." />
+                                                </div>
+                                            </div>
+                                            <!-- <div>Nhập hình ảnh sản phẩm</div> -->
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="price">Giá <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input type="number" class="form-control" id="price"
+                                                        name="price" placeholder="Nhập giá của sản phẩm.." />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="stock-quantity">Số lượng tồn
+                                                    kho
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input type="number" class="form-control" id="stockQuantity"
+                                                        name="stockQuantity" placeholder="Nhập số lượng tồn kho.." />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label"
+                                                    for="val-confirm-password">Discount percent
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input type="number" class="form-control" id="discountPercent"
+                                                        name="discountPercent" placeholder="nhập % giảm giá!" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="val-suggestions">Mô tả <span
+                                                        class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <textarea class="form-control" id="description" name="description" rows="5" placeholder="Nhập mô tả..."></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="val-skill">Status
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <select class="form-control" id="status" name="status">
+                                                        <option value="1">Đang kinh doanh</option>
+                                                        <option value="0">Đã ngừng kinh doanh</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Trạng thái</label>
+                                                <div class="col-sm-10">
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="IsActive" value="1">
+                                                            Active</label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="IsActive" value="0">
+                                                            InActive</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="form-group row">
                             <label
                               class="col-lg-4 col-form-label"
                               for="val-currency"
@@ -155,39 +113,33 @@
                               />
                             </div>
                           </div> -->
-                          <div class="form-group row">
-                            <label
-                              class="col-lg-4 col-form-label"
-                              for="val-website"
-                              >Style
-                              <span class="text-danger">*</span>
-                            </label>
-                            <div class="col-lg-6">
-                              <input
-                                type="text"
-                                class="form-control"
-                                id="style"
-                                name="style"
-                                placeholder="nhập kiểu sản phẩm!"
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Logo</label>
-                        <div class="col-sm-10">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-primary" type="button">Button</button>
-                                </div>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" accept=".jpg, .png, .jpeg"
-                                        id="imageURL" name="imageURL">
-                                    <label class="custom-file-label">Chọn tệp</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                          <!-- <div class="form-group row">
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="val-website">Style
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input type="text" class="form-control" id="style"
+                                                        name="style" placeholder="nhập kiểu sản phẩm!" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Logo</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-primary"
+                                                                type="button">Button</button>
+                                                        </div>
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input"
+                                                                accept=".jpg, .png, .jpeg" id="imageURL"
+                                                                name="imageURL">
+                                                            <label class="custom-file-label">Chọn tệp</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="form-group row">
                             <label
                               class="col-lg-4 col-form-label"
                               for="val-phoneus"
@@ -277,17 +229,18 @@
                               >
                             </div>
                           </div>-->
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" onclick="CloseModal('ModalCreateProduct')"data-bs-dismiss="modal">Đóng</button>
-                                    <button type="submit" class="btn btn-primary">Lưu</button>
-                              
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <script></script>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    onclick="CloseModal('ModalCreateProduct')"data-bs-dismiss="modal">Đóng</button>
+                                                <button type="submit" class="btn btn-primary">Lưu</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<script></script>

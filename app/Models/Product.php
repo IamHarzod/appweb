@@ -23,12 +23,11 @@ class Product extends Model
         'IsActive',
         'category_id',
         'style',
-    ];    
-       
-           // Quan hệ với Category (nếu có bảng categories)
-           public function category()
-           {
-               return $this->belongsTo(\app\Models\Category::class, 'category_id');
-           }
+    ];
 
-}   
+    // Quan hệ với Category (nếu có bảng categories)
+    public function category()
+    {
+        return $this->belongsTo(\app\Models\Category::class, 'category_id');
+    }
+}

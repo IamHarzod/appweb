@@ -54,4 +54,3 @@ Route::get('/edit-category/{id}', [CategoryController::class, 'edit'])->name('ca
 Route::post('/update-category/{id}', [CategoryController::class, 'update'])->name('category.update');
 Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
 Route::get('/show-edit-category/{id}', [CategoryController::class, 'show_edit_modal'])->name('category.show_edit_modal');
-

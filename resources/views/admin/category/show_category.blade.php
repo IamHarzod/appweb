@@ -47,7 +47,8 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 @if ($item->ImageURL)
-                                                    <img src="{{ asset('public/uploads/categories/' . $item->ImageURL) }}" width="50" alt="">
+                                                    <img src="{{ asset('public/uploads/categories/' . $item->ImageURL) }}"
+                                                        width="50" alt="">
                                                 @else
                                                     <span class="text-muted">Không có ảnh</span>
                                                 @endif
@@ -63,17 +64,18 @@
                                                     <div class="dropdown-menu">
                                                         {{-- Sửa --}}
                                                         <a class="dropdown-item"
-                                                           href="{{ route('category.edit', $item->id) }}">
+                                                            href="{{ route('category.edit', $item->id) }}">
                                                             Sửa
                                                         </a>
 
                                                         {{-- Xoá --}}
                                                         <form action="{{ route('delete-category', ['id' => $item->id]) }}"
-                                                              method="POST"
-                                                              onsubmit="return confirm('Bạn có chắc chắn muốn xoá không?')">
+                                                            method="POST"
+                                                            onsubmit="return confirm('Bạn có chắc chắn muốn xoá không?')">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger">Xoá</button>
+                                                            <button type="submit"
+                                                                class="dropdown-item text-danger">Xoá</button>
                                                         </form>
                                                     </div>
                                                 </div>
