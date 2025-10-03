@@ -176,6 +176,12 @@
                             <span class="nav-text">Quản lý sản phẩm</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.users') }}" aria-expanded="false">
+                            <i class="icon icon-people"></i>
+                            <span class="nav-text">Quản lý tài khoản</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -184,7 +190,7 @@
             @yield('view-content')
         </div>
     </div>
-    <div class="modal fade" id="ModalEdit" tabindex="-1" data-backdrop="static" aria-labelledby="ModalEditLabel"
+    <div class="modal fade" id="ModalEdit" tabindex="-1" aria-labelledby="ModalEditLabel"
         aria-hidden="true" role="dialog">
     </div>
 

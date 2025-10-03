@@ -66,10 +66,16 @@
                         <a href="#" class="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
                                     class="fa fa-home me-2"></i> My Dashboard</small></a>
                         <div class="dropdown-menu rounded">
-                            <a href="#" class="dropdown-item"> Đăng nhập</a>
-                            <a href="#" class="dropdown-item"> Yêu thích</a>
-                            <a href="#" class="dropdown-item"> Thông tin cá nhân</a>
-                            <a href="#" class="dropdown-item"> Log Out</a>
+                            @auth
+                                @if(auth()->user()->role === 'admin')
+                                    <a href="{{ route('admin.dashboard') }}" class="dropdown-item"> Admin Dashboard</a>
+                                    <div class="dropdown-divider"></div>
+                                @endif
+                                <a href="#" class="dropdown-item"> Thông tin cá nhân</a>
+                                <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
+                            @else
+                                <a href="{{ route('admin') }}" class="dropdown-item"> Đăng nhập</a>
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -244,8 +250,8 @@
                         <div class="col-xl-6 carousel-content p-4">
                             <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
                                 style="letter-spacing: 3px;">Phụ kiện giảm tới 50%</h4>
-                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Thu cũ đổi mới</h1>
-                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Terms and Condition Apply</p>
+                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Thu cũ đổi mới | Lên đời giá tốt</h1>
+                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Thu cũ lên đời | Trợ giá lên đến 3 triệu | Giảm đến 1tr cho thành viên của 36Member</p>
                             <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
                                 href="#">Shop Now</a>
                         </div>
@@ -278,8 +284,8 @@
                         <div class="carousel-banner-content text-center p-4">
                             <a href="#" class="d-block mb-2"> Vision Pro</a>
                             <a href="#" class="d-block text-white fs-3"> So Visionary <br>So Pro.</a>
-                            <del class="me-2 text-white fs-5">$1,250.00</del>
-                            <span class="text-primary fs-5">$1,050.00</span>
+                            <del class="me-2 text-white fs-5">86.990.000đ</del>
+                            <span class="text-primary fs-5">85.399.000đ</span>
                         </div>
                         <a href="#" class="btn btn-primary rounded-pill py-2 px-4"><i
                                 class="fas fa-shopping-cart me-2"></i> Thêm ngay vào giỏ hàng </a>
