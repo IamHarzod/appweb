@@ -63,9 +63,15 @@
                                                     </button>
                                                     <div class="dropdown-menu">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                                                         {{-- Sửa --}}
                                                         <a class="dropdown-item"
                                                             href="{{ route('category.edit', $item->id) }}">
+=======
+                                                        {{-- Sửa (modal) --}}
+                                                        <button class="dropdown-item" type="button"
+                                                            onclick="OpenModal(null, '{{ route('category.show_edit_modal', $item->id) }}')">
+>>>>>>> Stashed changes
 =======
                                                         {{-- Sửa (modal) --}}
                                                         <button class="dropdown-item" type="button"
