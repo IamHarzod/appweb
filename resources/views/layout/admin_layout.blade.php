@@ -132,14 +132,14 @@
                                     </a>
                                 @endauth
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    {{-- <a href="./app-profile.html" class="dropdown-item">
+                                    <!-- <a href="./app-profile.html" class="dropdown-item">
                                         <i class="icon-user"></i>
                                         <span class="ml-2">Profile </span>
-                                    </a>
-                                    <a href="./email-inbox.html" class="dropdown-item">
+                                    </a> -->
+                                    <a href="{{url('/show-home')}} " class="dropdown-item">
                                         <i class="icon-envelope-open"></i>
-                                        <span class="ml-2">Inbox </span>
-                                    </a> --}}
+                                        <span class="ml-2"> Quay lại trang chủ </span>
+                                    </a>
                                     <a href="{{ url('/logout-admin') }}" class="dropdown-item">
                                         <i class="icon-key"></i>
                                         <span class="ml-2">Đăng xuất </span>

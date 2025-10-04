@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProfilesController;
+
 
 
 // Home
@@ -15,6 +17,13 @@ Route::get('/show-home', [HomeController::class, 'show_home'])->name('home');
 
 // Cart
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
+//Profile
+Route::middleware('auth')->group(function () {
+    Route::get('/show-profile', [ProfilesController::class, 'show_profile'])
+        ->name('profile');
+        });
+
+
 
 
 // ADMIN

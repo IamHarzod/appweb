@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,15 +21,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="{{ asset('public/layout/lib/animate/animate.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/layout/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/client/lib/animate/animate.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/client/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
 
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="{{ asset('public/layout/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('public/client/css/bootstrap.min.css') }}" rel="stylesheet">
+
 
     <!-- Template Stylesheet -->
-    <link href="{{ asset('public/layout/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/client/css/style.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/client/img/favicon.png') }}">
 </head>
 
 <body>
@@ -44,7 +47,7 @@
 
 
     <!-- Topbar Start -->
-<div class="container-fluid px-5 d-none border-bottom d-lg-block">
+    <div class="container-fluid px-5 d-none border-bottom d-lg-block">
         <div class="row gx-0 align-items-center">
             <div class="col-lg-4 text-center text-lg-start mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
@@ -119,39 +122,39 @@
             <div class="col-lg-3 d-none d-lg-block">
                 <nav class="navbar navbar-light position-relative" style="width: 250px;">
                     <button class="navbar-toggler border-0 fs-4 w-100 px-0 text-start" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#allCat">
-                        <h4 class="m-0"><i class="fa fa-bars me-2"></i>Danh mục sản phẩm</h4>
+                        data-bs-toggle="collapse" data-bs-target="#!allCat">
+                        <h4 class="m-0"><i class="fa fa-bars me-2"></i>All Categories</h4>
                     </button>
                     <div class="collapse navbar-collapse rounded-bottom" id="allCat">
                         <div class="navbar-nav ms-auto py-0">
                             <ul class="list-unstyled categories-bars">
                                 <li>
                                     <div class="categories-bars-item">
-                                        <a href="#">Accessories</a>
+                                        <a href="#!">Accessories</a>
                                         <span>(3)</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="categories-bars-item">
-                                        <a href="#">Electronics & Computer</a>
+                                        <a href="#!">Electronics & Computer</a>
                                         <span>(5)</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="categories-bars-item">
-                                        <a href="#">Laptops & Desktops</a>
+                                        <a href="#!">Laptops & Desktops</a>
                                         <span>(2)</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="categories-bars-item">
-                                        <a href="#">Mobiles & Tablets</a>
+                                        <a href="#!">Mobiles & Tablets</a>
                                         <span>(8)</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="categories-bars-item">
-                                        <a href="#">SmartPhone & Smart TV</a>
+                                        <a href="#!">SmartPhone & Smart TV</a>
                                         <span>(5)</span>
                                     </div>
                                 </li>
@@ -168,58 +171,58 @@
                         <!-- <img src="img/logo.png" alt="Logo"> -->
                     </a>
                     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarCollapse">
+                        data-bs-target="#!navbarCollapse">
                         <span class="fa fa-bars fa-1x"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
-                            <a href="{{route('home')}} " class="nav-item nav-link">Trang chủ</a>
+                            <a href="index.html" class="nav-item nav-link">Home</a>
                             <a href="shop.html" class="nav-item nav-link">Shop</a>
                             <a href="single.html" class="nav-item nav-link">Single Page</a>
                             <div class="nav-item dropdown">
-                                <a href="#" class="nav-link active" data-bs-toggle="dropdown"><span
+                                <a href="#!" class="nav-link" data-bs-toggle="dropdown"><span
                                         class="dropdown-toggle">Pages</span></a>
                                 <div class="dropdown-menu m-0">
                                     <a href="bestseller.html" class="dropdown-item">Bestseller</a>
-                                    <a href="cart.html" class="dropdown-item active">Cart Page</a>
+                                    <a href="cart.html" class="dropdown-item">Cart Page</a>
                                     <a href="cheackout.html" class="dropdown-item">Cheackout</a>
                                     <a href="404.html" class="dropdown-item">404 Page</a>
                                 </div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link me-2">Contact</a>
+                            <a href="contact.html" class="nav-item nav-link me-2 active">Contact</a>
                             <div class="nav-item dropdown d-block d-lg-none mb-3">
-                                <a href="#" class="nav-link" data-bs-toggle="dropdown"><span
+                                <a href="#!" class="nav-link" data-bs-toggle="dropdown"><span
                                         class="dropdown-toggle">All
                                         Category</span></a>
                                 <div class="dropdown-menu m-0">
                                     <ul class="list-unstyled categories-bars">
                                         <li>
                                             <div class="categories-bars-item">
-                                                <a href="#">Accessories</a>
+                                                <a href="#!">Accessories</a>
                                                 <span>(3)</span>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="categories-bars-item">
-                                                <a href="#">Electronics & Computer</a>
+                                                <a href="#!">Electronics & Computer</a>
                                                 <span>(5)</span>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="categories-bars-item">
-                                                <a href="#">Laptops & Desktops</a>
+                                                <a href="#!">Laptops & Desktops</a>
                                                 <span>(2)</span>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="categories-bars-item">
-                                                <a href="#">Mobiles & Tablets</a>
+                                                <a href="#!">Mobiles & Tablets</a>
                                                 <span>(8)</span>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="categories-bars-item">
-                                                <a href="#">SmartPhone & Smart TV</a>
+                                                <a href="#!">SmartPhone & Smart TV</a>
                                                 <span>(5)</span>
                                             </div>
                                         </li>
@@ -227,8 +230,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href=""
-                            class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i
+                        <a href="" class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i
                                 class="fa fa-mobile-alt me-2"></i> +0123 456 7890</a>
                     </div>
                 </nav>
@@ -239,187 +241,91 @@
 
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Giỏ hàng</h1>
+        <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Contact Us</h1>
         <ol class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay="0.3s">
-
-            <li class="breadcrumb-item"><a href="{{ url('/show-home') }}">Trang chủ</a></li>
-            <li class="breadcrumb-item active text-white">Giỏ hàng</li>
-
-            <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Pages</a></li>
-            <li class="breadcrumb-item active text-white">Cart Page</li>
-
+            <li class="breadcrumb-item"><a href="#!">Home</a></li>
+            <li class="breadcrumb-item"><a href="#!">Pages</a></li>
+            <li class="breadcrumb-item active text-white">Contact</li>
         </ol>
     </div>
     <!-- Single Page Header End -->
 
-    <!-- Cart Page Start -->
-    <div class="container-fluid py-5">
+    <!-- Contucts Start -->
+    <div class="container-fluid contact py-5">
         <div class="container py-5">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Tên</th>
-                            <th scope="col">Danh mục</th>
-                            <th scope="col">Giá</th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Tổng tiền</th>
-                            <th scope="col">Xoá</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                <p class="mb-0 py-4">Apple iPad Mini</p>
-                            </th>
-                            <td>
-                                <p class="mb-0 py-4">G2356</p>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td>
-                                <div class="input-group quantity py-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0"
-                                        value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
+            <div class="p-5 bg-light rounded">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 900px;">
+                            <h4 class="text-primary border-bottom border-primary border-2 d-inline-block pb-2">Thông tin cá nhân</h4>
+                            <p class="mb-5 fs-5 text-dark">Thông tin cá nhân của bạn</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <h1 class="display-5 mb-4 wow fadeInUp" data-wow-delay="0.3s">36Member Profile</h1>
+                            <div class="row g-4 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="col-lg-12 col-xl-6">
+                                    <div class="form-floating">
+                                        <p><strong>Họ và tên:</strong> {{ $client->name }}</p>
                                     </div>
                                 </div>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td class="py-4">
-                                <button class="btn btn-md rounded-circle bg-light border">
-                                    <i class="fa fa-times text-danger"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <p class="mb-0 py-4">Apple iPad Mini</p>
-                            </th>
-                            <td>
-                                <p class="mb-0 py-4">G2356</p>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td>
-                                <div class="input-group quantity py-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0"
-                                        value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
+                                <div class="col-lg-12 col-xl-6">
+                                    <div class="form-floating">
+                                        <p><strong>Email:</strong> {{ $client->email }}</p>
                                     </div>
                                 </div>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td class="py-4">
-                                <button class="btn btn-md rounded-circle bg-light border">
-                                    <i class="fa fa-times text-danger"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <p class="mb-0 py-4">Apple iPad Mini</p>
-                            </th>
-                            <td>
-                                <p class="mb-0 py-4">G2356</p>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td>
-                                <div class="input-group quantity py-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0"
-                                        value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
+                                <div class="col-lg-12 col-xl-6">
+                                    <div class="form-floating">
+                                         <p><strong>Số điện thoại:</strong> {{ $client->phoneNumber ?? 'Chưa cập nhật' }}</p>
                                     </div>
                                 </div>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td class="py-4">
-                                <button class="btn btn-md rounded-circle bg-light border">
-                                    <i class="fa fa-times text-danger"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-5">
-                <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4"
-                    placeholder="Mã giảm giá">
-                <button class="btn btn-primary rounded-pill px-4 py-3" type="button">Nhập mã giảm giá</button>
-            </div>
-            <div class="row g-4 justify-content-end">
-                <div class="col-8"></div>
-                <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
-                    <div class="bg-light rounded">
-                        <div class="p-4">
-                            <h1 class="display-6 mb-4">Tổng đơn hàng<span class="fw-normal"></span></h1>
-                            <div class="d-flex justify-content-between mb-4">
-                                <h5 class="mb-0 me-4">Tổng phụ:</h5>
-                                <p class="mb-0">$96.00</p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <h5 class="mb-0 me-4">Phí vận chuyển:</h5>
-                                <div>
-                                    <p class="mb-0">Flat rate: $3.00</p>
+                                <div class="col-lg-12 col-xl-6">
+                                    <div class="form-floating">
+                                        <p><strong>Địa chỉ:</strong> {{ $client->address ?? 'Chưa cập nhật' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <p><strong>Ngày khởi tạo :</strong>{{ $client->create_at}} </p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Leave a message here" id="message"
+                                            style="height: 160px"></textarea>
+                                        <label for="message">Message</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100 py-3">Send Message</button>
                                 </div>
                             </div>
-                            <p class="mb-0 text-end">Shipping to Ukraine.</p>
+                        </form>
+                    </div>
+                    <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="h-100 rounded">
+                            <iframe class="rounded w-100" style="height: 100%;"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387191.33750346623!2d-73.97968099999999!3d40.6974881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1694259649153!5m2!1sen!2sbd"
+                                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
-                        <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                            <h5 class="mb-0 ps-4 me-4">Tổng tiền</h5>
-                            <p class="mb-0 pe-4">$99.00</p>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="row g-4 align-items-center justify-content-center">
+                            <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="rounded p-4">
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-4"
+                                        style="width: 70px; height: 70px;">
+                                        <i class="fas fa-map-marker-alt fa-2x text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4"
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                            type="button">Tiến hành thanh toán</button>
-=======
-                            type="button">Xác nhận thanh toán</button>
->>>>>>> Stashed changes
-=======
-                            type="button">Xác nhận thanh toán</button>
->>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Cart Page End -->
+    <!-- Contuct End -->
 
     <!-- Footer Start -->
     <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
@@ -432,8 +338,8 @@
                             <i class="fas fa-map-marker-alt fa-2x text-primary"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">Địa chỉ</h4>
-                            <p class="mb-2">123 Hà Nội</p>
+                            <h4 class="text-white">Address</h4>
+                            <p class="mb-2">123 Street New York.USA</p>
                         </div>
                     </div>
                 </div>
@@ -444,8 +350,8 @@
                             <i class="fas fa-envelope fa-2x text-primary"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">Viết Mail cho chúng tôi</h4>
-                            <p class="mb-2">36shop@gmail.com</p>
+                            <h4 class="text-white">Mail Us</h4>
+                            <p class="mb-2">info@example.com</p>
                         </div>
                     </div>
                 </div>
@@ -456,8 +362,8 @@
                             <i class="fa fa-phone-alt fa-2x text-primary"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">Số điện thoại</h4>
-                            <p class="mb-2">(+084) 3456 7890</p>
+                            <h4 class="text-white">Telephone</h4>
+                            <p class="mb-2">(+012) 3456 7890</p>
                         </div>
                     </div>
                 </div>
@@ -479,8 +385,7 @@
                     <div class="footer-item d-flex flex-column">
                         <div class="footer-item">
                             <h4 class="text-primary mb-4">Newsletter</h4>
-                            <p class="text-white mb-3">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem
-                                ipsum
+                            <p class="text-white mb-3">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum
                                 dolor sit amet, consectetur adipiscing elit consectetur adipiscing elit.</p>
                             <div class="position-relative mx-auto rounded-pill">
                                 <input class="form-control rounded-pill w-100 py-3 ps-4 pe-5" type="text"
@@ -494,40 +399,37 @@
                 <div class="col-md-6 col-lg-6 col-xl-3">
                     <div class="footer-item d-flex flex-column">
                         <h4 class="text-primary mb-4">Customer Service</h4>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Contact Us</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Returns</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Site Map</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Testimonials</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> My Account</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Unsubscribe
-                            Notification</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Contact Us</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Returns</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Site Map</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Testimonials</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> My Account</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Unsubscribe Notification</a>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-3">
                     <div class="footer-item d-flex flex-column">
                         <h4 class="text-primary mb-4">Information</h4>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> About Us</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Delivery
-                            infomation</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Privacy Policy</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Terms &
-                            Conditions</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Warranty</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> FAQ</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Seller Login</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> About Us</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Delivery infomation</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Privacy Policy</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Terms & Conditions</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Warranty</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> FAQ</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Seller Login</a>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-3">
                     <div class="footer-item d-flex flex-column">
                         <h4 class="text-primary mb-4">Extras</h4>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Brands</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Gift Vouchers</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Affiliates</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Wishlist</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Track Your Order</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Track Your Order</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Brands</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Gift Vouchers</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Affiliates</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Wishlist</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Track Your Order</a>
+                        <a href="#!" class=""><i class="fas fa-angle-right me-2"></i> Track Your Order</a>
                     </div>
                 </div>
             </div>
@@ -541,7 +443,7 @@
         <div class="container">
             <div class="row g-4 align-items-center">
                 <div class="col-md-6 text-center text-md-start mb-md-0">
-                    <span class="text-white"><a href="#" class="border-bottom text-white"><i
+                    <span class="text-white"><a href="#!" class="border-bottom text-white"><i
                                 class="fas fa-copyright text-light me-2"></i>Your Site Name</a>, All right
                         reserved.</span>
                 </div>
@@ -551,7 +453,8 @@
                     <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
                     <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
                     Designed By <a class="border-bottom text-white" href="https://htmlcodex.com">HTML Codex</a>.
-                    Distributed By <a class="border-bottom text-white" href="https://themewagon.com">ThemeWagon</a>
+                    Distributed By <a class="border-bottom text-white" href="https://themewagon.com"
+                        target="_blank">ThemeWagon</a>
                 </div>
             </div>
         </div>
@@ -560,7 +463,7 @@
 
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>
+    <a href="#!" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>
 
 
     <!-- JavaScript Libraries -->
