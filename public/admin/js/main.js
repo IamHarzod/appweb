@@ -1,4 +1,3 @@
-
 function DeleteData(url) {
     Swal.fire({
         title: "Xác nhận",
@@ -110,7 +109,7 @@ function OpenModal(id, url) {
                 }
             })
             .fail(function (xhr) {
-                toastr.error("Đã có lỗi khi xoá dữ liệu", "Lỗi", {
+                toastr.error("Đã có lỗi khi thêm dữ liệu", "Lỗi", {
                     timeOut: 500000000,
                     closeButton: !0,
                     debug: !1,

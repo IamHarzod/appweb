@@ -4,8 +4,8 @@
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="ModalCreateProductLabel">Thêm mới sản phẩm</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        onclick="CloseModal('ModalCreateProduct')" aria-label="Close">X</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CloseModal('ModalEdit')"
+                        aria-label="Close">X</button>
                 </div>
 
                 <div class="row">
@@ -261,7 +261,7 @@
                           </div>-->
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
-                                                    onclick="CloseModal('ModalCreateProduct')"data-bs-dismiss="modal">Đóng</button>
+                                                    onclick="CloseModal('ModalEdit')"data-bs-dismiss="modal">Đóng</button>
                                                 <button type="submit" class="btn btn-primary">Lưu</button>
 
                                             </div>

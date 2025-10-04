@@ -22,10 +22,7 @@ class ProductController extends Controller
 
     public function show_create_product()
     {
-        $brand = Brand::with([
-            'brand:TenThuongHieu',        // chọn đúng cột tên của bạn, ví dụ TenThuongHieu
-            'category:name'      // ví dụ TenDanhMuc
-        ])->get();
+        $brand = Brand::get();
         $category = Category::get();
         return view("admin.product.add_product")->with(compact("brand", "category"));
     }
