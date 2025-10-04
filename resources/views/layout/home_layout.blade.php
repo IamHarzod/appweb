@@ -71,7 +71,7 @@
                                     <a href="{{ route('admin.dashboard') }}" class="dropdown-item"> Admin Dashboard</a>
                                     <div class="dropdown-divider"></div>
                                 @endif
-                                <a href="#" class="dropdown-item"> Thông tin cá nhân</a>
+                                <a href="{{url('/show-profile')}}" class="dropdown-item"> Thông tin cá nhân</a>
                                 <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
                             @else
                                 <a href="{{ route('admin') }}" class="dropdown-item"> Đăng nhập</a>
