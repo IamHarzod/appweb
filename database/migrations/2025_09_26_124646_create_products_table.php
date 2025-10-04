@@ -19,14 +19,12 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->integer('stockQuantity');
             $table->unsignedBigInteger('category_id');
-            $table->decimal('discountPercent', 5, 2)->default(0);
+            $table->integer('discountPercent')->nullable();
             $table->string('imageURL')->nullable();
             $table->boolean('IsActive')->default(true);
             $table->string('line')->nullable();
             $table->string('style')->nullable();
             $table->string('status')->nullable();
-    
-
         });
     }
 
@@ -35,7 +33,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        
+
         Schema::dropIfExists('products');
     }
 };

@@ -1,0 +1,1558 @@
+@extends('layout.home_layout')
+@section('home-content')
+    <!-- Carousel Start -->
+    <div class="container-fluid carousel bg-light px-0">
+        <div class="row g-0 justify-content-end">
+            <div class="col-12 col-lg-7 col-xl-9">
+                <div class="header-carousel owl-carousel bg-light py-5">
+                    <div class="row g-0 header-carousel-item align-items-center">
+                        <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
+                            <img src="{{ asset('public/client/img/macbook-banner.png') }}" class="img-fluid w-100"
+                                alt="Image">
+                        </div>
+                        <div class="col-xl-6 carousel-content p-4">
+                            <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
+                                style="letter-spacing: 3px;">Phụ kiện giảm tới 50%</h4>
+                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Thu cũ
+                                đổi mới | Lên đời giá tốt</h1>
+                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Thu cũ lên đời | Trợ giá lên
+                                đến 3 triệu | Giảm đến 1tr cho thành viên của 36Member</p>
+                            <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
+                                href="#">Shop Now</a>
+                        </div>
+                    </div>
+                    <div class="row g-0 header-carousel-item align-items-center">
+                        <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
+                            <img src="{{ asset('public/client/img/Mac-studio-banner.png') }}" class="img-fluid w-100"
+                                alt="Image">
+                        </div>
+                        <div class="col-xl-6 carousel-content p-4">
+                            <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
+                                style="letter-spacing: 3px;">Ưu đã tới 50%</h4>
+                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Giải pháp
+                                đột phá. Ưu đãi doanh nghiệp</h1>
+                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Tổng ưu đãi lên đến 7 triệu |
+                                Trả góp 0% lên đến 12 tháng | Giá chỉ từ 30.99 triệu</p>
+                            <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
+                                href="#">Mua ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 col-xl-3 wow fadeInRight" data-wow-delay="0.1s">
+                <div class="carousel-header-banner h-100">
+                    <img src="{{ asset('public/client/img/Vision-Pro-Banner.jpg') }}" class="img-fluid w-100 h-100"
+                        style="object-fit: cover;" alt="Image">
+                    <div class="carousel-banner-offer">
+                        <p class="bg-primary text-white rounded fs-5 py-2 px-4 mb-0 me-3"> Giảm ngay 10%</p>
+                        <p class="text-primary fs-5 fw-bold mb-0">Khuyến mãi đặc biệt</p>
+                    </div>
+                    <div class="carousel-banner">
+                        <div class="carousel-banner-content text-center p-4">
+                            <a href="#" class="d-block mb-2"> Vision Pro</a>
+                            <a href="#" class="d-block text-white fs-3"> So Visionary <br>So Pro.</a>
+                            <del class="me-2 text-white fs-5">86.990.000đ</del>
+                            <span class="text-primary fs-5">85.399.000đ</span>
+                        </div>
+                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4"><i
+                                class="fas fa-shopping-cart me-2"></i> Thêm ngay vào giỏ hàng </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+    <!-- Searvices Start -->
+    <div class="container-fluid px-0">
+        <div class="row g-0">
+            <div class="col-6 col-md-4 col-lg-2 border-start border-end wow fadeInUp" data-wow-delay="0.1s">
+                <div class="p-4">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="fa fa-sync-alt fa-2x text-primary"></i>
+                        <div class="ms-4">
+                            <h6 class="text-uppercase mb-2">Miễn phí hoàn trả !!</h6>
+                            <p class="mb-0">Trong vòng 30 ngày sau khi mua hàng!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 border-end wow fadeInUp" data-wow-delay="0.2s">
+                <div class="p-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fab fa-telegram-plane fa-2x text-primary"></i>
+                        <div class="ms-4">
+                            <h6 class="text-uppercase mb-2">Miễn phí ship</h6>
+                            <p class="mb-0">Miễn phí ship các đơn hàng của bạn !</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 border-end wow fadeInUp" data-wow-delay="0.3s">
+                <div class="p-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-life-ring fa-2x text-primary"></i>
+                        <div class="ms-4">
+                            <h6 class="text-uppercase mb-2">Hỗ trợ 24/7</h6>
+                            <p class="mb-0">Chúng tôi sẽ luôn hỗ trợ bạn trong 24h </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 border-end wow fadeInUp" data-wow-delay="0.4s">
+                <div class="p-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-credit-card fa-2x text-primary"></i>
+                        <div class="ms-4">
+                            <h6 class="text-uppercase mb-2">Nhận về nhiều mã giảm giá !</h6>
+                            <p class="mb-0">Có thể nhận mã giảm giá lên đến 50% cho mỗi đơn hàng áp dụng !</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 border-end wow fadeInUp" data-wow-delay="0.5s">
+                <div class="p-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-lock fa-2x text-primary"></i>
+                        <div class="ms-4">
+                            <h6 class="text-uppercase mb-2">Thanh toán bảo mật</h6>
+                            <p class="mb-0">Chúc tôi đảm bảo bạn luôn được bảo mật</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 border-end wow fadeInUp" data-wow-delay="0.6s">
+                <div class="p-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-blog fa-2x text-primary"></i>
+                        <div class="ms-4">
+                            <h6 class="text-uppercase mb-2">Dịch vụ online</h6>
+                            <p class="mb-0">Được hoàn trả hàng trong vòng 30 ngày !!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Searvices End -->
+
+    <!-- Products Offer Start -->
+    <div class="container-fluid bg-light py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.2s">
+                    <a href="#"
+                        class="d-flex align-items-center justify-content-between border bg-white rounded p-4">
+                        <div>
+                            <p class="text-muted mb-3">Khám phá máy ảnh theo phong cách của bạn !</p>
+                            <h3 class="text-primary">Camera </h3>
+                            <h1 class="display-3 text-secondary mb-0">40% <span class="text-primary fw-normal">Off</span>
+                            </h1>
+                        </div>
+                        <img src="{{ asset('public/client/img/product-1.png') }}" class="img-fluid" alt="">
+                    </a>
+                </div>
+                <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.3s">
+                    <a href="#"
+                        class="d-flex align-items-center justify-content-between border bg-white rounded p-4">
+                        <div>
+                            <p class="text-muted mb-3">Phụ kiện đeo tay ư ? Không thể thiếu !</p>
+                            <h3 class="text-primary">Smart Whatch</h3>
+                            <h1 class="display-3 text-secondary mb-0">20% <span class="text-primary fw-normal">Off</span>
+                            </h1>
+                        </div>
+                        <img src="{{ asset('public/client/img/product-2.png') }}" class="img-fluid" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Products Offer End -->
+
+
+    <!-- Our Products Start -->
+    <div class="container-fluid product py-5">
+        <div class="container py-5">
+            <div class="tab-class">
+                <div class="row g-4">
+                    <div class="col-lg-4 text-start wow fadeInLeft" data-wow-delay="0.1s">
+                        <h2>Sản phẩm của chúng tôi</h2>
+                    </div>
+                    <div class="col-lg-8 text-end wow fadeInRight" data-wow-delay="0.1s">
+                        <ul class="nav nav-pills d-inline-flex text-center mb-5">
+                            <li class="nav-item mb-4">
+                                <a class="d-flex mx-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill"
+                                    href="#tab-1">
+                                    <span class="text-dark" style="width: 130px;">Tất cả sản phẩm</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mb-4">
+                                <a class="d-flex py-2 mx-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-2">
+                                    <span class="text-dark" style="width: 130px;">Sản phẩm mới !</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mb-4">
+                                <a class="d-flex mx-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-3">
+                                    <span class="text-dark" style="width: 130px;">Nổi bật</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mb-4">
+                                <a class="d-flex mx-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-4">
+                                    <span class="text-dark" style="width: 130px;">Top bán chạy</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane fade show p-0 active">
+                        <div class="row g-4">
+                            @foreach ($our_product as $product)
+                                <div class="col-md-6 col-lg-4 col-xl-3">
+                                    <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
+                                        <div class="product-item-inner border rounded">
+                                            <div class="product-item-inner-item">
+                                                <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                                    class="img-fluid w-100 rounded-top" alt="">
+                                                <div class="product-new">Mới</div>
+                                                <div class="product-details">
+                                                    <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="text-center rounded-bottom p-4">
+                                                <a href="#" class="d-block mb-2">{{ $product->category->name }}</a>
+                                                <a href="#" class="d-block h4"> {{ $product->name }} <br> </a>
+                                                @php
+                                                    $price = (float) ($product->price ?? 0);
+                                                    $percent = (int) ($product->discountPercent ?? 0);
+                                                    $percent = max(0, min(100, $percent)); // chặn ngoài 0–100
+
+                                                    // giá sau giảm (làm tròn đến đơn vị đồng; nếu muốn tới nghìn dùng round($..., -3))
+                                                    $discounted = ($price * (100 - $percent)) / 100;
+
+                                                    // format VND: 1.234.567đ
+                                                    $fmt = fn($n) => number_format($n, 0, ',', '.') . 'đ';
+                                                @endphp
+
+                                                @if ($percent > 0)
+                                                    <del class="me-2 fs-5">{{ $fmt($price) }}</del>
+                                                    <span class="text-primary fs-5">{{ $fmt($discounted) }}</span>
+                                                @else
+                                                    <span class="fs-5">{{ $fmt($price) }}</span>
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="product-item-add border border-top-0 rounded-bottom text-center p-4 pt-0">
+                                            <a href="#"
+                                                class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex">
+                                                    <i class="fas fa-star text-primary"></i>
+                                                    <i class="fas fa-star text-primary"></i>
+                                                    <i class="fas fa-star text-primary"></i>
+                                                    <i class="fas fa-star text-primary"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="d-flex">
+                                                    <a href="#"
+                                                        class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                            class="rounded-circle btn-sm-square border"><i
+                                                                class="fas fa-random"></i></i></a>
+                                                    <a href="#"
+                                                        class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                            class="rounded-circle btn-sm-square border"><i
+                                                                class="fas fa-heart"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    {{-- <div id="tab-2" class="tab-pane fade show p-0">
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-3.png') }}"
+                                                class="img-fluid rounded-top" alt="">
+                                            <div class="product-new">New</div>
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.3s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-4.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="">
+                                            <div class="product-new">New</div>
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.5s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-5.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="">
+                                            <div class="product-new">New</div>
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.7s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-6.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="Image">
+                                            <div class="product-new">New</div>
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-3" class="tab-pane fade show p-0">
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-9.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="">
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.3s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-10.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="Image">
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.5s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-11.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="Image">
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.7s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-12.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="Image">
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-4" class="tab-pane fade show p-0">
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-14.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="Image">
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.3s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-15.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="Image">
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.5s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-17.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="Image">
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.7s">
+                                    <div class="product-item-inner border rounded">
+                                        <div class="product-item-inner-item">
+                                            <img src="{{ asset('public/client/img/product-16.png') }}"
+                                                class="img-fluid w-100 rounded-top" alt="Image">
+                                            <div class="product-details">
+                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center rounded-bottom p-4">
+                                            <a href="#" class="d-block mb-2">SmartPhone</a>
+                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                            <del class="me-2 fs-5">$1,250.00</del>
+                                            <span class="text-primary fs-5">$1,050.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
+                                        <a href="#"
+                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
+                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex">
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star text-primary"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-random"></i></i></a>
+                                                <a href="#"
+                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                                        class="rounded-circle btn-sm-square border"><i
+                                                            class="fas fa-heart"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Our Products End -->
+
+
+    <!-- Product List Satrt -->
+    <div class="container-fluid products productList overflow-hidden">
+        <div class="container products-mini py-5">
+            <div class="mx-auto text-center mb-5" style="max-width: 900px;">
+                <h4 class="text-primary border-bottom border-primary border-2 d-inline-block p-2 title-border-radius wow fadeInUp"
+                    data-wow-delay="0.1s">Products</h4>
+                <h1 class="mb-0 display-3 wow fadeInUp" data-wow-delay="0.3s">All Product Items</h1>
+            </div>
+            <div class="productList-carousel owl-carousel pt-4 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="productImg-carousel owl-carousel productList-item">
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-4.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-4.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-6.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-7.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="productImg-carousel owl-carousel productList-item">
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-8.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-9.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-10.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-11.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="productImg-carousel owl-carousel productList-item">
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-12.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-13.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-14.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-15.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="productImg-carousel owl-carousel productList-item">
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-16.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-17.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="productImg-item products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-3.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Product List End -->
+
+    <!-- Bestseller Products Start -->
+    <div class="container-fluid products pb-5">
+        <div class="container products-mini py-5">
+            <div class="mx-auto text-center mb-5" style="max-width: 700px;">
+                <h4 class="text-primary mb-4 border-bottom border-primary border-2 d-inline-block p-2 title-border-radius wow fadeInUp"
+                    data-wow-delay="0.1s">Bestseller Products</h4>
+                <p class="mb-0 wow fadeInUp" data-wow-delay="0.2s">Lorem ipsum dolor sit amet consectetur
+                    adipisicing
+                    elit. Modi, asperiores ducimus sint quos tempore officia similique quia? Libero, pariatur
+                    consectetur?</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-3.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-4.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-5.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-6.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-7.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="products-mini-item border">
+                        <div class="row g-0">
+                            <div class="col-5">
+                                <div class="products-mini-img border-end h-100">
+                                    <img src="{{ asset('public/client/img/product-11.png') }}"
+                                        class="img-fluid w-100 h-100" alt="Image">
+                                    <div class="products-mini-icon rounded-circle bg-primary">
+                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="products-mini-content p-3">
+                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                    <a href="#" class="d-block h4"> iPad Mini <br></a>
+                                    <del class="me-2 fs-5">$1,250.00</del>
+                                    <span class="text-primary fs-5">$1,050.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-mini-add border p-3">
+                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
+                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <div class="d-flex">
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></i></a>
+                                <a href="#"
+                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
+                                        class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bestseller Products End -->
+@endsection

@@ -11,11 +11,13 @@ use App\Http\Controllers\CategoryController;
 
 
 // Home
-Route::get('/show-home', [HomeController::class, 'show_home'])->name('home');
+
+Route::get('/', [HomeController::class, 'show_home'])->name('home');
 Route::get('/show-category-home', [HomeController::class, 'show_category_home']);
 
 // Cart
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
+Route::get('/show-category-cart', [CartController::class, 'show_category_cart']);
 
 
 // ADMIN

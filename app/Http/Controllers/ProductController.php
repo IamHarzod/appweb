@@ -65,6 +65,7 @@ class ProductController extends Controller
             $file->move($destDir, $filename);
         }
 
+
         // tạo product — keys phải khớp với protected $fillable trong Model
         Product::create([
             'name' => $validated['name'],

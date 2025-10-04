@@ -12,7 +12,9 @@ class HomeController extends Controller
     public function show_home()
     {
         $categories = Category::orderBy("id", "desc")->get();
-        return view("layout.home_layout")->with(compact("categories"));
+        $our_product = Product::orderBy("id", "desc")->limit(8)->get();
+        $all_product = Product::orderBy("id", "desc")->get();
+        return view("client.home.index_home")->with(compact("categories", "all_product", "our_product"));
     }
 
     public function category($id)
