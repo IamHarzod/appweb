@@ -149,7 +149,7 @@
                                                 </label>
                                                 <div class="col-lg-6">
                                                     <input type="text" class="form-control" id="style"
-                                                        name="style" placeholder="nhập kiểu sản phẩm!" />
+                                                        name="style" placeholder="Nhập kiểu sản phẩm!" />
                                                 </div>
                                             </div>
                                             <div class="form-group row">

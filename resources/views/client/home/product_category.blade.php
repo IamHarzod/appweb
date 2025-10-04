@@ -122,44 +122,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="featured-product-item">
-                            <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                <img src="img/product-4.png" class="img-fluid rounded" alt="Image">
-                            </div>
-                            <div>
-                                <h6 class="mb-2">Smart Camera</h6>
-                                <div class="d-flex mb-2">
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="d-flex mb-2">
-                                    <h5 class="fw-bold me-2">2.99 $</h5>
-                                    <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="featured-product-item">
-                            <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                <img src="img/product-5.png" class="img-fluid rounded" alt="Image">
-                            </div>
-                            <div>
-                                <h6 class="mb-2">Camera Leance</h6>
-                                <div class="d-flex mb-2">
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <div class="d-flex mb-2">
-                                    <h5 class="fw-bold me-2">2.99 $</h5>
-                                    <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="d-flex justify-content-center my-4">
                             <a href="#" class="btn btn-primary px-4 py-3 rounded-pill w-100">Vew More</a>
                         </div>
@@ -233,25 +196,42 @@
                     <div class="tab-content">
                         <div id="tab-5" class="tab-pane fade show p-0 active">
                             <div class="row g-4 product">
-                                @foreach ($product as $itemproduct)
+                                @foreach ($product as $item)
                                     <div class="col-lg-4">
                                         <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
                                             <div class="product-item-inner border rounded">
                                                 <div class="product-item-inner-item">
-                                                    <img src="img/product-3.png" class="img-fluid w-100 rounded-top"
-                                                        alt="">
+                                                    <img src="{{ asset('public/uploads/products/' . $item->imageURL) }}"
+                                                        class="img-fluid w-100 rounded-top" alt="">
                                                     <div class="product-new">New</div>
                                                     <div class="product-details">
                                                         <a href="#"><i class="fa fa-eye fa-1x"></i></a>
                                                     </div>
                                                 </div>
                                                 <div class="text-center rounded-bottom p-4">
-                                                    <a href="#" class="d-block mb-2">SmartPhone</a>
+                                                    <a href="#" class="d-block mb-2">{{ $item->category->name }}</a>
                                                     <a href="#" class="d-block h4"><br>
-                                                    </a>
-                                                    <del class="me-2 fs-5">$1,250.00</del>
-                                                    <span class="text-primary fs-5">$1,050.00</span>
+                                                        {{ $item->name }}</a>
+
+                                                    @php
+                                                        $price = (float) ($item->price ?? 0);
+                                                        $percent = (int) ($item->discountPercent ?? 0);
+                                                        $percent = max(0, min(100, $percent)); // chặn ngoài 0–100
+
+                                                        // giá sau giảm (làm tròn đến đơn vị đồng; nếu muốn tới nghìn dùng round($..., -3))
+                                                        $discounted = ($price * (100 - $percent)) / 100;
+
+                                                        // format VND: 1.234.567đ
+                                                        $fmt = fn($n) => number_format($n, 0, ',', '.') . 'đ';
+                                                    @endphp
+                                                    @if ($percent > 0)
+                                                        <del class="me-2 fs-5">{{ $fmt($price) }}</del>
+                                                        <span class="text-primary fs-5">{{ $fmt($discounted) }}</span>
+                                                    @else
+                                                        <span class="fs-5">{{ $fmt($price) }}</span>
+                                                    @endif
                                                 </div>
+
                                             </div>
                                             <div
                                                 class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
