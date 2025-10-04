@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfilesController;
 
 // Home
 Route::get('/show-home', [HomeController::class, 'show_home'])->name('home');
+Route::get('/show-category-home', [HomeController::class, 'show_category_home']);
 
 // Cart
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
@@ -41,6 +42,7 @@ Route::post('/submit-register-admin', [AdminController::class, 'submit_register'
 Route::post('/submit-login-admin', [AdminController::class, 'submit_login']);
 
 
+
 // ADMIN FEATURE ROUTES (protected)
 Route::middleware(['auth', 'admin'])->group(function () {
     // Brand
@@ -50,6 +52,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/show-create-brand', [BrandController::class, 'showCreate']);
     Route::get('/show-edit-brand/{id}', [BrandController::class, 'showEdit']);
     Route::post('/update-brand', [BrandController::class, 'update_brand']);
+
 
     // Product
     Route::get('/show-product', [App\Http\Controllers\ProductController::class, 'show_product']);

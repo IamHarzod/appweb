@@ -126,12 +126,14 @@
                     <div class="collapse navbar-collapse rounded-bottom" id="allCat">
                         <div class="navbar-nav ms-auto py-0">
                             <ul class="list-unstyled categories-bars">
-                                <li>
-                                    <div class="categories-bars-item">
-                                        <a href="#">Accessories</a>
-                                        <span>(3)</span>
-                                    </div>
-                                </li>
+                                @foreach ($categories as $cat)
+                                    <li>
+                                        <div class="categories-bars-item">
+                                            <a href="">{{ $cat->name }}</a>
+                                            <span>{{ $cat->products_count }}</span>
+                                        </div>
+                                    </li>
+                                @endforeach
 
                             </ul>
                         </div>
@@ -153,32 +155,6 @@
                         <div class="navbar-nav ms-auto py-0">
                             <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
                             <a href="shop.html" class="nav-item nav-link">Shop</a>
-                            <a href="single.html" class="nav-item nav-link">Single Page</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle"
-                                    data-bs-toggle="dropdown">Pages</a>
-                                <div class="dropdown-menu m-0">
-                                    <a href="bestseller.html" class="dropdown-item">Bestseller</a>
-                                    <a href="cart.html" class="dropdown-item">Cart Page</a>
-                                    <a href="cheackout.html" class="dropdown-item">Cheackout</a>
-                                    <a href="404.html" class="dropdown-item">404 Page</a>
-                                </div>
-                            </div>
-                            <a href="contact.html" class="nav-item nav-link me-2">Contact</a>
-                            <div class="nav-item dropdown d-block d-lg-none mb-3">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                    Danh mục </a>
-                                <div class="dropdown-menu m-0">
-                                    <ul class="list-unstyled categories-bars">
-                                        <li>
-                                            <div class="categories-bars-item">
-                                                <a href="#">Accessories</a>
-                                                <span>(3)</span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                         <a href=""
                             class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i

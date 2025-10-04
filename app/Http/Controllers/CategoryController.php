@@ -18,6 +18,8 @@ class CategoryController extends Controller
         return view("admin.category.show_category")->with("categories", $categories);
     }
 
+
+
     // Tạo mới category
     public function create_category(Request $request)
     {

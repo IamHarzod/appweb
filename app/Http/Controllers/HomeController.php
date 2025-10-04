@@ -26,4 +26,14 @@ class HomeController extends Controller
 
         return view('frontend.category', compact('category', 'products'));
     }
+
+    public function show_category_home()
+    {
+        // nếu có cột status => chỉ lấy danh mục đang bật
+        $categories = Category::where('status', 1)
+            ->orderBy('name')
+            ->get();
+
+        return view('layout.home_layout', compact('categories')); // view nào chứa khối nav-bar thì truyền vào view đó
+    }
 }
