@@ -16,6 +16,7 @@ use App\Http\Controllers\ProfilesController;
 
 Route::get('/', [HomeController::class, 'show_home'])->name('home');
 Route::get('/show-category-home', [HomeController::class, 'show_category_home']);
+Route::get('/show-product-category-home/{id}', [HomeController::class, 'show_product_category_home']);
 
 // Cart
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');

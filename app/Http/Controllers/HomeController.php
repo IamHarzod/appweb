@@ -38,4 +38,11 @@ class HomeController extends Controller
 
         return view('layout.home_layout', compact('categories')); // view nào chứa khối nav-bar thì truyền vào view đó
     }
+
+    public function show_product_category_home($id)
+    {
+        $categories = Category::orderBy("id", "desc")->get();
+        $product = Product::where('category_id', $id)->orderBy('id', 'desc')->get();
+        return view('client.home.product_category', compact('product', 'categories'));
+    }
 }

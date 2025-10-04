@@ -129,7 +129,8 @@
                                 @foreach ($categories as $cat)
                                     <li>
                                         <div class="categories-bars-item">
-                                            <a href="">{{ $cat->name }}</a>
+                                            <a
+                                                href="{{ url('/show-product-category-home/' . $cat->id) }}">{{ $cat->name }}</a>
                                         </div>
                                     </li>
                                 @endforeach
