@@ -34,4 +34,12 @@ class HomeController extends Controller
         $product = Product::where('category_id', $id)->orderBy('id', 'desc')->get();
         return view('client.home.product_category', compact('product', 'categories'));
     }
+
+    public function show_product_detail($id)
+    {
+        $product = Product::with(['category', 'brand'])->findOrFail($id);
+        $categories = Category::orderBy("id", "desc")->get();
+        
+        return view('client.product.detail', compact('product', 'categories'));
+    }
 }

@@ -215,13 +215,13 @@
                                                 <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
                                                     class="img-fluid w-100 rounded-top" alt="">
                                                 <div class="product-new">Mới</div>
-                                                <div class="product-details">
-                                                    <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                                </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                             </div>
                                             <div class="text-center rounded-bottom p-4">
-                                                <a href="#" class="d-block mb-2">{{ $product->category->name }}</a>
-                                                <a href="#" class="d-block h4"> {{ $product->name }} <br> </a>
+                                                <a href="{{ route('product.detail', $product->id) }}" class="d-block mb-2">{{ $product->category->name }}</a>
+                                                <a href="{{ route('product.detail', $product->id) }}" class="d-block h4"> {{ $product->name }} <br> </a>
                                                 @php
                                                     $price = (float) ($product->price ?? 0);
                                                     $percent = (int) ($product->discountPercent ?? 0);
@@ -245,9 +245,11 @@
                                         </div>
                                         <div
                                             class="product-item-add border border-top-0 rounded-bottom text-center p-4 pt-0">
-                                            <a href="#"
-                                                class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                    data-product-id="{{ $product->id }}" 
+                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                            </button>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex">
                                                     <i class="fas fa-star text-primary"></i>
@@ -282,9 +284,9 @@
                                             <img src="{{ asset('public/client/img/product-3.png') }}"
                                                 class="img-fluid rounded-top" alt="">
                                             <div class="product-new">New</div>
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -294,9 +296,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="{{ $product->id }}" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -326,9 +330,9 @@
                                             <img src="{{ asset('public/client/img/product-4.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="">
                                             <div class="product-new">New</div>
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -338,9 +342,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -370,9 +376,9 @@
                                             <img src="{{ asset('public/client/img/product-5.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="">
                                             <div class="product-new">New</div>
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -382,9 +388,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -414,9 +422,9 @@
                                             <img src="{{ asset('public/client/img/product-6.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
                                             <div class="product-new">New</div>
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -426,9 +434,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -461,9 +471,9 @@
                                         <div class="product-item-inner-item">
                                             <img src="{{ asset('public/client/img/product-9.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="">
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -473,9 +483,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -504,9 +516,9 @@
                                         <div class="product-item-inner-item">
                                             <img src="{{ asset('public/client/img/product-10.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -516,9 +528,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -547,9 +561,9 @@
                                         <div class="product-item-inner-item">
                                             <img src="{{ asset('public/client/img/product-11.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -559,9 +573,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -590,9 +606,9 @@
                                         <div class="product-item-inner-item">
                                             <img src="{{ asset('public/client/img/product-12.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -602,9 +618,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -637,9 +655,9 @@
                                         <div class="product-item-inner-item">
                                             <img src="{{ asset('public/client/img/product-14.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -649,9 +667,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -680,9 +700,9 @@
                                         <div class="product-item-inner-item">
                                             <img src="{{ asset('public/client/img/product-15.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -692,9 +712,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -723,9 +745,9 @@
                                         <div class="product-item-inner-item">
                                             <img src="{{ asset('public/client/img/product-17.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -735,9 +757,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -766,9 +790,9 @@
                                         <div class="product-item-inner-item">
                                             <img src="{{ asset('public/client/img/product-16.png') }}"
                                                 class="img-fluid w-100 rounded-top" alt="Image">
-                                            <div class="product-details">
-                                                <a href="#"><i class="fa fa-eye fa-1x"></i></a>
-                                            </div>
+                                                    <div class="product-details">
+                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    </div>
                                         </div>
                                         <div class="text-center rounded-bottom p-4">
                                             <a href="#" class="d-block mb-2">SmartPhone</a>
@@ -778,9 +802,11 @@
                                         </div>
                                     </div>
                                     <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <a href="#"
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="1" 
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                        </button>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex">
                                                 <i class="fas fa-star text-primary"></i>
@@ -843,8 +869,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="{{ $product->id }}" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -876,8 +905,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -909,8 +941,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -942,8 +977,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -977,8 +1015,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1010,8 +1051,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1043,8 +1087,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1076,8 +1123,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1111,8 +1161,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1144,8 +1197,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1177,8 +1233,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1210,8 +1269,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1245,8 +1307,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1278,8 +1343,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1311,8 +1379,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1363,8 +1434,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1398,8 +1472,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1433,8 +1510,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1468,8 +1548,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1503,8 +1586,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -1538,8 +1624,11 @@
                             </div>
                         </div>
                         <div class="products-mini-add border p-3">
-                            <a href="#" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                    class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng</a>
+                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
+                                    data-product-id="1" 
+                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                            </button>
                             <div class="d-flex">
                                 <a href="#"
                                     class="text-primary d-flex align-items-center justify-content-center me-3"><span

@@ -7,6 +7,13 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="route-cart-add" content="{{ route('cart.add') }}">
+    <meta name="route-cart-update" content="{{ route('cart.update', ['cartItemId' => 0]) }}">
+    <meta name="route-cart-remove" content="{{ route('cart.remove', ['cartItemId' => 0]) }}">
+    <meta name="route-cart-clear" content="{{ route('cart.clear') }}">
+    <meta name="route-cart-summary" content="{{ route('cart.summary') }}">
+    <meta name="route-cart-api" content="{{ route('cart.api') }}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -105,9 +112,13 @@
             <div class="col-md-4 col-lg-3 text-center text-lg-end">
                 <div class="d-inline-flex align-items-center">
                     <a href="{{ route('cart') }}"
-                        class="text-muted d-flex align-items-center justify-content-center"><span
-                            class="rounded-circle btn-md-square border"><i class="fas fa-shopping-cart"></i></span>
-                        <span class="text-dark ms-2">Giỏ Hàng</span></a>
+                        class="text-muted d-flex align-items-center justify-content-center position-relative">
+                        <span class="rounded-circle btn-md-square border">
+                            <i class="fas fa-shopping-cart"></i>
+                        </span>
+                        <span class="text-dark ms-2">Giỏ Hàng</span>
+                        <span class="cart-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -185,6 +196,6 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('public/client/js/main.js') }}"></script>
-</body>
+    <script src="{{ asset('public/client/js/cart.js') }}"></script>
 
 </html>

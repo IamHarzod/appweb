@@ -17,9 +17,22 @@ use App\Http\Controllers\ProfilesController;
 Route::get('/', [HomeController::class, 'show_home'])->name('home');
 Route::get('/show-category-home', [HomeController::class, 'show_category_home']);
 Route::get('/show-product-category-home/{id}', [HomeController::class, 'show_product_category_home']);
+Route::get('/product/{id}', [HomeController::class, 'show_product_detail'])->name('product.detail');
 
-// Cart
+// Cart Routes (public)
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
+// Public cart summary for header counter (no auth required)
+Route::get('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
+
+// Cart Routes (authenticated)
+Route::middleware('auth')->group(function () {
+    // Cart API endpoints
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::put('/cart/update/{cartItemId}', [CartController::class, 'updateCartItem'])->name('cart.update');
+    Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+    Route::delete('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+    Route::get('/cart/api', [CartController::class, 'getCart'])->name('cart.api');
+});
 //Profile
 Route::middleware('auth')->group(function () {
     Route::get('/show-profile', [ProfilesController::class, 'show_profile'])

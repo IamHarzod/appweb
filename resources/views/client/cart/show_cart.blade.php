@@ -3,165 +3,266 @@
     <!-- Cart Page Start -->
     <div class="container-fluid py-5">
         <div class="container py-5">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Tên</th>
-                            <th scope="col">Danh mục</th>
-                            <th scope="col">Giá</th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Tổng tiền</th>
-                            <th scope="col">Xoá</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                <p class="mb-0 py-4">Apple iPad Mini</p>
-                            </th>
-                            <td>
-                                <p class="mb-0 py-4">G2356</p>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td>
-                                <div class="input-group quantity py-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
+            @if(!Auth::check())
+                <div class="alert alert-warning text-center">
+                    <h4>Vui lòng đăng nhập để xem giỏ hàng</h4>
+                    <p>Bạn cần đăng nhập để có thể thêm sản phẩm vào giỏ hàng và tiến hành thanh toán.</p>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Đăng nhập ngay</a>
+                </div>
+            @elseif($cartItems->isEmpty())
+                <div class="alert alert-info text-center">
+                    <h4>Giỏ hàng trống</h4>
+                    <p>Bạn chưa có sản phẩm nào trong giỏ hàng.</p>
+                    <a href="{{ route('home') }}" class="btn btn-primary">Tiếp tục mua sắm</a>
+                </div>
+            @else
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Hình ảnh</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Tổng tiền</th>
+                                <th scope="col">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-items">
+                            @foreach($cartItems as $item)
+                                <tr id="cart-item-{{ $item->id }}">
+                                    <td>
+                                        <img src="{{ asset('public/uploads/products/' . $item->product->imageURL) }}" 
+                                             alt="{{ $item->product->name }}" 
+                                             style="width: 80px; height: 80px; object-fit: cover;">
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 py-4">{{ $item->product->name }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 py-4">{{ number_format($item->product->price, 0, ',', '.') }} VNĐ</p>
+                                    </td>
+                                    <td>
+                                        <div class="input-group quantity py-4" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border" 
+                                                        onclick="updateQuantity({{ $item->id }}, {{ $item->quantity - 1 }})">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="number" 
+                                                   class="form-control form-control-sm text-center border-0 quantity-input" 
+                                                   value="{{ $item->quantity }}" 
+                                                   min="1" 
+                                                   max="{{ $item->product->stockQuantity }}"
+                                                   onchange="updateQuantity({{ $item->id }}, this.value)">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border" 
+                                                        onclick="updateQuantity({{ $item->id }}, {{ $item->quantity + 1 }})">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 py-4" id="subtotal-{{ $item->id }}">
+                                            {{ number_format($item->quantity * $item->product->price, 0, ',', '.') }} VNĐ
+                                        </p>
+                                    </td>
+                                    <td class="py-4">
+                                        <button class="btn btn-md rounded-circle bg-light border" 
+                                                onclick="removeFromCart({{ $item->id }})">
+                                            <i class="fa fa-times text-danger"></i>
                                         </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0"
-                                        value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="mt-4 mb-4">
+                    <button class="btn btn-danger" onclick="clearCart()">
+                        <i class="fa fa-trash"></i> Xóa tất cả giỏ hàng
+                    </button>
+                </div>
+
+                <!-- Coupon section -->
+                <div class="mt-5">
+                    <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Mã giảm giá">
+                    <button class="btn btn-primary rounded-pill px-4 py-3" type="button">Nhập mã giảm giá</button>
+                </div>
+
+                <!-- Order summary -->
+                <div class="row g-4 justify-content-end">
+                    <div class="col-8"></div>
+                    <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
+                        <div class="bg-light rounded">
+                            <div class="p-4">
+                                <h1 class="display-6 mb-4">Tổng đơn hàng<span class="fw-normal"></span></h1>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <h5 class="mb-0 me-4">Tổng phụ:</h5>
+                                    <p class="mb-0" id="cart-subtotal">{{ number_format($cart->totalAmount, 0, ',', '.') }} VNĐ</p>
                                 </div>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td class="py-4">
-                                <button class="btn btn-md rounded-circle bg-light border">
-                                    <i class="fa fa-times text-danger"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <p class="mb-0 py-4">Apple iPad Mini</p>
-                            </th>
-                            <td>
-                                <p class="mb-0 py-4">G2356</p>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td>
-                                <div class="input-group quantity py-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="mb-0 me-4">Phí vận chuyển:</h5>
+                                    <div>
+                                        <p class="mb-0">Miễn phí vận chuyển</p>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0"
-                                        value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td class="py-4">
-                                <button class="btn btn-md rounded-circle bg-light border">
-                                    <i class="fa fa-times text-danger"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <p class="mb-0 py-4">Apple iPad Mini</p>
-                            </th>
-                            <td>
-                                <p class="mb-0 py-4">G2356</p>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td>
-                                <div class="input-group quantity py-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0"
-                                        value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p class="mb-0 py-4">2.99 $</p>
-                            </td>
-                            <td class="py-4">
-                                <button class="btn btn-md rounded-circle bg-light border">
-                                    <i class="fa fa-times text-danger"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-5">
-                <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Mã giảm giá">
-                <button class="btn btn-primary rounded-pill px-4 py-3" type="button">Nhập mã giảm giá</button>
-            </div>
-            <div class="row g-4 justify-content-end">
-                <div class="col-8"></div>
-                <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
-                    <div class="bg-light rounded">
-                        <div class="p-4">
-                            <h1 class="display-6 mb-4">Tổng đơn hàng<span class="fw-normal"></span></h1>
-                            <div class="d-flex justify-content-between mb-4">
-                                <h5 class="mb-0 me-4">Tổng phụ:</h5>
-                                <p class="mb-0">$96.00</p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <h5 class="mb-0 me-4">Phí vận chuyển:</h5>
-                                <div>
-                                    <p class="mb-0">Flat rate: $3.00</p>
                                 </div>
                             </div>
-                            <p class="mb-0 text-end">Shipping to Ukraine.</p>
+                            <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
+                                <h5 class="mb-0 ps-4 me-4">Tổng tiền</h5>
+                                <p class="mb-0 pe-4" id="cart-total">{{ number_format($cart->totalAmount, 0, ',', '.') }} VNĐ</p>
+                            </div>
+                            <button class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4" type="button">
+                                Tiến hành thanh toán
+                            </button>
                         </div>
-                        <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                            <h5 class="mb-0 ps-4 me-4">Tổng tiền</h5>
-                            <p class="mb-0 pe-4">$99.00</p>
-                        </div>
-                        <button class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4" type="button">Tiến
-                            hành thanh toán</button>
-
-                        </button>
-
-
-                        </button>
-
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
     <!-- Cart Page End -->
+
+    <!-- JavaScript -->
+    <script>
+        // Function to update quantity
+        function updateQuantity(cartItemId, newQuantity) {
+            if (newQuantity < 1) {
+                newQuantity = 1;
+            }
+
+            const updateUrlTemplate = document.querySelector('meta[name="route-cart-update"]').getAttribute('content');
+            const updateUrl = updateUrlTemplate.replace(/0$/, String(cartItemId));
+
+            fetch(updateUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    quantity: newQuantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the quantity input
+                    document.querySelector(`#cart-item-${cartItemId} .quantity-input`).value = newQuantity;
+                    
+                    // Update subtotal
+                    const productPrice = parseFloat(document.querySelector(`#cart-item-${cartItemId} td:nth-child(3) p`).textContent.replace(/[^\d]/g, ''));
+                    const subtotal = productPrice * newQuantity;
+                    document.querySelector(`#subtotal-${cartItemId}`).textContent = subtotal.toLocaleString('vi-VN') + ' VNĐ';
+                    
+                    // Update cart total
+                    document.querySelector('#cart-subtotal').textContent = data.cart_total.toLocaleString('vi-VN') + ' VNĐ';
+                    document.querySelector('#cart-total').textContent = data.cart_total.toLocaleString('vi-VN') + ' VNĐ';
+                    
+                    // Show success message
+                    showMessage(data.message, 'success');
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Có lỗi xảy ra khi cập nhật giỏ hàng', 'error');
+            });
+        }
+
+        // Function to remove item from cart
+        function removeFromCart(cartItemId) {
+            if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+                fetch(document.querySelector('meta[name="route-cart-remove"]').getAttribute('content').replace(/0$/, String(cartItemId)), {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the row from table
+                        document.querySelector(`#cart-item-${cartItemId}`).remove();
+                        
+                        // Update cart total
+                        document.querySelector('#cart-subtotal').textContent = data.cart_total.toLocaleString('vi-VN') + ' VNĐ';
+                        document.querySelector('#cart-total').textContent = data.cart_total.toLocaleString('vi-VN') + ' VNĐ';
+                        
+                        // Check if cart is empty
+                        const cartItems = document.querySelectorAll('#cart-items tr');
+                        if (cartItems.length === 0) {
+                            location.reload(); // Reload to show empty cart message
+                        }
+                        
+                        showMessage(data.message, 'success');
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showMessage('Có lỗi xảy ra khi xóa sản phẩm', 'error');
+                });
+            }
+        }
+
+        // Function to clear cart
+        function clearCart() {
+            if (confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng?')) {
+                fetch(document.querySelector('meta[name="route-cart-clear"]').getAttribute('content'), {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload(); // Reload to show empty cart message
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showMessage('Có lỗi xảy ra khi xóa giỏ hàng', 'error');
+                });
+            }
+        }
+
+        // Function to show messages
+        function showMessage(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 3000);
+        }
+    </script>
 @endsection

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->decimal('totalAmount', 10, 2);
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id') ->unique(); // Mỗi người dùng chỉ có một giỏ hàng
             // Khóa ngoại: liên kết tới bảng users
             $table->foreign('user_id')
                     ->references('id')
