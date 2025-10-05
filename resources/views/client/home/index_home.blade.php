@@ -215,13 +215,16 @@
                                                 <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
                                                     class="img-fluid w-100 rounded-top" alt="">
                                                 <div class="product-new">Mới</div>
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
+                                                <div class="product-details">
+                                                    <a href="{{ route('product.detail', $product->id) }}"><i
+                                                            class="fa fa-eye fa-1x"></i></a>
+                                                </div>
                                             </div>
                                             <div class="text-center rounded-bottom p-4">
-                                                <a href="{{ route('product.detail', $product->id) }}" class="d-block mb-2">{{ $product->category->name }}</a>
-                                                <a href="{{ route('product.detail', $product->id) }}" class="d-block h4"> {{ $product->name }} <br> </a>
+                                                <a href="{{ route('product.detail', $product->id) }}"
+                                                    class="d-block mb-2">{{ $product->category->name }}</a>
+                                                <a href="{{ route('product.detail', $product->id) }}" class="d-block h4">
+                                                    {{ $product->name }} <br> </a>
                                                 @php
                                                     $price = (float) ($product->price ?? 0);
                                                     $percent = (int) ($product->discountPercent ?? 0);
@@ -245,9 +248,10 @@
                                         </div>
                                         <div
                                             class="product-item-add border border-top-0 rounded-bottom text-center p-4 pt-0">
-                                            <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                    data-product-id="{{ $product->id }}" 
-                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                            <button
+                                                class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                data-product-id="{{ $product->id }}"
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                                             </button>
                                             <div class="d-flex justify-content-between align-items-center">
@@ -870,8 +874,8 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="{{ $product->id }}" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="{{ $product->id }}"
+                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -906,8 +910,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -942,8 +945,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -978,8 +980,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1016,8 +1017,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1052,8 +1052,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1088,8 +1087,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1124,8 +1122,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1162,8 +1159,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1198,8 +1194,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1234,8 +1229,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1270,8 +1264,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1308,8 +1301,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1344,8 +1336,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1380,8 +1371,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1435,8 +1425,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1473,8 +1462,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1511,8 +1499,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1549,8 +1536,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1587,8 +1573,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">
@@ -1625,8 +1610,7 @@
                         </div>
                         <div class="products-mini-add border p-3">
                             <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="1" 
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                data-product-id="1" data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                             </button>
                             <div class="d-flex">

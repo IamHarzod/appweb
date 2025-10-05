@@ -12,8 +12,8 @@ class HomeController extends Controller
     public function show_home()
     {
         $categories = Category::orderBy("id", "desc")->get();
-        $our_product = Product::orderBy("id", "desc")->limit(8)->get();
         $all_product = Product::orderBy("id", "desc")->get();
+        $our_product = Product::orderBy("id", "desc")->limit(8)->get();
         return view("client.home.index_home")->with(compact("categories", "all_product", "our_product"));
     }
 
@@ -39,7 +39,7 @@ class HomeController extends Controller
     {
         $product = Product::with(['category', 'brand'])->findOrFail($id);
         $categories = Category::orderBy("id", "desc")->get();
-        
+
         return view('client.product.detail', compact('product', 'categories'));
     }
 }

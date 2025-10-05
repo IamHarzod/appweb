@@ -5,46 +5,6 @@
         <div class="container py-5">
             <div class="row g-4">
                 <div class="col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="product-categories mb-4">
-                        <h4>Products Categories</h4>
-                        <ul class="list-unstyled">
-                            <li>
-                                <div class="categories-item">
-                                    <a href="#" class="text-dark"><i class="fas fa-apple-alt text-secondary me-2"></i>
-                                        Accessories</a>
-                                    <span>(3)</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="categories-item">
-                                    <a href="#" class="text-dark"><i class="fas fa-apple-alt text-secondary me-2"></i>
-                                        Electronics & Computer</a>
-                                    <span>(5)</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="categories-item">
-                                    <a href="#" class="text-dark"><i
-                                            class="fas fa-apple-alt text-secondary me-2"></i>Laptops & Desktops</a>
-                                    <span>(2)</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="categories-item">
-                                    <a href="#" class="text-dark"><i
-                                            class="fas fa-apple-alt text-secondary me-2"></i>Mobiles & Tablets</a>
-                                    <span>(8)</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="categories-item">
-                                    <a href="#" class="text-dark"><i
-                                            class="fas fa-apple-alt text-secondary me-2"></i>SmartPhone & Smart TV</a>
-                                    <span>(5)</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="price mb-4">
                         <h4 class="mb-2">Price</h4>
                         <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput" min="0"
@@ -53,32 +13,32 @@
                         <div class=""></div>
                     </div>
                     <div class="product-color mb-3">
-                        <h4>Select By Color</h4>
+                        <h4>Lựa chọn hãng</h4>
                         <ul class="list-unstyled">
                             <li>
                                 <div class="product-color-item">
                                     <a href="#" class="text-dark"><i class="fas fa-apple-alt text-secondary me-2"></i>
-                                        Gold</a>
-                                    <span>(1)</span>
+                                        Iphone</a>
+
                                 </div>
                             </li>
                             <li>
                                 <div class="product-color-item">
                                     <a href="#" class="text-dark"><i class="fas fa-apple-alt text-secondary me-2"></i>
-                                        Green</a>
-                                    <span>(1)</span>
+                                        Androi</a>
+
                                 </div>
                             </li>
                             <li>
                                 <div class="product-color-item">
                                     <a href="#" class="text-dark"><i class="fas fa-apple-alt text-secondary me-2"></i>
-                                        White</a>
-                                    <span>(1)</span>
+                                        Nokia</a>
+
                                 </div>
                             </li>
                         </ul>
                     </div>
-                    <div class="additional-product mb-4">
+                    {{-- <div class="additional-product mb-4">
                         <h4>Additional Products</h4>
                         <div class="additional-product-item">
                             <input type="radio" class="me-2" id="Categories-1" name="Categories-1" value="Beverages">
@@ -100,8 +60,8 @@
                             <input type="radio" class="me-2" id="Categories-5" name="Categories-1" value="Beverages">
                             <label for="Categories-5" class="text-dark"> SmartPhone & Smart TV</label>
                         </div>
-                    </div>
-                    <div class="featured-product mb-4">
+                    </div> --}}
+                    {{-- <div class="featured-product mb-4">
                         <h4 class="mb-3">Featured products</h4>
                         <div class="featured-product-item">
                             <div class="rounded me-4" style="width: 100px; height: 100px;">
@@ -126,8 +86,8 @@
                         <div class="d-flex justify-content-center my-4">
                             <a href="#" class="btn btn-primary px-4 py-3 rounded-pill w-100">Vew More</a>
                         </div>
-                    </div>
-                    <a href="#">
+                    </div> --}}
+                    {{-- <a href="#">
                         <div class="position-relative">
                             <img src="img/product-banner-2.jpg" class="img-fluid w-100 rounded" alt="Image">
                             <div class="text-center position-absolute d-flex flex-column align-items-center justify-content-center rounded p-4"
@@ -137,8 +97,8 @@
                                 <a href="#" class="btn btn-primary rounded-pill px-4">Shop Now</a>
                             </div>
                         </div>
-                    </a>
-                    <div class="product-tags py-4">
+                    </a> --}}
+                    {{-- <div class="product-tags py-4">
                         <h4 class="mb-3">PRODUCT TAGS</h4>
                         <div class="product-tags-items bg-light rounded p-3">
                             <a href="#" class="border rounded py-1 px-2 mb-2">New</a>
@@ -152,7 +112,7 @@
                             <a href="#" class="border rounded py-1 px-2 mb-2">talevision</a>
                             <a href="#" class="border rounded py-1 px-2 mb-2">slaes</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-lg-9 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="row g-4">
