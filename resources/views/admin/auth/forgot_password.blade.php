@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Admin Login</title>
+    <title>Quên mật khẩu</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/admin/images/favicon.png') }}">
     <link href="{{ asset('public/admin/css/style.css') }}" rel="stylesheet">
@@ -21,10 +21,18 @@
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
-                                    <h4 class="text-center mb-4">Đăng nhập tài khoản</h4>
-                                    <form action="{{ url('/submit-login-admin') }}" method="POST">
+                                    <h4 class="text-center mb-4">Quên mật khẩu</h4>
+                                    <p class="text-center mb-4">Nhập địa chỉ email của bạn để nhận liên kết khôi phục mật khẩu.</p>
+                                    
+                                    <form action="{{ route('password.email') }}" method="POST">
                                         @csrf
                                         
+                                        @if (session('success'))
+                                            <div class="alert alert-success">
+                                                {{ session('success') }}
+                                            </div>
+                                        @endif
+
                                         @if ($errors->any())
                                             <div class="alert alert-danger">
                                                 <ul class="mb-0">
@@ -38,39 +46,21 @@
                                         <div class="form-group">
                                             <label><strong>Email</strong></label>
                                             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
-                                                value="{{ old('email') }}" placeholder="Email">
+                                                value="{{ old('email') }}" placeholder="Nhập địa chỉ email của bạn">
                                             @error('email')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div class="form-group">
-                                            <label><strong>Mật khẩu</strong></label>
-                                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" 
-                                                placeholder="Mật khẩu">
-                                            @error('password')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-row d-flex justify-content-between mt-4 mb-2">
-                                            <div class="form-group">
-                                                <div class="form-check ml-2">
-                                                    <input class="form-check-input" type="checkbox" name="remember"
-                                                        id="basic_checkbox_1" {{ old('remember') ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="basic_checkbox_1">Ghi nhớ
-                                                        tôi</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
-                                            </div>
-                                        </div>
+                                        
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+                                            <button type="submit" class="btn btn-primary btn-block">Gửi liên kết khôi phục</button>
                                         </div>
                                     </form>
+                                    
                                     <div class="new-account mt-3">
-                                        <p>Nếu chưa có tài khoản? <a class="text-primary"
-                                                href="{{ url('/register-admin') }}">Đăng ký</a></p>
+                                        <p class="text-center">
+                                            <a class="text-primary" href="{{ route('admin') }}">← Quay lại đăng nhập</a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +70,6 @@
             </div>
         </div>
     </div>
-
 
     <!--**********************************
         Scripts
