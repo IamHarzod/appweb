@@ -73,7 +73,7 @@
                                         <i class="icon-user"></i>
                                         <span class="ml-2">Profile </span>
                                     </a> -->
-                                    <a href="{{ url('/show-home') }} " class="dropdown-item">
+                                    <a href="{{ url('/') }} " class="dropdown-item">
                                         <i class="icon-envelope-open"></i>
                                         <span class="ml-2"> Quay lại trang chủ </span>
                                     </a>

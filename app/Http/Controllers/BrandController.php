@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\File;
 
 class BrandController extends Controller
 {
+    // Hiển thị thương hiệu
     public function show_brand()
     {
         $brand = Brand::get();
         return view("admin.brand.show_brand")->with("brands", $brand);
     }
 
+    // tạo mới thương hiệu
     public function create_brand(Request $request)
     {
         $data = $request->all();
@@ -53,6 +55,7 @@ class BrandController extends Controller
         return redirect("/show-brand");
     }
 
+    // Xoá thương hiệu
     public function destroy($id)
     {
         try {
@@ -73,12 +76,14 @@ class BrandController extends Controller
         }
     }
 
+    // Hiển thị form sửa thương hiệu
     public function showEdit($id)
     {
         $brand = Brand::where('id', $id)->first();
         return view('admin.brand.edit_brand')->with(compact('brand'));
     }
 
+    // Cập nhật dữ liệu về thương hiệu khi sửa
     public function update_brand(Request $request)
     {
         try {

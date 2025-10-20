@@ -117,7 +117,9 @@
                             <i class="fas fa-shopping-cart"></i>
                         </span>
                         <span class="text-dark ms-2">Giỏ Hàng</span>
-                        <span class="cart-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">0</span>
+                        <span
+                            class="cart-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="display: none;">0</span>
                     </a>
                 </div>
             </div>
@@ -155,8 +157,8 @@
                 <nav class="navbar navbar-expand-lg navbar-light bg-primary ">
                     <a href="" class="navbar-brand d-block d-lg-none">
                         <h1 class="display-5 text-secondary m-0"><i
-                                class="fas fa-shopping-bag text-white me-2"></i>Electro</h1>
-                        {{ asset('<!-- <img src="img/logo.png" alt="Logo"> -->') }}
+                                class="fas fa-shopping-bag text-white me-2"></i>36Shop</h1>
+
                     </a>
                     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
