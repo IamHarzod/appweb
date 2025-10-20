@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BrandController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfilesController;
+use App\Http\Controllers\Auth\PasswordResetController;
 
 
 
@@ -56,6 +58,25 @@ Route::get('/register-admin', [AdminController::class, 'register_admin']);
 Route::get('/admin', [AdminController::class, 'login'])->name('admin');
 Route::post('/submit-register-admin', [AdminController::class, 'submit_register']);
 Route::post('/submit-login-admin', [AdminController::class, 'submit_login']);
+
+// Password Reset Routes
+Route::get('/password/reset', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
+
+// Test route để xem log reset password (chỉ để test)
+Route::get('/test-password-reset/{email}', function($email) {
+    $resetRecord = DB::table('password_reset_tokens')->where('email', $email)->first();
+    if ($resetRecord) {
+        return response()->json([
+            'email' => $resetRecord->email,
+            'created_at' => $resetRecord->created_at,
+            'token_exists' => true
+        ]);
+    }
+    return response()->json(['message' => 'No reset record found for this email']);
+});
 
 
 

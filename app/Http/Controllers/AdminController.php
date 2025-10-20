@@ -31,19 +31,33 @@ class AdminController extends Controller
 
     public function submit_login(Request $request)
     {
-        // Validate đơn giản
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
+        // Validate với thông báo lỗi chi tiết
+        $request->validate([
+            'email'    => ['required', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
+        ], [
+            'email.required' => 'Vui lòng nhập địa chỉ email.',
+            'email.email' => 'Địa chỉ email không hợp lệ.',
+            'email.max' => 'Địa chỉ email không được vượt quá 255 ký tự.',
+            'password.required' => 'Vui lòng nhập mật khẩu.',
+            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate(); // bảo mật session
-            // Cả admin và user đều được chuyển về trang home
-            return redirect()->route('home');
+            
+            // Kiểm tra role để redirect phù hợp
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->route('home');
+            }
         }
 
-        // Sai thông tin → trả về lỗi chung
+        // Sai thông tin → trả về lỗi cụ thể
         return back()
             ->withErrors(['email' => 'Email hoặc mật khẩu không đúng.'])
             ->onlyInput('email');
