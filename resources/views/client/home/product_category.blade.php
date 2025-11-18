@@ -165,12 +165,14 @@
                                                         class="img-fluid w-100 rounded-top" alt="">
                                                     <div class="product-new">New</div>
                                                     <div class="product-details">
-                                                        <a href="#"><i class="fa fa-eye fa-1x"></i></a>
+                                                        <a href="{{ route('product.detail', $item->id) }}"><i
+                                                                class="fa fa-eye fa-1x"></i></a>
                                                     </div>
                                                 </div>
                                                 <div class="text-center rounded-bottom p-4">
                                                     <a href="#" class="d-block mb-2">{{ $item->category->name }}</a>
-                                                    <a href="#" class="d-block h4"><br>
+                                                    <a href="{{ route('product.detail', $item->id) }}"
+                                                        class="d-block h4"><br>
                                                         {{ $item->name }}</a>
 
                                                     @php
@@ -195,9 +197,12 @@
                                             </div>
                                             <div
                                                 class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                                <a href="#"
-                                                    class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i
-                                                        class="fas fa-shopping-cart me-2"></i> Add To Cart</a>
+                                                <button type="button"
+                                                    class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
+                                                    data-product-id="{{ $item->id }}"
+                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                                    <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                                                </button>
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="d-flex">
                                                         <i class="fas fa-star text-primary"></i>
@@ -237,44 +242,7 @@
                         </div>
                         <div id="tab-6" class="products tab-pane fade show p-0">
                             <div class="row g-4 products-mini">
-                                <div class="col-lg-6">
-                                    <div class="products-mini-item border">
-                                        <div class="row g-0">
-                                            <div class="col-5">
-                                                <div class="products-mini-img border-end h-100">
-                                                    <img src="img/product-3.png" class="img-fluid w-100 h-100"
-                                                        alt="Image">
-                                                    <div class="products-mini-icon rounded-circle bg-primary">
-                                                        <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-7">
-                                                <div class="products-mini-content p-3">
-                                                    <a href="#" class="d-block mb-2">SmartPhone</a>
-                                                    <a href="#" class="d-block h4">Apple iPad Mini <br> G2356</a>
-                                                    <del class="me-2 fs-5">$1,250.00</del>
-                                                    <span class="text-primary fs-5">$1,050.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="products-mini-add border p-3">
-                                            <a href="#"
-                                                class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                                    class="fas fa-shopping-cart me-2"></i> Add To Cart</a>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
 
                                 {{-- <div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="pagination d-flex justify-content-center mt-5">

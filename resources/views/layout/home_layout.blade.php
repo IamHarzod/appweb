@@ -178,8 +178,9 @@
         </div>
     </div>
     <!-- Navbar & Hero End -->
-
-    @yield('home-content')
+    <main class="flex-grow-1">
+        @yield('home-content')
+    </main>
 
     <!-- Footer Start -->
     @include('layout.footer_home')

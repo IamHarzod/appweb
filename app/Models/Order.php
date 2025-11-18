@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -17,6 +18,12 @@ class Order extends Model
         'unitPrice',
         'Quantity',
         'totalPrice',
-        
+
     ];
+
+    use HasFactory;
+    public function oderItems()
+    {
+        return $this->hasMany(OderItem::class);
+    }
 }

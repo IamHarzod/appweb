@@ -46,7 +46,7 @@
                                         <td>{{ $item->stockQuantity > 0 ? 'Còn hàng (' . $item->stockQuantity . ')' : 'Hết hàng' }}
                                         </td>
                                         <td>{{ $item->discountPercent }}%</td>
-                                        <td>{{ $item->brand->TenThuongHieu }}</td>
+                                        <td>{{ $item->brand->TenThuongHieu ?? 'Chưa có thương hiệu' }}</td>
                                         <td>{{ $item->category->name }}</td>
                                         <td>{{ $item->style }}</td>
                                         <td>{{ $item->description }} </td>

@@ -14,7 +14,11 @@ class HomeController extends Controller
         $categories = Category::orderBy("id", "desc")->get();
         $all_product = Product::orderBy("id", "desc")->get();
         $our_product = Product::orderBy("id", "desc")->limit(8)->get();
-        return view("client.home.index_home")->with(compact("categories", "all_product", "our_product"));
+        $best_seller_product = Product::withSum('oderItems', 'quantity') // <-- Đổi 'orderDetails' thành 'oderItems'
+            ->orderBy('oder_items_sum_quantity', 'desc') // <-- Tên cột ảo cũng thay đổi
+            ->limit(6)
+            ->get();
+        return view("client.home.index_home")->with(compact("categories", "all_product", "our_product", "best_seller_product"));
     }
 
 

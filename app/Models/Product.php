@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -35,5 +36,11 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id'); // chú ý: đúng tên cột
+    }
+
+    use HasFactory;
+    public function oderItems()
+    {
+        return $this->hasMany(OderItem::class);
     }
 }
