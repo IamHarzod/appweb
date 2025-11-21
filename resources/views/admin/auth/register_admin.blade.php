@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Focus - Bootstrap Admin Dashboard </title>
+    <title>Đăng kí tài khoản </title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/admin/images/favicon.png') }}">
     <link href="{{ asset('public/admin/css/style.css') }}" rel="stylesheet">
@@ -37,7 +37,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Số điện thoại</strong></label>
-                                            <input type="text" name="phone" class="form-control"
+                                            <input type="text" name="phoneNumber" class="form-control"
                                                 placeholder="Số điện thoại" required>
                                         </div>
                                         <div class="form-group">
@@ -112,7 +112,7 @@
 
             // Chặn submit nếu có lỗi
             form.addEventListener('submit', function(e) {
-             
+
 
                 validateMatch();
                 if (!form.checkValidity()) {

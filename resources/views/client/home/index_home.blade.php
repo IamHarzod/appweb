@@ -171,7 +171,7 @@
 
 
     <!-- Our Products Start -->
-    <div class="container-fluid product py-5">
+    <div id="san-pham-moi" class="container-fluid product py-5">
         <div class="container py-5">
             <div class="tab-class">
                 <div class="row g-4">
@@ -181,23 +181,18 @@
                     <div class="col-lg-8 text-end wow fadeInRight" data-wow-delay="0.1s">
                         <ul class="nav nav-pills d-inline-flex text-center mb-5">
                             <li class="nav-item mb-4">
-                                <a class="d-flex mx-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill"
-                                    href="#tab-1">
+                                <a class="d-flex mx-2 py-2 bg-light rounded-pill active text-dark scroll-link"
+                                    href="#san-pham-moi">
+                                    <span class="" style="width: 130px;">Sản phẩm mới</span>
+                                </a>
+                            </li>
+                            <li class="nav-item mb-4">
+                                <a class="d-flex py-2 mx-2 bg-light rounded-pill scroll-link" href="#tat-ca-san-pham">
                                     <span class="text-dark" style="width: 130px;">Tất cả sản phẩm</span>
                                 </a>
                             </li>
                             <li class="nav-item mb-4">
-                                <a class="d-flex py-2 mx-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-2">
-                                    <span class="text-dark" style="width: 130px;">Sản phẩm mới !</span>
-                                </a>
-                            </li>
-                            <li class="nav-item mb-4">
-                                <a class="d-flex mx-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-3">
-                                    <span class="text-dark" style="width: 130px;">Nổi bật</span>
-                                </a>
-                            </li>
-                            <li class="nav-item mb-4">
-                                <a class="d-flex mx-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-4">
+                                <a class="d-flex mx-2 py-2 bg-light rounded-pill scroll-link" href="#top-ban-chay">
                                     <span class="text-dark" style="width: 130px;">Top bán chạy</span>
                                 </a>
                             </li>
@@ -206,6 +201,11 @@
                 </div>
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
+                        <div class="mx-auto text-center mb-5" style="max-width: 900px;">
+                            <h4 class="text-primary border-bottom border-primary border-2 d-inline-block p-2 title-border-radius wow fadeInUp"
+                                data-wow-delay="0.1s">Products</h4>
+                            <h1 class="mb-0 display-3 wow fadeInUp" data-wow-delay="0.3s">Sản phẩm mới</h1>
+                        </div>
                         <div class="row g-4">
                             @foreach ($our_product as $product)
                                 <div class="col-md-6 col-lg-4 col-xl-3">
@@ -843,7 +843,7 @@
 
 
     <!-- Product List Satrt -->
-    <div class="container-fluid products productList overflow-hidden">
+    <div id="tat-ca-san-pham" class="container-fluid products productList overflow-hidden mb-5">
         <div class="container products-mini py-5">
             <div class="mx-auto text-center mb-5" style="max-width: 900px;">
                 <h4 class="text-primary border-bottom border-primary border-2 d-inline-block p-2 title-border-radius wow fadeInUp"
@@ -919,15 +919,12 @@
             <!-- Product List End -->
 
             <!-- Bestseller Products Start -->
-            <div class="container-fluid products pb-5">
+            <div id="top-ban-chay" class="container-fluid products pb-5 mt-5">
                 <div class="container products-mini py-5">
-                    <div class="mx-auto text-center mb-5" style="max-width: 700px;">
-                        <h4 class="text-primary mb-4 border-bottom border-primary border-2 d-inline-block p-2 title-border-radius wow fadeInUp"
-                            data-wow-delay="0.1s">Bestseller Products</h4>
-                        <p class="mb-0 wow fadeInUp" data-wow-delay="0.2s">Lorem ipsum dolor sit amet consectetur
-                            adipisicing
-                            elit. Modi, asperiores ducimus sint quos tempore officia similique quia? Libero, pariatur
-                            consectetur?</p>
+                    <div class="mx-auto text-center mb-5" style="max-width: 900px;">
+                        <h4 class="text-primary border-bottom border-primary border-2 d-inline-block p-2 title-border-radius wow fadeInUp"
+                            data-wow-delay="0.1s">Products</h4>
+                        <h1 class="mb-0 display-3 wow fadeInUp" data-wow-delay="0.3s">Top bán chạy</h1>
                     </div>
                     <div class="row g-4">
                         @foreach ($best_seller_product as $product)
@@ -960,7 +957,7 @@
                                     </div>
                                     <div class="products-mini-add border p-3">
                                         <button
-                                            class="btn btn-primary border-secondx   ary rounded-pill py-2 px-4 add-to-cart-btn"
+                                            class="btn btn-primary border-secondx  ary rounded-pill py-2 px-4 add-to-cart-btn"
                                             data-product-id="{{ $product->id ?? 1 }}"
                                             data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
                                             <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
@@ -984,3 +981,35 @@
             </div>
             <!-- Bestseller Products End -->
         @endsection
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const links = document.querySelectorAll('.scroll-link');
+
+                links.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault(); // Ngăn chặn hành động nhảy trang mặc định
+
+                        // 1. Xóa class active ở tất cả các nút
+                        links.forEach(l => l.classList.remove('active'));
+
+                        // 2. Thêm class active cho nút vừa click
+                        this.classList.add('active');
+
+                        // 3. Lấy ID mục tiêu
+                        const targetId = this.getAttribute('href');
+                        const targetSection = document.querySelector(targetId);
+
+                        if (targetSection) {
+                            // 4. Cuộn mượt xuống vị trí đó
+                            // offsetTop - 100 để trừ hao thanh menu header nếu có (tùy chỉnh số 100 này)
+                            const offsetTop = targetSection.offsetTop - 100;
+
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: "smooth"
+                            });
+                        }
+                    });
+                });
+            });
+        </script>

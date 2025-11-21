@@ -3,7 +3,7 @@
     <!-- Cart Page Start -->
     <div class="container-fluid py-5">
         <div class="container py-5">
-            @if(!Auth::check())
+            @if (!Auth::check())
                 <div class="alert alert-warning text-center">
                     <h4>Vui lòng đăng nhập để xem giỏ hàng</h4>
                     <p>Bạn cần đăng nhập để có thể thêm sản phẩm vào giỏ hàng và tiến hành thanh toán.</p>
@@ -29,12 +29,12 @@
                             </tr>
                         </thead>
                         <tbody id="cart-items">
-                            @foreach($cartItems as $item)
+                            @foreach ($cartItems as $item)
                                 <tr id="cart-item-{{ $item->id }}">
                                     <td>
-                                        <img src="{{ asset('public/uploads/products/' . $item->product->imageURL) }}" 
-                                             alt="{{ $item->product->name }}" 
-                                             style="width: 80px; height: 80px; object-fit: cover;">
+                                        <img src="{{ asset('public/uploads/products/' . $item->product->imageURL) }}"
+                                            alt="{{ $item->product->name }}"
+                                            style="width: 80px; height: 80px; object-fit: cover;">
                                     </td>
                                     <td>
                                         <p class="mb-0 py-4">{{ $item->product->name }}</p>
@@ -45,20 +45,19 @@
                                     <td>
                                         <div class="input-group quantity py-4" style="width: 100px;">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border" 
-                                                        onclick="updateQuantity({{ $item->id }}, {{ $item->quantity - 1 }})">
+                                                <button class="btn btn-sm btn-minus rounded-circle bg-light border"
+                                                    onclick="updateQuantity({{ $item->id }}, {{ $item->quantity - 1 }})">
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
-                                            <input type="number" 
-                                                   class="form-control form-control-sm text-center border-0 quantity-input" 
-                                                   value="{{ $item->quantity }}" 
-                                                   min="1" 
-                                                   max="{{ $item->product->stockQuantity }}"
-                                                   onchange="updateQuantity({{ $item->id }}, this.value)">
+                                            <input type="number"
+                                                class="form-control form-control-sm text-center border-0 quantity-input"
+                                                value="{{ $item->quantity }}" min="1"
+                                                max="{{ $item->product->stockQuantity }}"
+                                                onchange="updateQuantity({{ $item->id }}, this.value)">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border" 
-                                                        onclick="updateQuantity({{ $item->id }}, {{ $item->quantity + 1 }})">
+                                                <button class="btn btn-sm btn-plus rounded-circle bg-light border"
+                                                    onclick="updateQuantity({{ $item->id }}, {{ $item->quantity + 1 }})">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
@@ -70,8 +69,8 @@
                                         </p>
                                     </td>
                                     <td class="py-4">
-                                        <button class="btn btn-md rounded-circle bg-light border" 
-                                                onclick="removeFromCart({{ $item->id }})">
+                                        <button class="btn btn-md rounded-circle bg-light border"
+                                            onclick="removeFromCart({{ $item->id }})">
                                             <i class="fa fa-times text-danger"></i>
                                         </button>
                                     </td>
@@ -103,7 +102,8 @@
                                 <h1 class="display-6 mb-4">Tổng đơn hàng<span class="fw-normal"></span></h1>
                                 <div class="d-flex justify-content-between mb-4">
                                     <h5 class="mb-0 me-4">Tổng phụ:</h5>
-                                    <p class="mb-0" id="cart-subtotal">{{ number_format($cart->totalAmount, 0, ',', '.') }} VNĐ</p>
+                                    <p class="mb-0" id="cart-subtotal">
+                                        {{ number_format($cart->totalAmount, 0, ',', '.') }} VNĐ</p>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="mb-0 me-4">Phí vận chuyển:</h5>
@@ -114,11 +114,13 @@
                             </div>
                             <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                 <h5 class="mb-0 ps-4 me-4">Tổng tiền</h5>
-                                <p class="mb-0 pe-4" id="cart-total">{{ number_format($cart->totalAmount, 0, ',', '.') }} VNĐ</p>
+                                <p class="mb-0 pe-4" id="cart-total">{{ number_format($cart->totalAmount, 0, ',', '.') }}
+                                    VNĐ</p>
                             </div>
-                            <button class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4" type="button">
+                            <a class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4"
+                                href="{{ route('checkout.index') }}">
                                 Tiến hành thanh toán
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -139,71 +141,37 @@
             const updateUrl = updateUrlTemplate.replace(/0$/, String(cartItemId));
 
             fetch(updateUrl, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({
-                    quantity: newQuantity
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the quantity input
-                    document.querySelector(`#cart-item-${cartItemId} .quantity-input`).value = newQuantity;
-                    
-                    // Update subtotal
-                    const productPrice = parseFloat(document.querySelector(`#cart-item-${cartItemId} td:nth-child(3) p`).textContent.replace(/[^\d]/g, ''));
-                    const subtotal = productPrice * newQuantity;
-                    document.querySelector(`#subtotal-${cartItemId}`).textContent = subtotal.toLocaleString('vi-VN') + ' VNĐ';
-                    
-                    // Update cart total
-                    document.querySelector('#cart-subtotal').textContent = data.cart_total.toLocaleString('vi-VN') + ' VNĐ';
-                    document.querySelector('#cart-total').textContent = data.cart_total.toLocaleString('vi-VN') + ' VNĐ';
-                    
-                    // Show success message
-                    showMessage(data.message, 'success');
-                } else {
-                    showMessage(data.message, 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showMessage('Có lỗi xảy ra khi cập nhật giỏ hàng', 'error');
-            });
-        }
-
-        // Function to remove item from cart
-        function removeFromCart(cartItemId) {
-            if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
-                fetch(document.querySelector('meta[name="route-cart-remove"]').getAttribute('content').replace(/0$/, String(cartItemId)), {
-                    method: 'DELETE',
+                    method: 'PUT',
                     headers: {
+                        'Content-Type': 'application/json',
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    credentials: 'same-origin'
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        quantity: newQuantity
+                    })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Remove the row from table
-                        document.querySelector(`#cart-item-${cartItemId}`).remove();
-                        
+                        // Update the quantity input
+                        document.querySelector(`#cart-item-${cartItemId} .quantity-input`).value = newQuantity;
+
+                        // Update subtotal
+                        const productPrice = parseFloat(document.querySelector(
+                            `#cart-item-${cartItemId} td:nth-child(3) p`).textContent.replace(/[^\d]/g, ''));
+                        const subtotal = productPrice * newQuantity;
+                        document.querySelector(`#subtotal-${cartItemId}`).textContent = subtotal.toLocaleString(
+                            'vi-VN') + ' VNĐ';
+
                         // Update cart total
-                        document.querySelector('#cart-subtotal').textContent = data.cart_total.toLocaleString('vi-VN') + ' VNĐ';
-                        document.querySelector('#cart-total').textContent = data.cart_total.toLocaleString('vi-VN') + ' VNĐ';
-                        
-                        // Check if cart is empty
-                        const cartItems = document.querySelectorAll('#cart-items tr');
-                        if (cartItems.length === 0) {
-                            location.reload(); // Reload to show empty cart message
-                        }
-                        
+                        document.querySelector('#cart-subtotal').textContent = data.cart_total.toLocaleString('vi-VN') +
+                            ' VNĐ';
+                        document.querySelector('#cart-total').textContent = data.cart_total.toLocaleString('vi-VN') +
+                            ' VNĐ';
+
+                        // Show success message
                         showMessage(data.message, 'success');
                     } else {
                         showMessage(data.message, 'error');
@@ -211,8 +179,49 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showMessage('Có lỗi xảy ra khi xóa sản phẩm', 'error');
+                    showMessage('Có lỗi xảy ra khi cập nhật giỏ hàng', 'error');
                 });
+        }
+
+        // Function to remove item from cart
+        function removeFromCart(cartItemId) {
+            if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+                fetch(document.querySelector('meta[name="route-cart-remove"]').getAttribute('content').replace(/0$/, String(
+                        cartItemId)), {
+                        method: 'DELETE',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove the row from table
+                            document.querySelector(`#cart-item-${cartItemId}`).remove();
+
+                            // Update cart total
+                            document.querySelector('#cart-subtotal').textContent = data.cart_total.toLocaleString(
+                                'vi-VN') + ' VNĐ';
+                            document.querySelector('#cart-total').textContent = data.cart_total.toLocaleString(
+                                'vi-VN') + ' VNĐ';
+
+                            // Check if cart is empty
+                            const cartItems = document.querySelectorAll('#cart-items tr');
+                            if (cartItems.length === 0) {
+                                location.reload(); // Reload to show empty cart message
+                            }
+
+                            showMessage(data.message, 'success');
+                        } else {
+                            showMessage(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showMessage('Có lỗi xảy ra khi xóa sản phẩm', 'error');
+                    });
             }
         }
 
@@ -220,25 +229,25 @@
         function clearCart() {
             if (confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm trong giỏ hàng?')) {
                 fetch(document.querySelector('meta[name="route-cart-clear"]').getAttribute('content'), {
-                    method: 'DELETE',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    credentials: 'same-origin'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload(); // Reload to show empty cart message
-                    } else {
-                        showMessage(data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showMessage('Có lỗi xảy ra khi xóa giỏ hàng', 'error');
-                });
+                        method: 'DELETE',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // Reload to show empty cart message
+                        } else {
+                            showMessage(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showMessage('Có lỗi xảy ra khi xóa giỏ hàng', 'error');
+                    });
             }
         }
 
@@ -254,9 +263,9 @@
                 ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
-            
+
             document.body.appendChild(alertDiv);
-            
+
             // Auto remove after 3 seconds
             setTimeout(() => {
                 if (alertDiv.parentNode) {

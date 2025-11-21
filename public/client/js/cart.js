@@ -145,15 +145,18 @@ class CartManager {
     // Show message to user
 
     showMessage(message, type = "info") {
-        if (activeAlertTimer) {
-            clearTimeout(activeAlertTimer);
+        // 1. Xóa timer cũ nếu đang chạy (Sửa lỗi: dùng this)
+        if (this.activeAlertTimer) {
+            clearTimeout(this.activeAlertTimer);
         }
 
+        // 2. Xóa thông báo cũ để tránh bị chồng chéo
         let oldAlert = document.querySelector(".global-alert");
         if (oldAlert) {
             oldAlert.remove();
         }
 
+        // 3. Chọn màu sắc dựa trên type
         const alertClass =
             {
                 success: "alert-success",
@@ -162,25 +165,45 @@ class CartManager {
                 info: "alert-info",
             }[type] || "alert-info";
 
+        // 4. Tạo phần tử HTML
         const alertDiv = document.createElement("div");
-        alertDiv.className = `alert ${alertClass} alert-dismissible fade show position-fixed global-alert`;
-        alertDiv.style.top = "20px";
-        alertDiv.style.right = "20px";
-        alertDiv.style.zIndex = "9999";
-        alertDiv.style.minWidth = "300px";
+        alertDiv.className = `alert ${alertClass} alert-dismissible fade show position-fixed global-alert shadow`; // Thêm shadow cho đẹp
+
+        // Style để hiện góc trên bên phải
+        Object.assign(alertDiv.style, {
+            top: "20px",
+            right: "20px",
+            zIndex: "9999",
+            minWidth: "300px",
+            maxWidth: "400px",
+        });
+
         alertDiv.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
+        <div class="d-flex align-items-center">
+            <strong class="me-2">${
+                type === "success"
+                    ? '<i class="fa fa-check-circle"></i>'
+                    : '<i class="fa fa-info-circle"></i>'
+            }</strong>
+            <span>${message}</span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
 
         document.body.appendChild(alertDiv);
 
+        // 5. Đặt hẹn giờ tự tắt (Sửa lỗi: dùng this)
         this.activeAlertTimer = setTimeout(() => {
-            if (alertDiv.parentNode) {
-                alertDiv.parentNode.removeChild(alertDiv);
+            if (alertDiv && alertDiv.parentNode) {
+                // Thêm hiệu ứng fade out trước khi xóa (tùy chọn)
+                alertDiv.classList.remove("show");
+                setTimeout(() => {
+                    if (alertDiv.parentNode)
+                        alertDiv.parentNode.removeChild(alertDiv);
+                }, 150); // Đợi animation của bootstrap
             }
-            activeAlertTimer = null;
-        }, 5000);
+            this.activeAlertTimer = null;
+        }, 3000); // 3 giây là vừa đủ, 5 giây hơi lâu
     }
 }
 

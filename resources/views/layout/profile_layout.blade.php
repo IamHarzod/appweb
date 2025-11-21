@@ -28,17 +28,12 @@
                                     <p><strong>Số điện thoại:</strong> {{ $client->phoneNumber ?? 'Chưa cập nhật' }}</p>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-xl-6">
-                                <div class="form-floating">
-                                    <p><strong>Địa chỉ:</strong> {{ $client->address ?? 'Chưa cập nhật' }}</p>
-                                </div>
-                            </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <p><strong>Ngày khởi tạo :</strong>{{ $client->create_at ?? 'Chưa cập nhật' }} </p>
+                                    <p><strong>Ngày khởi tạo :</strong> {{ $client->created_at ?? 'Chưa cập nhật' }} </p>
                                 </div>
                             </div>
-                            s
+
                             <div class="col-12">
                                 <button class="btn btn-primary w-100 py-3">Send Message</button>
                             </div>

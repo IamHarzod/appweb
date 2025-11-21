@@ -47,7 +47,7 @@ class AdminController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate(); // bảo mật session
-            
+
             // Kiểm tra role để redirect phù hợp
             $user = Auth::user();
             if ($user->role === 'admin') {
@@ -80,7 +80,7 @@ class AdminController extends Controller
         $credentials = $request->validate([
             'name'    => ['required', 'string'],
             'email'    => ['required', 'email'],
-            'phone'    => [
+            'phoneNumber'    => [
                 'required',
                 'regex:/^(0|\+84)(3|5|7|8|9)\d{8}$/'
                 // ví dụ chấp nhận: 0981234567, +84981234567
@@ -88,7 +88,7 @@ class AdminController extends Controller
             'password' => ['required', 'string', 'min:6'],
         ]);
 
-        $arrayData = ['name' => $request->name, 'email' => $request->email, 'phone' => $request->phone, 'password' => bcrypt($request->password)];
+        $arrayData = ['name' => $request->name, 'email' => $request->email, 'phoneNumber' => $request->phoneNumber, 'password' => bcrypt($request->password)];
         User::create($arrayData);
         return redirect()->intended(route('admin'));
     }

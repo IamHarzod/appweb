@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\CheckoutController;
 
 
 
@@ -35,6 +36,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
     Route::get('/cart/api', [CartController::class, 'getCart'])->name('cart.api');
 });
+
+// Checkout Routes
+Route::get('/show-checkout', [CheckoutController::class, 'show_checkout'])->name('checkout.index');
+Route::post('/thanh-toan', [CheckoutController::class, 'processOrder'])->name('checkout.process');
+
 //Profile
 Route::middleware('auth')->group(function () {
     Route::get('/show-profile', [ProfilesController::class, 'show_profile'])
@@ -66,7 +72,7 @@ Route::get('/password/reset/{token}', [PasswordResetController::class, 'showRese
 Route::post('/password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
 
 // Test route để xem log reset password (chỉ để test)
-Route::get('/test-password-reset/{email}', function($email) {
+Route::get('/test-password-reset/{email}', function ($email) {
     $resetRecord = DB::table('password_reset_tokens')->where('email', $email)->first();
     if ($resetRecord) {
         return response()->json([
