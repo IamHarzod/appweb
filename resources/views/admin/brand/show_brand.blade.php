@@ -26,7 +26,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Basic Datatable</h4>
+                        <h4 class="card-title">Danh sách thương hiệu</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

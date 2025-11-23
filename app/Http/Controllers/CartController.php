@@ -8,25 +8,62 @@ use App\Models\Category;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Coupon;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
+
+use function Symfony\Component\Clock\now;
 
 class CartController extends Controller
 {
     public function show_cart()
     {
+        $shippingFee = 50000;
+        $discountAmount = 0;
+        $subtotal = 0;
         $categories = Category::orderBy("id", "desc")->get();
         $cart = null;
         $cartItems = collect();
-        
+
         if (Auth::check()) {
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
                 $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
+                foreach ($cartItems as $item) {
+                    $subtotal += $item->product->price * $item->quantity;
+                }
             }
         }
-        
-        return view("client.cart.show_cart")->with(compact("categories", "cart", "cartItems"));
+        if (Session::has('coupon')) {
+            $coupon = Session::get('coupon');
+
+            if ($coupon['type'] == 'free_ship') {
+                $shippingFee = $shippingFee - $coupon['value'];
+                if ($shippingFee < 0) {
+                    $shippingFee = 0; //ko dc am
+                }
+            } elseif ($coupon['type'] == 'fixed') {
+                $discountAmount = $coupon['value'];
+            } elseif ($coupon['type'] == 'percent') {
+                $discountAmount = ($subtotal * $coupon['value']) / 100;
+            }
+        }
+        $totalPrice = $subtotal + $shippingFee - $discountAmount;
+
+        if ($totalPrice < 0) $totalPrice = 0;
+
+        return view("client.cart.show_cart")->with(compact(
+            "categories",
+            "cart",
+            "cartItems",
+            "subtotal",
+            "shippingFee",
+            "discountAmount",
+            "totalPrice"
+        ));
     }
 
     /**
@@ -57,7 +94,7 @@ class CartController extends Controller
             DB::beginTransaction();
 
             $product = Product::findOrFail($request->product_id);
-            
+
             // Kiểm tra tồn kho
             if ($product->stockQuantity < $request->quantity) {
                 return response()->json([
@@ -80,7 +117,7 @@ class CartController extends Controller
             if ($existingItem) {
                 // Cập nhật số lượng
                 $newQuantity = $existingItem->quantity + $request->quantity;
-                
+
                 // Kiểm tra tồn kho tổng
                 if ($product->stockQuantity < $newQuantity) {
                     return response()->json([
@@ -88,7 +125,7 @@ class CartController extends Controller
                         'message' => 'Số lượng sản phẩm vượt quá tồn kho'
                     ], 400);
                 }
-                
+
                 $existingItem->quantity = $newQuantity;
                 $existingItem->save();
             } else {
@@ -116,7 +153,6 @@ class CartController extends Controller
                 'message' => 'Thêm sản phẩm vào giỏ hàng thành công',
                 'cart_total' => $cart->totalAmount
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('CartController@addToCart failed', [
@@ -153,7 +189,7 @@ class CartController extends Controller
 
             $cartItem = CartItem::with(['cart', 'product'])
                 ->where('id', $cartItemId)
-                ->whereHas('cart', function($query) {
+                ->whereHas('cart', function ($query) {
                     $query->where('user_id', Auth::id());
                 })
                 ->firstOrFail();
@@ -179,7 +215,6 @@ class CartController extends Controller
                 'message' => 'Cập nhật giỏ hàng thành công',
                 'cart_total' => $cartItem->cart->totalAmount
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -206,7 +241,7 @@ class CartController extends Controller
 
             $cartItem = CartItem::with('cart')
                 ->where('id', $cartItemId)
-                ->whereHas('cart', function($query) {
+                ->whereHas('cart', function ($query) {
                     $query->where('user_id', Auth::id());
                 })
                 ->firstOrFail();
@@ -224,7 +259,6 @@ class CartController extends Controller
                 'message' => 'Xóa sản phẩm khỏi giỏ hàng thành công',
                 'cart_total' => $cart->totalAmount
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -250,11 +284,11 @@ class CartController extends Controller
             DB::beginTransaction();
 
             $cart = Cart::where('user_id', Auth::id())->first();
-            
+
             if ($cart) {
                 // Xóa tất cả cart items
                 CartItem::where('cart_id', $cart->id)->delete();
-                
+
                 // Reset tổng tiền về 0
                 $cart->totalAmount = 0;
                 $cart->save();
@@ -266,7 +300,6 @@ class CartController extends Controller
                 'success' => true,
                 'message' => 'Xóa tất cả sản phẩm trong giỏ hàng thành công'
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -303,7 +336,7 @@ class CartController extends Controller
             ]);
         }
 
-        $cartItems = $cart->cartItems->map(function($item) {
+        $cartItems = $cart->cartItems->map(function ($item) {
             return [
                 'id' => $item->id,
                 'product_id' => $item->product_id,
@@ -362,5 +395,60 @@ class CartController extends Controller
                 'total_amount' => $cart->totalAmount,
             ]
         ]);
+    }
+
+    public function applyCoupon($request)
+    {
+        $code = $request->input('coupon_code');
+        $coupon = Coupon::where('code', $code)->first();
+
+        if (!$coupon) {
+            return redirect()->back()->with('error', 'Mã giảm giá sai hoặc không tồn tại!');
+        }
+        if ($coupon->quantity <= 0) {
+            return redirect()->back()->with('error', 'Mã giảm giá đã hết lượt sử dụng!');
+        }
+        if ($coupon->expiry_date && now() > ($coupon->expiry_date)) {
+            return redirect()->back()->with('error', 'Mã giảm giá đã hết hạn');
+        }
+
+        session()->put('coupon', [
+            'code' => $coupon->code,
+            'type' => $coupon->type,
+            'value'  => $coupon->value,
+        ]);
+
+        return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
+    }
+
+    public function removeCoupon()
+    {
+        Session::forget('coupon');
+        return redirect()->back()->with('success', 'Đã gỡ bỏ mã giảm giá!');
+    }
+
+    public function checkCoupon(Request $request)
+    {
+        $data = $request->all();
+        $coupon = Coupon::where('code', $data['code_input'])->first();
+
+        if (!$coupon) {
+            return redirect()->back()->with('error', 'Mã giảm giá sai hoặc không tồn tại');
+        }
+        if (Carbon::now()->gt(Carbon::parse($coupon->expiry_date))) {
+            return redirect()->back()->with('error', 'Mã giảm giá đã hết hạn');
+        }
+        if ($coupon->quantity <= 0) {
+            return redirect()->back()->with('error', 'Mã giảm giá đã hết số lượng!');
+        }
+        // nếu ok
+        Session::put('coupon', [
+            'id' => $coupon->id,
+            'code' => $coupon->code,
+            'type' => $coupon->type,
+            'value' => $coupon->value,
+        ]);
+
+        return redirect()->back()->with('success', 'Áp dụng mã thành công');
     }
 }

@@ -12,7 +12,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\OrderController;
 
 
 
@@ -130,4 +129,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Users management
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
     Route::post('/admin/users/{id}/role', [AdminController::class, 'update_user_role'])->name('admin.users.role');
+
+    //Coupon management
+    Route::get('/show-coupon', [CouponController::class, 'index'])->name('coupon.index');
+    Route::get('/show-create-coupon', [CouponController::class, 'create'])->name('show_create_coupon');
+    Route::get('/edit-coupon/{id}', [CouponController::class, 'edit'])->name('show_coupon_edit');
+    Route::post('/save', [CouponController::class, 'store'])->name('coupon.store');
+    Route::get('/delete-coupon/{id}', [CouponController::class, 'destroy'])->name('coupon.delete');
+    Route::post('/update-coupon/{id}', [CouponController::class, 'update'])->name('coupon.update');
+    // Route sử lý coupon
+    Route::post('/check-coupon', [CartController::class, 'checkCoupon'])->name('check_coupon');
+    Route::get('/remove-coupon', [CartController::class, 'removeCoupon'])->name('remove_coupon');
+    // thanh toan ok
+    // Route::get('/order-success/{id}', [CheckoutController::class, 'order_success'])->name('order.success');
 });

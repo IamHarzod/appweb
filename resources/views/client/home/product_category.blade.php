@@ -12,7 +12,7 @@
                         <output id="amount" name="amount" min-velue="0" max-value="500" for="rangeInput">0</output>
                         <div class=""></div>
                     </div>
-                    <div class="product-color mb-3">
+                    {{-- <div class="product-color mb-3">
                         <h4>Lựa chọn hãng</h4>
                         <ul class="list-unstyled">
                             <li>
@@ -37,7 +37,7 @@
                                 </div>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
                     {{-- <div class="additional-product mb-4">
                         <h4>Additional Products</h4>
                         <div class="additional-product-item">
@@ -123,7 +123,7 @@
                                 <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
                             </div>
                         </div>
-                        <div class="col-xl-3 text-end">
+                        {{-- <div class="col-xl-3 text-end">
                             <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between">
                                 <label for="electronics">Sort By:</label>
                                 <select id="electronics" name="electronicslist"
@@ -137,7 +137,7 @@
                                     <option value="audi">High to low</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-lg-4 col-xl-2">
                             <ul class="nav nav-pills d-inline-flex text-center py-2 px-2 rounded bg-light mb-4">
                                 <li class="nav-item me-4">

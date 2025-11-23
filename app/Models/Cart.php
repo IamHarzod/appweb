@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
+    use HasFactory;
     public $timestamps = true;
     //bảng liên kết
     protected $table = 'carts';
@@ -44,5 +46,15 @@ class Cart extends Model
     {
         $this->totalAmount = $this->calculateTotal();
         $this->save();
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(CartItem::class, 'cart_id', 'id');
     }
 }
