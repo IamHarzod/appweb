@@ -12,6 +12,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\OrderController;
 
 
 
@@ -19,8 +21,9 @@ use App\Http\Controllers\CheckoutController;
 
 Route::get('/', [HomeController::class, 'show_home'])->name('home');
 Route::get('/show-category-home', [HomeController::class, 'show_category_home']);
-Route::get('/show-product-category-home/{id}', [HomeController::class, 'show_product_category_home']);
+Route::get('/show-product-category-home/{id}', [HomeController::class, 'show_product_category_home'])->name('home.category.product');
 Route::get('/product/{id}', [HomeController::class, 'show_product_detail'])->name('product.detail');
+
 
 // Cart Routes (public)
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
@@ -49,7 +52,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Orders (admin scope)
-Route::middleware(['auth','admin'])->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
     Route::delete('/admin/orders/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
 });
@@ -118,6 +121,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/show-edit-product/{id}', [ProductController::class, 'show_edit'])->name('product.show_edit');
     Route::put('/update-product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::post('/update-product/{id}', [ProductController::class, 'update']);
+    Route::get('/search', [ProductController::class, 'search'])->name('search');
+    Route::get('/autocomplete-ajax', [ProductController::class, 'autocomplete_ajax'])->name('product.autocomplete_ajax');
 
     // Category
     Route::get('/show-category', [CategoryController::class, 'show_category'])->name('category.index');

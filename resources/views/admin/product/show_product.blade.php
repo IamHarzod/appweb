@@ -1,10 +1,29 @@
 @extends('layout.admin_layout')
 @section('view-content')
+    @if (isset($keyword))
+        <div class="alert alert-info d-flex align-items-center justify-content-between">
+            <span>
+                Kết quả tìm kiếm cho: <strong>"{{ $keyword }}"</strong>
+                ({{ count($products) }} sản phẩm)
+            </span>
+            <a href="{{ url('/shop') }}" class="btn btn-sm btn-outline-secondary">Xóa tìm kiếm</a>
+        </div>
+
+        @if (count($products) == 0)
+            <div class="text-center py-5">
+                <h4>Không tìm thấy sản phẩm nào!</h4>
+                <p>Vui lòng thử lại với từ khóa khác.</p>
+            </div>
+        @endif
+    @endif
     <div class="container-fluid">
         <button type="button" class="btn btn-primary" onclick="OpenModal(null, '{{ url('/show-create-product') }}')">Thêm
             mới</button>
         <div class="row">
             <div class="col-12">
+
+
+
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Danh sách sản phẩm</h4>
