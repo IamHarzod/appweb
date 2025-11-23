@@ -118,6 +118,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.orders.index') }}" aria-expanded="false">
+                            <i class="icon icon-notebook"></i>
+                            <span class="nav-text">Quản lý đơn hàng</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('admin.users') }}" aria-expanded="false">
                             <i class="icon icon-people"></i>
                             <span class="nav-text">Quản lý tài khoản</span>

@@ -12,6 +12,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 
 
 
@@ -40,6 +41,19 @@ Route::middleware('auth')->group(function () {
 // Checkout Routes
 Route::get('/show-checkout', [CheckoutController::class, 'show_checkout'])->name('checkout.index');
 Route::post('/thanh-toan', [CheckoutController::class, 'processOrder'])->name('checkout.process');
+
+// Orders (user scope)
+Route::middleware('auth')->group(function () {
+    Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my');
+    Route::post('/orders/from-cart', [OrderController::class, 'storeFromCart'])->name('orders.store_from_cart');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+});
+
+// Orders (admin scope)
+Route::middleware(['auth','admin'])->group(function () {
+    Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::delete('/admin/orders/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
+});
 
 //Profile
 Route::middleware('auth')->group(function () {

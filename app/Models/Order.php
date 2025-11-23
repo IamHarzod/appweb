@@ -16,7 +16,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'unitPrice',
-        'Quantity',
+        'quantity',
         'totalPrice',
 
     ];
@@ -25,5 +25,10 @@ class Order extends Model
     public function oderItems()
     {
         return $this->hasMany(OderItem::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

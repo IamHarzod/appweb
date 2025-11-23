@@ -57,4 +57,10 @@ class User extends Authenticatable implements CanResetPassword
     {
         return $this->email;
     }
+
+    // Quan hệ: một user có nhiều đơn hàng
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id');
+    }
 }

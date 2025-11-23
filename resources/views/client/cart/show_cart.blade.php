@@ -7,7 +7,7 @@
                 <div class="alert alert-warning text-center">
                     <h4>Vui lòng đăng nhập để xem giỏ hàng</h4>
                     <p>Bạn cần đăng nhập để có thể thêm sản phẩm vào giỏ hàng và tiến hành thanh toán.</p>
-                    <a href="{{ route('login') }}" class="btn btn-primary">Đăng nhập ngay</a>
+                    <a href="{{ route('admin') }}" class="btn btn-primary">Đăng nhập ngay</a>
                 </div>
             @elseif($cartItems->isEmpty())
                 <div class="alert alert-info text-center">

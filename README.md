@@ -1,61 +1,199 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# HỆ THỐNG QUẢN LÝ BÁN HÀNG - E-COMMERCE MANAGEMENT SYSTEM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📋 TỔNG QUAN
 
-## About Laravel
+Hệ thống quản lý bán hàng được xây dựng trên Laravel 11.x với đầy đủ chức năng CRUD cho các module chính. Hệ thống hỗ trợ quản lý sản phẩm, danh mục, thương hiệu và người dùng với giao diện admin panel chuyên nghiệp.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 TÍNH NĂNG CHÍNH
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### ✅ Module CRUD Hoàn Chỉnh
+- **Product Management** - Quản lý sản phẩm với upload ảnh
+- **Category Management** - Quản lý danh mục sản phẩm  
+- **Brand Management** - Quản lý thương hiệu với logo
+- **User Management** - Quản lý người dùng và phân quyền
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### ✅ Hệ Thống Xác Thực
+- Đăng nhập/Đăng ký với validation đầy đủ
+- Quên mật khẩu qua email
+- Phân quyền Admin/User
+- Bảo mật session và CSRF
 
-## Learning Laravel
+### ✅ Quản Lý File Upload
+- Upload ảnh sản phẩm, danh mục, logo thương hiệu
+- Validation file type và size
+- Tự động xóa file cũ khi cập nhật
+- Tên file an toàn với timestamp
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### ✅ Giỏ Hàng & Đơn Hàng
+- Thêm/sửa/xóa sản phẩm trong giỏ hàng
+- Quản lý số lượng sản phẩm
+- Tính toán tổng tiền tự động
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 📁 CẤU TRÚC DỰ ÁN
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
+appweb/
+├── 📁 app/
+│   ├── 📁 Http/Controllers/     # Controllers chính
+│   ├── 📁 Models/               # Eloquent Models
+│   └── 📁 Providers/            # Service Providers
+├── 📁 database/
+│   ├── 📁 migrations/          # Database migrations
+│   └── 📁 seeders/             # Database seeders
+├── 📁 public/
+│   ├── 📁 admin/               # Admin panel assets
+│   ├── 📁 client/              # Client-side assets
+│   └── 📁 uploads/             # Uploaded files
+├── 📁 resources/views/
+│   ├── 📁 admin/               # Admin views
+│   ├── 📁 client/              # Client views
+│   └── 📁 layout/              # Layout templates
+└── 📁 routes/
+    └── web.php                 # Application routes
+```
 
-## Laravel Sponsors
+## 🛠️ CÀI ĐẶT VÀ CHẠY DỰ ÁN
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Yêu cầu hệ thống
+- PHP >= 8.1
+- MySQL >= 8.0
+- Composer
+- Node.js & NPM
 
-### Premium Partners
+### Cài đặt
+```bash
+# Clone repository
+git clone <repository-url>
+cd appweb
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# Install dependencies
+composer install
+npm install
 
-## Contributing
+# Environment setup
+cp .env.example .env
+php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Database setup
+php artisan migrate
+php artisan db:seed
 
-## Code of Conduct
+# Build assets
+npm run build
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Start server
+php artisan serve
+```
 
-## Security Vulnerabilities
+### Truy cập hệ thống
+- **Admin Panel**: `http://localhost:8000/admin`
+- **Client Site**: `http://localhost:8000`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📊 BÁO CÁO KIỂM THỬ
 
-## License
+### Kết quả kiểm thử CRUD
+| Module | CREATE | READ | UPDATE | DELETE | Điểm |
+|--------|--------|------|--------|--------|------|
+| Product | ✅ | ✅ | ✅ | ✅ | 9.5/10 |
+| Category | ✅ | ✅ | ✅ | ✅ | 9.5/10 |
+| Brand | ✅ | ✅ | ✅ | ✅ | 8.5/10 |
+| User | ✅ | ✅ | ✅ | ❌ | 7.5/10 |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Điểm tổng thể: **8.5/10**
+
+## 📚 TÀI LIỆU
+
+### 📄 Báo cáo chi tiết
+- **[Báo cáo kiểm thử CRUD](BAO_CAO_KIEM_THU_CRUD.md)** - Báo cáo đầy đủ về kiểm thử các module
+- **[Documentation](DOCUMENTATION.md)** - Tài liệu kỹ thuật chi tiết cho developers
+- **[Hướng dẫn đăng nhập](HUONG_DAN_DANG_NHAP.md)** - Hướng dẫn sử dụng hệ thống xác thực
+
+### 🔗 Links quan trọng
+- **Admin Login**: `/admin`
+- **Password Reset**: `/password/reset`
+- **Product Management**: `/show-product`
+- **Category Management**: `/show-category`
+- **Brand Management**: `/show-brand`
+- **User Management**: `/admin/users`
+
+## 🔧 CẤU HÌNH QUAN TRỌNG
+
+### Database
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=webbanhang
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### File Upload
+- **Max Size**: 4MB
+- **Allowed Types**: jpg, jpeg, png, gif, webp
+- **Storage Path**: `public/uploads/`
+
+### Security
+- CSRF Protection: ✅ Enabled
+- Password Hashing: ✅ bcrypt
+- File Validation: ✅ Type & Size
+- SQL Injection Protection: ✅ Eloquent ORM
+
+## 🚨 LƯU Ý QUAN TRỌNG
+
+### Cần cải thiện
+1. **Brand Module**: Thêm validation chi tiết
+2. **User Module**: Thêm chức năng DELETE
+3. **Error Messages**: Customize thông báo lỗi
+4. **Logging**: Implement logging system
+5. **API**: Tạo API responses chuẩn
+
+### Bảo mật
+- ✅ CSRF tokens được sử dụng
+- ✅ File upload được validate
+- ✅ Password được hash
+- ⚠️ Cần kiểm tra XSS protection
+- ⚠️ Cần audit SQL injection
+
+## 📞 HỖ TRỢ
+
+### Troubleshooting
+1. **500 Error**: Kiểm tra logs tại `storage/logs/laravel.log`
+2. **File Upload Fails**: Kiểm tra quyền thư mục `public/uploads/`
+3. **Database Error**: Kiểm tra kết nối và migrations
+4. **Login Issues**: Kiểm tra cấu hình session và database
+
+### Development
+- **Debug Mode**: Set `APP_DEBUG=true` trong `.env`
+- **Log Level**: Cấu hình trong `config/logging.php`
+- **Cache**: Clear cache với `php artisan cache:clear`
+
+## 📈 ROADMAP
+
+### Version 2.0 (Planned)
+- [ ] API Documentation với Swagger
+- [ ] Unit Tests cho tất cả modules
+- [ ] Soft Delete cho các entities quan trọng
+- [ ] Audit Trail cho thay đổi dữ liệu
+- [ ] Advanced Search và Filtering
+- [ ] Real-time Notifications
+- [ ] Multi-language Support
+
+### Version 3.0 (Future)
+- [ ] Microservices Architecture
+- [ ] Redis Caching
+- [ ] Queue Jobs cho heavy tasks
+- [ ] Mobile API
+- [ ] Advanced Analytics Dashboard
+
+---
+
+## 📝 LICENSE
+
+Dự án này được phát triển cho mục đích học tập và nghiên cứu.
+
+---
+
+**Phiên bản**: 1.0  
+**Cập nhật cuối**: 19/10/2025  
+**Trạng thái**: Production Ready với một số cải thiện nhỏ

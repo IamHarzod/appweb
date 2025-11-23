@@ -34,6 +34,13 @@ class CartController extends Controller
      */
     public function addToCart(Request $request)
     {
+        \Log::info('CartController@addToCart called', [
+            'user_id' => Auth::id(),
+            'product_id' => $request->product_id,
+            'quantity' => $request->quantity,
+            'ip' => $request->ip()
+        ]);
+
         if (!Auth::check()) {
             return response()->json([
                 'success' => false,
@@ -98,6 +105,12 @@ class CartController extends Controller
 
             DB::commit();
 
+            \Log::info('Cart item added successfully', [
+                'cart_id' => $cart->id,
+                'cart_items_count' => $cart->cartItems()->count(),
+                'total_amount' => $cart->totalAmount
+            ]);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Thêm sản phẩm vào giỏ hàng thành công',
@@ -106,6 +119,12 @@ class CartController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('CartController@addToCart failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => Auth::id(),
+                'product_id' => $request->product_id
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
