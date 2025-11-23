@@ -2,7 +2,7 @@
 @section('home-content')
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Cheackout Page</h1>
+        <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Checkout Page</h1>
     </div>
     <!-- Single Page Header End -->
 
@@ -138,14 +138,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="text-center">
-                                        <th scope="row" class="text-start py-4">
-                                            Apple iPad Mini
-                                        </th>
-                                        <td class="py-4">$269.00</td>
-                                        <td class="py-4 text-center">2</td>
-                                        <td class="py-4">$538.00</td>
-                                    </tr>
+                                    @foreach ($cartItems as $item)
+                                        <tr class="text-center">
+                                            <th scope="row" class="text-start py-4">
+                                                {{ $item->product->name }}
+                                            </th>
+                                            <td class="py-4">
+                                                {{ number_format($item->product->price, 0, ',', '.') }} VNĐ
+                                            </td>
+                                            <td class="py-4 text-center">{{ $item->quantity }}</td>
+                                            <td class="py-4">
+                                                {{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}
+                                                VNĐ
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     <tr>
                                         <th scope="row">
                                         </th>
@@ -156,33 +163,57 @@
                                         </td>
                                         <td class="py-4">
                                             <div class="py-2 text-center border-bottom border-top">
-                                                <p class="mb-0 text-dark">$1134.00</p>
+                                                <p class="mb-0 text-dark">{{ number_format($subtotal ?? 0, 0, ',', '.') }}
+                                                    VNĐ</p>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">
-                                        </th>
-                                        <td class="py-4">
-                                            <p class="mb-0 text-dark py-4">Shipping</p>
+                                        <th scope="row"></th>
+                                        <td class="py-4" colspan="2">
+                                            <p class="mb-0 text-dark py-2">Phí vận chuyển</p>
                                         </td>
-                                        <td colspan="3" class="py-4">
-                                            <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0"
-                                                    id="Shipping-1" name="Shipping-1" value="Shipping">
-                                                <label class="form-check-label" for="Shipping-1">Free Shipping</label>
+                                        <td class="py-4">
+                                            <div class="py-2 text-center border-bottom">
+                                                @if (isset($shippingFee) && $shippingFee == 0)
+                                                    <p class="mb-0 text-success">Miễn phí</p>
+                                                @else
+                                                    <p class="mb-0 text-dark">
+                                                        {{ number_format($shippingFee ?? 50000, 0, ',', '.') }} VNĐ</p>
+                                                @endif
                                             </div>
-                                            <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0"
-                                                    id="Shipping-2" name="Shipping-1" value="Shipping">
-                                                <label class="form-check-label" for="Shipping-2">Flat rate:
-                                                    $15.00</label>
-                                            </div>
-                                            <div class="form-check text-start">
-                                                <input type="checkbox" class="form-check-input bg-primary border-0"
-                                                    id="Shipping-3" name="Shipping-1" value="Shipping">
-                                                <label class="form-check-label" for="Shipping-3">Local Pickup:
-                                                    $8.00</label>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td class="py-4" colspan="3">
+                                            <div class="d-flex flex-column align-items-end">
+                                                @if (Session::has('coupon'))
+                                                    <div
+                                                        class="d-flex justify-content-between w-100 mb-2 align-items-center">
+                                                        <span class="text-success">
+                                                            <i class="fa fa-tag"></i> Mã:
+                                                            <strong>{{ Session::get('coupon')['code'] }}</strong>
+                                                        </span>
+                                                        <span class="text-success">
+                                                            - {{ number_format($discountAmount ?? 0, 0, ',', '.') }} VNĐ
+                                                        </span>
+                                                    </div>
+                                                    <a href="{{ route('remove_coupon') }}"
+                                                        class="btn btn-sm btn-outline-danger w-100"
+                                                        onclick="saveScrollPosition()">
+                                                        Gỡ bỏ mã
+                                                    </a>
+                                                @else
+                                                    <div class="input-group">
+                                                        <input type="text" form="coupon-form" name="code_input"
+                                                            class="form-control" placeholder="Nhập mã giảm giá">
+                                                        <button onclick="saveScrollPosition()" class="btn btn-dark"
+                                                            type="submit" form="coupon-form">Áp
+                                                            dụng</button>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -196,7 +227,8 @@
                                         <td class="py-4"></td>
                                         <td class="py-4">
                                             <div class="py-2 text-center border-bottom border-top">
-                                                <p class="mb-0 text-dark">$135.00</p>
+                                                <p class="mb-0 text-dark">
+                                                    {{ number_format($totalPrice ?? 0, 0, ',', '.') }} VNĐ</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -246,6 +278,9 @@
                         </div>
                     </div>
                 </div>
+            </form>
+            <form id="coupon-form" action="{{ route('check_coupon') }}" method="POST" style="display: none;">
+                @csrf
             </form>
         </div>
     </div>

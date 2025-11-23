@@ -199,5 +199,21 @@
     <!-- Template Javascript -->
     <script src="{{ asset('public/client/js/main.js') }}"></script>
     <script src="{{ asset('public/client/js/cart.js') }}"></script>
+    <!-- Script giữ vị trí cuộn trang -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            // 1. Khôi phục vị trí cuộn nếu có trong bộ nhớ
+            var scrollPos = sessionStorage.getItem('scrollPos');
+            if (scrollPos) {
+                window.scrollTo(0, scrollPos);
+                sessionStorage.removeItem('scrollPos'); // Xóa đi để không ảnh hưởng các trang khác
+            }
+        });
+
+        // 2. Hàm lưu vị trí cuộn hiện tại (Gọi hàm này trước khi reload)
+        function saveScrollPosition() {
+            sessionStorage.setItem('scrollPos', window.scrollY);
+        }
+    </script>
 
 </html>

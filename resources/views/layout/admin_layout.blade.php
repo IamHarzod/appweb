@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Focus - Bootstrap Admin Dashboard </title>
+    <title>Trang Admin</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/admin/images/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/owl-carousel/css/owl.carousel.min.css') }}">
@@ -29,7 +29,7 @@
     </div>
     <div id="main-wrapper">
         <div class="nav-header">
-            <a href="{{ url('/dashboard') }}" class="brand-logo">
+            <a href="{{ url('/admin/dashboard') }}" class="brand-logo">
                 <img class="logo-abbr" src="{{ asset('public/admin/images/logo.png') }}" alt="">
                 <img class="logo-compact" src="{{ asset('public/admin/images/logo-text.png') }}" alt="">
                 <img class="brand-title" src="{{ asset('public/admin/images/logo-text.png') }}" alt="">
@@ -69,14 +69,6 @@
                                     </a>
                                 @endauth
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <!-- <a href="./app-profile.html" class="dropdown-item">
-                                        <i class="icon-user"></i>
-                                        <span class="ml-2">Profile </span>
-                                    </a> -->
-                                    <a href="{{ url('/') }} " class="dropdown-item">
-                                        <i class="icon-envelope-open"></i>
-                                        <span class="ml-2"> Quay lại trang chủ </span>
-                                    </a>
                                     <a href="{{ url('/logout-admin') }}" class="dropdown-item">
                                         <i class="icon-logout"></i>
                                         <span class="ml-2">Đăng xuất </span>
@@ -119,8 +111,14 @@
                     </li>
                     <li>
                         <a href="{{ route('admin.users') }}" aria-expanded="false">
-                            <i class="icon icon-people"></i>
+                            <i class="ti-user"></i>
                             <span class="nav-text">Quản lý tài khoản</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('coupon.index') }}" aria-expanded="false">
+                            <i class="icon icon-tag"></i>
+                            <span class="nav-text">Quản lý mã khuyến mãi</span>
                         </a>
                     </li>
                 </ul>
@@ -133,13 +131,6 @@
     </div>
     <div class="modal fade" id="ModalEdit" tabindex="-1" aria-labelledby="ModalEditLabel" aria-hidden="true"
         role="dialog">
-    </div>
-
-    <div class="footer">
-        <div class="copyright">
-            <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p>
-            <p>Distributed by <a href="https://themewagon.com/" target="_blank">Themewagon</a></p>
-        </div>
     </div>
 
 
