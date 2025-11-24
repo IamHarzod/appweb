@@ -37,6 +37,22 @@
     <!-- Template Stylesheet -->
     <link href="{{ asset('public/client/css/style.css') }}" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/client/img/favicon.png') }}">
+    <style>
+        /* Hiệu ứng khi di chuột vào sản phẩm gợi ý */
+        .search-item:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+
+        /* Thanh cuộn nếu danh sách quá dài */
+        .dropdown-menu {
+            max-height: 400px;
+            overflow-y: auto;
+            border: none !important;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -101,12 +117,19 @@
             </div>
             <div class="col-md-4 col-lg-6 text-center">
                 <div class="position-relative ps-4">
-                    <div class="d-flex border rounded-pill">
-                        <input class="form-control border-0 rounded-pill w-100 py-3" type="text"
-                            data-bs-target="#dropdownToggle123" placeholder="Tìm kiếm sản phẩm?">
-                        <button type="button" class="btn btn-primary rounded-pill py-3 px-5" style="border: 0;"><i
-                                class="fas fa-search"></i></button>
-                    </div>
+                    <form action="{{ route('search') }}" method="GET" style="position: relative;">
+                        <div class="d-flex border rounded-pill">
+                            <input value="{{ request()->keyword }}"
+                                class="form-control border-0 rounded-pill w-100 py-3" type="text" name="keyword"
+                                id="keywords" placeholder="Tìm kiếm sản phẩm?" autocomplete="off">
+                            <button type="submit" class="btn btn-primary rounded-pill py-3 px-5" style="border: 0;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <div id="search_ajax"
+                                style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1021; background: white; border-radius: 0 0 15px 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="col-md-4 col-lg-3 text-center text-lg-end">
@@ -166,7 +189,7 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <div class="navbar-nav ms-auto py-0">
                             <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="shop.html" class="nav-item nav-link">Shop</a>
+                            {{-- <a href="shop.html" class="nav-item nav-link">Shop</a> --}}
                         </div>
                         <a href=""
                             class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i
@@ -214,6 +237,51 @@
         function saveScrollPosition() {
             sessionStorage.setItem('scrollPos', window.scrollY);
         }
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Bắt sự kiện khi gõ phím vào ô input #keywords
+            $('#keywords').keyup(function() {
+                var query = $(this).val();
+
+                if (query != '') {
+                    // Lấy CSRF Token (Laravel yêu cầu bảo mật)
+                    var _token = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        url: "{{ route('product.autocomplete_ajax') }}", // Gọi đến route ở Bước 1
+                        method: "GET",
+                        data: {
+                            query: query,
+                            _token: _token
+                        },
+                        success: function(data) {
+                            // Khi thành công, đổ dữ liệu HTML vào div #search_ajax
+                            $('#search_ajax').fadeIn();
+                            $('#search_ajax').html(data);
+                        }
+                    });
+                } else {
+                    $('#search_ajax').fadeOut(); // Nếu xóa hết chữ thì ẩn đi
+                }
+            });
+
+            // Khi click ra ngoài thì ẩn bảng gợi ý đi cho đỡ vướng
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#keywords, #search_ajax').length) {
+                    $('#search_ajax').fadeOut();
+                }
+            });
+
+            // Khi click vào 1 item trong danh sách -> Gán tên vào ô input (tùy chọn)
+            $(document).on('click', '.search-item', function() {
+                var text = $(this).find('span').first().text();
+                $('#keywords').val(text);
+                $('#search_ajax').fadeOut();
+                // Link thẻ <a> đã xử lý việc chuyển trang rồi
+            });
+        });
     </script>
 
 </html>

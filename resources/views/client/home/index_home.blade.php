@@ -54,8 +54,8 @@
                             <del class="me-2 text-white fs-5">86.990.000đ</del>
                             <span class="text-primary fs-5">85.399.000đ</span>
                         </div>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4"><i
-                                class="fas fa-shopping-cart me-2"></i> Thêm ngay vào giỏ hàng </a>
+                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4"><i class=" me-2"></i> Khám phá
+                            ngay </a>
                     </div>
                 </div>
             </div>
@@ -157,7 +157,7 @@
                         class="d-flex align-items-center justify-content-between border bg-white rounded p-4">
                         <div>
                             <p class="text-muted mb-3">Phụ kiện đeo tay ư ? Không thể thiếu !</p>
-                            <h3 class="text-primary">Smart Whatch</h3>
+                            <h3 class="text-primary">Smart Watch</h3>
                             <h1 class="display-3 text-secondary mb-0">20% <span class="text-primary fw-normal">Off</span>
                             </h1>
                         </div>
