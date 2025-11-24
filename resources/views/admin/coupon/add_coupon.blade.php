@@ -5,7 +5,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalCreateCouponLabel">Thêm mới Mã giảm giá</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CloseModal('ModalEdit')"
-                    aria-label="Close">X</button>
+                    aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
