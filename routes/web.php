@@ -12,8 +12,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\OrderController;
 
 
 

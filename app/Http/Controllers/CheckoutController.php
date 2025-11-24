@@ -8,7 +8,6 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session; // <--- QUAN TRỌNG: Nhớ thêm dòng này để dùng Session
-
 class CheckoutController extends Controller
 {
     public function show_checkout()
