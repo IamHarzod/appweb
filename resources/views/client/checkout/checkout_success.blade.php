@@ -54,24 +54,46 @@
                             <!-- Tóm tắt số tiền -->
                             <div class="bg-light p-3 rounded mt-4">
                                 <div class="d-flex justify-content-between mb-2">
+                                    <?php
+                                    // 1. Tính tổng tiền hàng
+                                    $subtotal = $order->orderItems->sum(function ($item) {
+                                        return $item->price * $item->quantity;
+                                    });
+                                    
+                                    // 2. Phí ship mặc định (Lấy cứng 50k theo yêu cầu của bạn)
+                                    $shippingFee = 50000;
+                                    
+                                    // 3. Lấy tiền giảm giá từ DB
+                                    $discount = $order->discount_amount ?? 0;
+                                    
+                                    $displayTotal = $subtotal + $shippingFee - $discount;
+                                    if ($displayTotal < 0) {
+                                        $displayTotal = 0;
+                                    }
+                                    ?>
                                     <span>Tổng tiền hàng:</span>
-                                    {{-- Giả sử bạn lưu subtotal --}}
-                                    <strong>{{ number_format($order->subtotal ?? 0, 0, ',', '.') }} VNĐ</strong>
+                                    <strong>{{ number_format($subtotal ?? 0, 0, ',', '.') }}
+                                        VNĐ</strong>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Phí vận chuyển:</span>
-                                    <strong>{{ number_format($order->shipping_fee ?? 0, 0, ',', '.') }} VNĐ</strong>
+                                    @if (isset($shippingFee) && $shippingFee == 0)
+                                        <p class="mb-0 text-success">Miễn phí</p>
+                                    @else
+                                        <p class="mb-0 text-dark">
+                                            {{ number_format($shippingFee ?? 50000, 0, ',', '.') }} VNĐ</p>
+                                    @endif
+                                    {{-- <strong>{{ number_format($shippingFee, 0, ',', '.') }} VNĐ</strong> --}}
                                 </div>
-                                @if (($order->discount_amount ?? 0) > 0)
+                                @if ($discount > 0)
                                     <div class="d-flex justify-content-between mb-2 text-success">
-                                        <span>Giảm giá:</span>
-                                        <strong>-{{ number_format($order->discount_amount, 0, ',', '.') }} VNĐ</strong>
+                                        <span>Giảm giá (Voucher):</span>
+                                        <strong>-{{ number_format($discount, 0, ',', '.') }} VNĐ</strong>
                                     </div>
                                 @endif
                                 <div class="d-flex justify-content-between border-top pt-2 mt-2">
                                     <span class="h5 mb-0">Tổng thanh toán:</span>
-                                    <span
-                                        class="h5 mb-0 text-primary">{{ number_format($order->total_price ?? 0, 0, ',', '.') }}
+                                    <span class="h5 mb-0 text-primary">{{ number_format($displayTotal, 0, ',', '.') }}
                                         VNĐ</span>
                                 </div>
                             </div>

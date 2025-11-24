@@ -5,31 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+// Tên class giữ nguyên theo tên file của bạn là OderItem
 class OderItem extends Model
 {
-    /** @use HasFactory<\Database\Factories\OderItemFactory> */
     use HasFactory;
-   
-    //bảng liên kết
-    protected $table = 'oder_items';
-    //khóa chính
-    protected $primaryKey = 'id';
-    //thuộc tính có thể gán hàng loạt
+    protected $table = 'order_items';
+
     protected $fillable = [
         'order_id',
         'product_id',
+        'product_name',
         'quantity',
-        'UnitPrice',
-        'totalPrice',
+        'price'
     ];
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
 
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

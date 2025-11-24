@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my');
     Route::post('/orders/from-cart', [OrderController::class, 'storeFromCart'])->name('orders.store_from_cart');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/dat-hang', [OrderController::class, 'placeOrder'])->name('dathang');
+    Route::get('/dat-hang-thanh-cong/{id}', [App\Http\Controllers\OrderController::class, 'showSuccess'])->name('order.success');
 });
 
 // Orders (admin scope)

@@ -95,6 +95,8 @@
                                     <div class="dropdown-divider"></div>
                                 @endif
                                 <a href="{{ url('/show-profile') }}" class="dropdown-item"> Thông tin cá nhân</a>
+                                <a href="{{ url('/dat-hang-thanh-cong/{id}') }}" class="dropdown-item"> Thông tin đơn
+                                    hàng</a>
                                 <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
                             @else
                                 <a href="{{ route('admin') }}" class="dropdown-item"> Đăng nhập</a>

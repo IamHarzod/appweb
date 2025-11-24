@@ -1,12 +1,8 @@
 @extends('layout.home_layout')
 @section('home-content')
-    <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Checkout Page</h1>
     </div>
-    <!-- Single Page Header End -->
-
-    <!-- Searvices Start -->
     <div class="container-fluid px-0">
         <div class="row g-0">
             <div class="col-6 col-md-4 col-lg-2 border-start border-end wow fadeInUp" data-wow-delay="0.1s">
@@ -77,55 +73,80 @@
             </div>
         </div>
     </div>
-    <!-- Searvices End -->
-
-
-    <!-- Checkout Page Start -->
     <div class="container-fluid bg-light overflow-hidden py-5">
         <div class="container py-5">
             <h1 class="mb-4 wow fadeInUp" data-wow-delay="0.1s">Thông tin giao hàng</h1>
-            <form action="#">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            <form action="{{ route('dathang') }}" method="POST">
+                @csrf
                 <div class="row g-5">
                     <div class="col-md-12 col-lg-6 col-xl-6 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="form-item">
                             <label class="form-label my-3">Họ và tên<sup>*</sup></label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" name="shipping_name"
+                                value="{{ auth()->user()->name ?? '' }}" required>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Số điện thoại<sup>*</sup></label>
-                            <input type="tel" class="form-control">
+                            <input type="text" class="form-control" name="shipping_phone" required>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Địa chỉ email<sup>*</sup></label>
-                            <input type="email" class="form-control">
+                            <input type="email" class="form-control" name="shipping_email"
+                                value="{{ auth()->user()->email ?? '' }}" required>
                         </div>
+
                         <div class="form-item">
                             <label class="form-label my-3">Tỉnh / Thành phố<sup>*</sup></label>
-                            <select name="tinh" id="tinh" class="form-select" title="Chọn tỉnh / thành phố">
-                                <option value="0">--Chọn--</option>
+                            <select name="tinh_thanh" id="tinh" class="form-select" title="Chọn tỉnh / thành phố"
+                                required>
+                                <option value="">--Chọn--</option>
                             </select>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Quận / Huyện<sup>*</sup></label>
-                            <select name="quan" id="quan" class="form-select" title="Chọn quận / huyện">
-                                <option value="0">--Chọn--</option>
+                            <select name="quan_huyen" id="quan" class="form-select" title="Chọn quận / huyện" required>
+                                <option value="">--Chọn--</option>
                             </select>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Phường / Xã<sup>*</sup></label>
-                            <select name="phuong" id="phuong" class="form-select" title="Chọn phường / xã">
-                                <option value="0">--Chọn--</option>
+                            <select name="phuong_xa" id="phuong" class="form-select" title="Chọn phường / xã" required>
+                                <option value="">--Chọn--</option>
                             </select>
                         </div>
+
                         <div class="form-item">
                             <label class="form-label my-3">Địa chỉ(số nhà, đường,...)<sup>*</sup></label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" name="shipping_address" required
+                                placeholder="Số nhà, tên đường...">
                         </div>
                         <div class="form-item">
-                            <textarea name="text" class="form-control mt-4" spellcheck="false" cols="30" rows="11"
-                                placeholder="Ghi chú"></textarea>
+                            <textarea name="ghichu" class="form-control mt-4" spellcheck="false" cols="30" rows="11"
+                                placeholder="Ghi chú đơn hàng"></textarea>
                         </div>
                     </div>
+
                     <div class="col-md-12 col-lg-6 col-xl-6 wow fadeInUp" data-wow-delay="0.3s">
                         <div class="table-responsive">
                             <table class="table">
@@ -242,7 +263,7 @@
 
                                 <div class="form-check text-start my-3">
                                     <input type="radio" class="form-check-input bg-primary border-0" id="payment_cod"
-                                        name="payment_method" value="cod" checked>
+                                        name="payment_method" value="COD" checked>
                                     <label class="form-check-label" for="payment_cod">
                                         Thanh toán khi nhận hàng (COD)
                                     </label>
@@ -250,7 +271,7 @@
 
                                 <div class="form-check text-start my-3">
                                     <input type="radio" class="form-check-input bg-primary border-0" id="payment_vnpay"
-                                        name="payment_method" value="vnpay">
+                                        name="payment_method" value="VNPAY">
                                     <label class="form-check-label d-flex align-items-center" for="payment_vnpay">
                                         <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png"
                                             alt="VNPAY" style="height: 30px; margin-right: 10px; object-fit: contain;">
@@ -260,7 +281,7 @@
 
                                 <div class="form-check text-start my-3">
                                     <input type="radio" class="form-check-input bg-primary border-0" id="payment_momo"
-                                        name="payment_method" value="momo">
+                                        name="payment_method" value="MOMO">
                                     <label class="form-check-label d-flex align-items-center" for="payment_momo">
                                         <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
                                             alt="MoMo" style="height: 30px; margin-right: 10px; object-fit: contain;">
@@ -279,11 +300,13 @@
                     </div>
                 </div>
             </form>
+
             <form id="coupon-form" action="{{ route('check_coupon') }}" method="POST" style="display: none;">
                 @csrf
             </form>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -291,52 +314,72 @@
             $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
                 if (data_tinh.error == 0) {
                     $.each(data_tinh.data, function(key_tinh, val_tinh) {
-                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh
-                            .full_name + '</option>');
+                        // SỬA: Lưu Tên vào value, Lưu ID vào data-id
+                        $("#tinh").append('<option value="' + val_tinh.full_name + '" data-id="' +
+                            val_tinh.id + '">' + val_tinh.full_name + '</option>');
                     });
 
-                    // Sự kiện khi chọn Tỉnh -> Load Quận
+                    // Sự kiện khi chọn Tỉnh
                     $("#tinh").change(function(e) {
-                        var idtinh = $(this).val();
-                        // Lấy danh sách Quận/Huyện
-                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(
-                            data_quan) {
-                            if (data_quan.error == 0) {
-                                $("#quan").html('<option value="0">Quận Huyện</option>');
-                                $("#phuong").html('<option value="0">Phường Xã</option>');
-                                $.each(data_quan.data, function(key_quan, val_quan) {
-                                    $("#quan").append('<option value="' + val_quan
-                                        .id + '">' + val_quan.full_name +
-                                        '</option>');
-                                });
+                        // Lấy ID từ data-id để gọi API
+                        var idtinh = $(this).find(':selected').data('id');
 
-                                // Sự kiện khi chọn Quận -> Load Phường
-                                $("#quan").change(function(e) {
-                                    var idquan = $(this).val();
-                                    // Lấy danh sách Phường/Xã
-                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' +
-                                        idquan + '.htm',
-                                        function(data_phuong) {
-                                            if (data_phuong.error == 0) {
-                                                $("#phuong").html(
-                                                    '<option value="0">Phường Xã</option>'
-                                                );
-                                                $.each(data_phuong.data,
-                                                    function(key_phuong,
-                                                        val_phuong) {
-                                                        $("#phuong").append(
-                                                            '<option value="' +
-                                                            val_phuong
-                                                            .id + '">' +
-                                                            val_phuong
-                                                            .full_name +
-                                                            '</option>');
+                        // Reset Quận/Phường
+                        $("#quan").html('<option value="">--Chọn Quận/Huyện--</option>');
+                        $("#phuong").html('<option value="">--Chọn Phường/Xã--</option>');
+
+                        if (idtinh) {
+                            $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm',
+                                function(data_quan) {
+                                    if (data_quan.error == 0) {
+                                        $.each(data_quan.data, function(key_quan, val_quan) {
+                                            $("#quan").append('<option value="' +
+                                                val_quan.full_name + '" data-id="' +
+                                                val_quan.id + '">' + val_quan
+                                                .full_name + '</option>');
+                                        });
+
+                                        // Sự kiện khi chọn Quận
+                                        $("#quan").change(function(e) {
+                                            var idquan = $(this).find(':selected').data(
+                                                'id');
+                                            $("#phuong").html(
+                                                '<option value="">--Chọn Phường/Xã--</option>'
+                                            );
+
+                                            if (idquan) {
+                                                $.getJSON(
+                                                    'https://esgoo.net/api-tinhthanh/3/' +
+                                                    idquan + '.htm',
+                                                    function(data_phuong) {
+                                                        if (data_phuong.error ==
+                                                            0) {
+                                                            $.each(data_phuong.data,
+                                                                function(
+                                                                    key_phuong,
+                                                                    val_phuong
+                                                                ) {
+                                                                    $("#phuong")
+                                                                        .append(
+                                                                            '<option value="' +
+                                                                            val_phuong
+                                                                            .full_name +
+                                                                            '" data-id="' +
+                                                                            val_phuong
+                                                                            .id +
+                                                                            '">' +
+                                                                            val_phuong
+                                                                            .full_name +
+                                                                            '</option>'
+                                                                        );
+                                                                });
+                                                        }
                                                     });
                                             }
                                         });
+                                    }
                                 });
-                            }
-                        });
+                        }
                     });
                 }
             });
