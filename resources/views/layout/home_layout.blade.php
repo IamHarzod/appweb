@@ -129,6 +129,7 @@
                                 style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1021; background: white; border-radius: 0 0 15px 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
                             </div>
                         </div>
+                    </form>
                 </div>
             </div>
             <div class="col-md-4 col-lg-3 text-center text-lg-end">

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Coupon;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 use function Symfony\Component\Clock\now;
 
@@ -71,7 +72,7 @@ class CartController extends Controller
      */
     public function addToCart(Request $request)
     {
-        \Log::info('CartController@addToCart called', [
+        Log::info('CartController@addToCart called', [
             'user_id' => Auth::id(),
             'product_id' => $request->product_id,
             'quantity' => $request->quantity,
@@ -142,7 +143,7 @@ class CartController extends Controller
 
             DB::commit();
 
-            \Log::info('Cart item added successfully', [
+            Log::info('Cart item added successfully', [
                 'cart_id' => $cart->id,
                 'cart_items_count' => $cart->cartItems()->count(),
                 'total_amount' => $cart->totalAmount
@@ -155,7 +156,7 @@ class CartController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('CartController@addToCart failed', [
+            Log::error('CartController@addToCart failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'user_id' => Auth::id(),
