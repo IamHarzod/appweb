@@ -125,6 +125,13 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request)
     {
+        // DEBUG: Kiểm tra session ngay đầu
+        \Log::info('=== START placeOrder ===');
+        \Log::info('Session has coupon?', ['has' => Session::has('coupon')]);
+        if (Session::has('coupon')) {
+            \Log::info('Coupon in session', Session::get('coupon'));
+        }
+        
         // 1. Validate dữ liệu
         $request->validate([
             'shipping_name' => 'required',
@@ -183,16 +190,39 @@ class OrderController extends Controller
         $discountAmount = 0;
         $couponCode = null;
 
+        // Tính toán discount từ coupon session (giống CheckoutController)
         if (Session::has('coupon')) {
             $coupon = Session::get('coupon');
-            $discountAmount = isset($coupon['discount']) ? $coupon['discount'] : 0;
+            $couponCode = $coupon['code'] ?? null;
+            
+            \Log::info('Coupon applied in placeOrder', [
+                'code' => $couponCode,
+                'type' => $coupon['type'] ?? null,
+                'value' => $coupon['value'] ?? null
+            ]);
+            
+            if ($coupon['type'] == 'free_ship') {
+                $tempShipping = $shippingFee - $coupon['value'];
+                $shippingFee = $tempShipping < 0 ? 0 : $tempShipping;
+                \Log::info('Free ship applied', ['new_shipping_fee' => $shippingFee]);
+            } elseif ($coupon['type'] == 'fixed') {
+                // Giảm giá cố định (VD: 100.000đ)
+                $discountAmount = $coupon['value'];
+            } elseif ($coupon['type'] == 'percent') {
+                // Giảm giá theo % (VD: 10%)
+                $discountAmount = ($productTotal * $coupon['value']) / 100;
+            }
+        } else {
+            \Log::info('No coupon in session when placing order');
         }
-        $finalTotalAmount = $productTotal + $shippingFee - $discountAmount;
-        if ($finalTotalAmount < 0) $finalTotalAmount = 0;
-
+        
+        // Miễn phí ship nếu đơn hàng > 10 triệu
         if ($productTotal > 10000000) {
             $shippingFee = 0;
         }
+        
+        $finalTotalAmount = $productTotal + $shippingFee - $discountAmount;
+        if ($finalTotalAmount < 0) $finalTotalAmount = 0;
         DB::beginTransaction();
         try {
             $fullAddress = $request->shipping_address . ', ' . $request->phuong_xa . ', ' . $request->quan_huyen . ', ' . $request->tinh_thanh;
@@ -206,9 +236,10 @@ class OrderController extends Controller
                 'notes' => $request->ghichu,
                 'payment_method' => $request->payment_method ?? 'COD',
 
-                // LƯU 2 SỐ QUAN TRỌNG NÀY
+                // LƯU CÁC SỐ QUAN TRỌNG
                 'total_amount' => $finalTotalAmount,       // Tổng thực trả
                 'discount_amount' => $discountAmount,      // Lưu số tiền đã giảm
+                'shipping_fee' => $shippingFee,            // Lưu phí vận chuyển
 
                 'status' => 'pending',
             ]);

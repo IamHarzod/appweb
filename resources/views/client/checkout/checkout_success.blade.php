@@ -60,8 +60,8 @@
                                         return $item->price * $item->quantity;
                                     });
                                     
-                                    // 2. Phí ship mặc định (Lấy cứng 50k theo yêu cầu của bạn)
-                                    $shippingFee = 50000;
+                                    // 2. Lấy phí ship từ DB (thay vì hardcode)
+                                    $shippingFee = $order->shipping_fee ?? 50000;
                                     
                                     // 3. Lấy tiền giảm giá từ DB
                                     $discount = $order->discount_amount ?? 0;

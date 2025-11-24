@@ -21,6 +21,8 @@ class Order extends Model
         'notes',            // Thêm dòng này
         'payment_method',   // Thêm dòng này
         'total_amount',     // Thêm dòng này
+        'discount_amount',  // Thêm cột discount_amount
+        'shipping_fee',     // Thêm cột shipping_fee
         'status',           // Thêm dòng này
     ];
 
