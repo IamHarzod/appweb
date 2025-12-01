@@ -9,7 +9,7 @@
                         </div>
                         <div>
                             <h4 class="text-white">Address</h4>
-                            <p class="mb-2">123 Street New York.USA</p>
+                            <p class="mb-2">41A Phú Diễn</p>
                         </div>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
                         </div>
                         <div>
                             <h4 class="text-white">Mail Us</h4>
-                            <p class="mb-2">info@example.com</p>
+                            <p class="mb-2">36shop@gmail.com</p>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                         </div>
                         <div>
                             <h4 class="text-white">Telephone</h4>
-                            <p class="mb-2">(+012) 3456 7890</p>
+                            <p class="mb-2">(+084) 123456789</p>
                         </div>
                     </div>
                 </div>
@@ -44,8 +44,8 @@
                             <i class="fab fa-firefox-browser fa-2x text-primary"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">Yoursite@ex.com</h4>
-                            <p class="mb-2">(+012) 3456 7890</p>
+                            <h4 class="text-white">36shop.com</h4>
+                            <p class="mb-2">(+084) 123456789</p>
                         </div>
                     </div>
                 </div>
@@ -55,9 +55,6 @@
                     <div class="footer-item d-flex flex-column">
                         <div class="footer-item">
                             <h4 class="text-primary mb-4">Newsletter</h4>
-                            <p class="mb-3">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor
-                                sit
-                                amet, consectetur adipiscing elit consectetur adipiscing elit.</p>
                             <div class="position-relative mx-auto rounded-pill">
                                 <input class="form-control rounded-pill w-100 py-3 ps-4 pe-5" type="text"
                                     placeholder="Enter your email">
@@ -72,12 +69,12 @@
                         <h4 class="text-primary mb-4">Customer Service</h4>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Contact Us</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Returns</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
+                        {{-- <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Site Map</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Testimonials</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> My Account</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Unsubscribe
-                            Notification</a>
+                            Notification</a> --}}
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-3">
@@ -88,11 +85,11 @@
                             infomation</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Privacy
                             Policy</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Terms &
+                        {{-- <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Terms &
                             Conditions</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Warranty</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> FAQ</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Seller Login</a>
+                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Seller Login</a> --}}
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-3">
@@ -101,12 +98,12 @@
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Brands</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Gift Vouchers</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Affiliates</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Wishlist</a>
+                        {{-- <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Wishlist</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Track Your
                             Order</a>
                         <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Track Your
-                            Order</a>
+                            Order</a> --}}
                     </div>
                 </div>
             </div>

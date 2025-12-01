@@ -56,7 +56,8 @@ Route::middleware('auth')->group(function () {
 // Orders (admin scope)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::delete('/admin/orders/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
+    Route::get('/admin/orders/delete/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
+    Route::get('/admin/orders/detail/{id}', [OrderController::class, 'showDetail'])->name('admin.orders.detail');
 });
 
 //Profile

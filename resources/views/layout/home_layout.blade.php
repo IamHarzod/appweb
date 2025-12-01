@@ -52,6 +52,19 @@
             padding: 0;
             margin: 0;
         }
+
+        .navbar-nav .nav-link.active {
+            color: #ffffff !important;
+            /* Bắt buộc màu trắng */
+            font-weight: bold;
+            /* In đậm cho rõ */
+            text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+            /* Thêm chút bóng nhẹ cho đẹp */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffffff !important;
+        }
     </style>
 </head>
 
@@ -155,47 +168,38 @@
     <!-- Navbar & Hero Start -->
     <div class="container-fluid nav-bar p-0">
         <div class="row gx-0 bg-primary px-5 align-items-center">
-            <div class="col-lg-3 d-none d-lg-block">
-                <nav class="navbar navbar-light position-relative" style="width: 250px;">
-                    <button class="navbar-toggler border-0 fs-4 w-100 px-0 text-start" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#allCat">
-                        <h4 class="m-0"><i class="fa fa-bars me-2"></i>Danh mục</h4>
-                    </button>
-                    <div class="collapse navbar-collapse rounded-bottom" id="allCat">
-                        <div class="navbar-nav ms-auto py-0">
-                            <ul class="list-unstyled categories-bars">
-                                @foreach ($categories as $cat)
-                                    <li>
-                                        <div class="categories-bars-item">
-                                            <a
-                                                href="{{ url('/show-product-category-home/' . $cat->id) }}">{{ $cat->name }}</a>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-            <div class="col-12 col-lg-9">
-                <nav class="navbar navbar-expand-lg navbar-light bg-primary ">
-                    <a href="" class="navbar-brand d-block d-lg-none">
-                        <h1 class="display-5 text-secondary m-0"><i
-                                class="fas fa-shopping-bag text-white me-2"></i>36Shop</h1>
-
+            <div class="col-12 col-lg-12">
+                <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+                    <a href="{{ url('/') }}" class="navbar-brand d-block d-lg-none">
+                        <h1 class="display-5 text-secondary m-0">
+                            <i class="fas fa-shopping-bag text-white me-2"></i>36Shop
+                        </h1>
                     </a>
+
                     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
                         <span class="fa fa-bars fa-1x"></span>
                     </button>
+
                     <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <div class="navbar-nav ms-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
+                        <div class="navbar-nav me-auto py-0"> <a href="{{ url(path: '/') }}"
+                                class="nav-item nav-link {{ request()->is('/') ? 'active text-white font-weight-bold' : '' }}">Trang
+                                chủ</a>
+
+                            @foreach ($categories as $cat)
+                                <a href="{{ url('/show-product-category-home/' . $cat->id) }}"
+                                    class="nav-item nav-link {{ request()->is('show-product-category-home/' . $cat->id) || request()->id == $cat->id ? 'active text-white font-weight-bold' : '' }}">
+                                    {{ $cat->name }}
+                                </a>
+                            @endforeach
+
                             {{-- <a href="shop.html" class="nav-item nav-link">Shop</a> --}}
                         </div>
+
                         <a href=""
-                            class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i
-                                class="fa fa-mobile-alt me-2"></i> +0123 456 7890</a>
+                            class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0">
+                            <i class="fa fa-mobile-alt me-2"></i> +0123 456 7890
+                        </a>
                     </div>
                 </nav>
             </div>

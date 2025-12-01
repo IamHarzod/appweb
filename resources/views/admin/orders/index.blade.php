@@ -25,42 +25,45 @@
                 <div class="table-responsive">
                     <table id="myTable" class="display" style="min-width: 845px">
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Người dùng</th>
-                            <th>Số lượng SP</th>
-                            <th>Giá TB</th>
-                            <th>Tổng tiền</th>
-                            <th>Ngày tạo</th>
-                            <th>Thao tác</th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Người dùng</th>
+                                <th>Số điện thoại</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày tạo</th>
+                                <th>Thao tác</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @foreach($orders as $order)
-                            <tr>
-                                <td>{{ $order->id }}</td>
-                                <td>{{ optional($order->user)->email ?? 'N/A' }}</td>
-                                <td>{{ $order->quantity }}</td>
-                                <td>{{ number_format($order->unitPrice, 0, ',', '.') }} ₫</td>
-                                <td class="text-primary fw-bold">{{ number_format($order->totalPrice, 0, ',', '.') }} ₫</td>
-                                <td>{{ $order->created_at?->format('d/m/Y H:i') }}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                            Thao tác
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('orders.show',$order->id) }}">Chi tiết</a>
-                                            <form action="{{ route('admin.orders.destroy',$order->id) }}" method="POST" onsubmit="return confirm('Xóa đơn hàng #{{ $order->id }}?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger">Xoá</button>
-                                            </form>
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td>{{ $order->id }}</td>
+                                    <td>{{ optional($order->user)->email ?? 'N/A' }}</td>
+                                    <td>{{ $order->shipping_phone }}</td>
+                                    <td class="text-primary fw-bold">{{ number_format($order->total_amount, 0, ',', '.') }}
+                                        ₫
+                                    </td>
+                                    <td>{{ $order->created_at?->format('d/m/Y H:i') }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-primary dropdown-toggle"
+                                                data-toggle="dropdown" aria-expanded="true">
+                                                Thao tác
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="ShowOrderDetails('{{ route('admin.orders.detail', $order->id) }}')">
+                                                    Chi tiết
+                                                </button>
+                                                <button type="button" class="dropdown-item text-danger btn-open-delete"
+                                                    onclick="DeleteData('{{ route('admin.orders.destroy', $order->id) }}')">
+                                                    Xoá
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -71,3 +74,49 @@
         </div>
     </div>
 @endsection
+<div class="modal fade" id="modalOrderDetails" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết đơn hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="order-detail-content">
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function ShowOrderDetails(url) {
+        // 1. Hiện modal lên trước và hiện icon loading
+        $('#modalOrderDetails').modal('show');
+        $('#order-detail-content').html(
+            '<div class="text-center py-3"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>'
+        );
+
+        // 2. Gọi Ajax lấy dữ liệu
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function(response) {
+                // 3. Chèn HTML nhận được vào modal body
+                $('#order-detail-content').html(response);
+            },
+            error: function(xhr) {
+                console.log(xhr);
+                $('#order-detail-content').html(
+                    '<p class="text-danger text-center">Lỗi không tải được dữ liệu!</p>');
+            }
+        });
+    }
+</script>

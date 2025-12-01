@@ -76,14 +76,13 @@ class AdminController extends Controller
 
     public function submit_register(Request $request)
     {
-        // Validate đơn giản
+
         $credentials = $request->validate([
             'name'    => ['required', 'string'],
             'email'    => ['required', 'email'],
             'phoneNumber'    => [
                 'required',
                 'regex:/^(0|\+84)(3|5|7|8|9)\d{8}$/'
-                // ví dụ chấp nhận: 0981234567, +84981234567
             ],
             'password' => ['required', 'string', 'min:6'],
         ]);

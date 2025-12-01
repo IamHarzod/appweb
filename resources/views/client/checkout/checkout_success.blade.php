@@ -103,7 +103,7 @@
                                 <a href="{{ route('home') }}" class="btn btn-outline-secondary rounded-pill px-4 py-2">
                                     <i class="fa fa-home me-2"></i>Về trang chủ
                                 </a>
-                                <a href="{{ url('/shop') }}" class="btn btn-primary rounded-pill px-4 py-2">
+                                <a href="{{ url('/') }}" class="btn btn-primary rounded-pill px-4 py-2">
                                     <i class="fa fa-shopping-bag me-2"></i>Tiếp tục mua sắm
                                 </a>
                             </div>

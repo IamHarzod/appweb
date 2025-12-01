@@ -11,6 +11,7 @@ use App\Models\OderItem;
 use App\Models\Product;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\OderItemController;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -117,21 +118,38 @@ class OrderController extends Controller
     // Delete order (admin or owner)
     public function destroy($id)
     {
-        $order = Order::with('user')->findOrFail($id);
-        $this->authorize('delete', $order);
-        $order->delete();
-        return redirect()->back()->with('success', 'Đã xóa đơn hàng.');
+        try {
+            // 1. Tìm đơn hàng
+            $order = Order::findOrFail($id);
+
+            // 2. Xóa chi tiết đơn hàng trước (QUAN TRỌNG)
+            // Trong Model Order.php của bạn tên hàm là 'orderItems'
+            // Nên ở đây BẮT BUỘC phải gọi là 'orderItems()'
+            $order->orderItems()->delete();
+
+            // 3. Xóa đơn hàng chính
+            $order->delete();
+
+            // 4. Trả về true để hàm JS DeleteData hiểu là thành công và reload trang
+            return true;
+        } catch (\Throwable $e) {
+            // Nếu có lỗi, ghi log hệ thống để kiểm tra (vào storage/logs/laravel.log xem)
+            Log::error("Lỗi xóa đơn hàng: " . $e->getMessage());
+
+            // Trả về false để JS hiện thông báo lỗi
+            return false;
+        }
     }
 
     public function placeOrder(Request $request)
     {
         // DEBUG: Kiểm tra session ngay đầu
-        \Log::info('=== START placeOrder ===');
-        \Log::info('Session has coupon?', ['has' => Session::has('coupon')]);
+        Log::info('=== START placeOrder ===');
+        Log::info('Session has coupon?', ['has' => Session::has('coupon')]);
         if (Session::has('coupon')) {
-            \Log::info('Coupon in session', Session::get('coupon'));
+            Log::info('Coupon in session', Session::get('coupon'));
         }
-        
+
         // 1. Validate dữ liệu
         $request->validate([
             'shipping_name' => 'required',
@@ -194,17 +212,17 @@ class OrderController extends Controller
         if (Session::has('coupon')) {
             $coupon = Session::get('coupon');
             $couponCode = $coupon['code'] ?? null;
-            
-            \Log::info('Coupon applied in placeOrder', [
+
+            Log::info('Coupon applied in placeOrder', [
                 'code' => $couponCode,
                 'type' => $coupon['type'] ?? null,
                 'value' => $coupon['value'] ?? null
             ]);
-            
+
             if ($coupon['type'] == 'free_ship') {
                 $tempShipping = $shippingFee - $coupon['value'];
                 $shippingFee = $tempShipping < 0 ? 0 : $tempShipping;
-                \Log::info('Free ship applied', ['new_shipping_fee' => $shippingFee]);
+                Log::info('Free ship applied', ['new_shipping_fee' => $shippingFee]);
             } elseif ($coupon['type'] == 'fixed') {
                 // Giảm giá cố định (VD: 100.000đ)
                 $discountAmount = $coupon['value'];
@@ -213,14 +231,14 @@ class OrderController extends Controller
                 $discountAmount = ($productTotal * $coupon['value']) / 100;
             }
         } else {
-            \Log::info('No coupon in session when placing order');
+            Log::info('No coupon in session when placing order');
         }
-        
+
         // Miễn phí ship nếu đơn hàng > 10 triệu
         if ($productTotal > 10000000) {
             $shippingFee = 0;
         }
-        
+
         $finalTotalAmount = $productTotal + $shippingFee - $discountAmount;
         if ($finalTotalAmount < 0) $finalTotalAmount = 0;
         DB::beginTransaction();
@@ -283,5 +301,15 @@ class OrderController extends Controller
         $categories = \App\Models\Category::all();
 
         return view('client.checkout.checkout_success', compact('order', 'categories'));
+    }
+
+    public function showDetail($id)
+    {
+        // Lấy đơn hàng kèm theo chi tiết sản phẩm
+        // Lưu ý: 'orderItems' là tên function trong Model Order bạn đã cung cấp
+        $order = Order::with('orderItems')->findOrFail($id);
+
+        // Trả về một View riêng (Partial View) chỉ chứa nội dung modal
+        return view('admin.orders.detail_modal', compact('order'));
     }
 }
