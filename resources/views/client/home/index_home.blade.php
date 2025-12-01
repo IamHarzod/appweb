@@ -1,64 +1,113 @@
 @extends('layout.home_layout')
 @section('home-content')
+    <style>
+        /* Quy định chiều cao chung cho cả slide và banner phụ */
+        :root {
+            --slide-height: 450px;
+            /* <--- CHỈNH ĐỘ CAO MONG MUỐN TẠI ĐÂY */
+        }
+
+        .header-carousel .carousel-img img {
+            height: var(--slide-height) !important;
+            object-fit: contain;
+            width: auto !important;
+            max-width: 100%;
+        }
+
+        /* Banner Vision Pro bên phải */
+        .carousel-header-banner {
+            height: var(--slide-height) !important;
+        }
+
+        .carousel-header-banner img {
+            height: 100% !important;
+            object-fit: cover;
+        }
+
+        /* Căn chỉnh lại nội dung chữ cho cân đối */
+        .carousel-content {
+            padding: 1rem !important;
+            /* Giảm padding của chữ */
+        }
+
+        .carousel-content h1.display-3 {
+            font-size: 2.5rem;
+            /* Giảm cỡ chữ tiêu đề */
+        }
+    </style>
     <!-- Carousel Start -->
     <div class="container-fluid carousel bg-light px-0">
-        <div class="row g-0 justify-content-end">
-            <div class="col-12 col-lg-7 col-xl-9">
-                <div class="header-carousel owl-carousel bg-light py-5">
+        <div class="row g-0 justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="header-carousel owl-carousel bg-light">
+
                     <div class="row g-0 header-carousel-item align-items-center">
                         <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                            <img src="{{ asset('public/client/img/macbook-banner.png') }}" class="img-fluid w-100"
-                                alt="Image">
+                            <img src="{{ asset('public/client/img/macbook-banner.png') }}" class="img-fluid" alt="Image">
                         </div>
                         <div class="col-xl-6 carousel-content p-4">
-                            <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
-                                style="letter-spacing: 3px;">Phụ kiện giảm tới 50%</h4>
-                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Thu cũ
-                                đổi mới | Lên đời giá tốt</h1>
-                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Thu cũ lên đời | Trợ giá lên
-                                đến 3 triệu | Giảm đến 1tr cho thành viên của 36Member</p>
-                            <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
+                            <h4 class="text-uppercase fw-bold mb-3 wow fadeInRight" data-wow-delay="0.1s"
+                                style="letter-spacing: 3px; font-size: 1rem;">
+                                Phụ kiện giảm tới 50%
+                            </h4>
+                            <h1 class="display-3 text-capitalize mb-3 wow fadeInRight" data-wow-delay="0.3s">
+                                Thu cũ đổi mới <br> Lên đời giá tốt
+                            </h1>
+                            <p class="text-dark wow fadeInRight mb-3" data-wow-delay="0.5s">
+                                Thu cũ lên đời | Trợ giá lên đến 3 triệu
+                            </p>
+                            <a class="btn btn-primary rounded-pill py-2 px-4 wow fadeInRight" data-wow-delay="0.7s"
                                 href="#">Shop Now</a>
                         </div>
                     </div>
+
                     <div class="row g-0 header-carousel-item align-items-center">
                         <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                            <img src="{{ asset('public/client/img/Mac-studio-banner.png') }}" class="img-fluid w-100"
+                            <img src="{{ asset('public/client/img/Mac-studio-banner.png') }}" class="img-fluid"
                                 alt="Image">
                         </div>
                         <div class="col-xl-6 carousel-content p-4">
-                            <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
-                                style="letter-spacing: 3px;">Ưu đã tới 50%</h4>
-                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Giải pháp
-                                đột phá. Ưu đãi doanh nghiệp</h1>
-                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Tổng ưu đãi lên đến 7 triệu |
-                                Trả góp 0% lên đến 12 tháng | Giá chỉ từ 30.99 triệu</p>
-                            <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
+                            <h4 class="text-uppercase fw-bold mb-3 wow fadeInRight" data-wow-delay="0.1s"
+                                style="letter-spacing: 3px; font-size: 1rem;">
+                                Ưu đã tới 50%
+                            </h4>
+                            <h1 class="display-3 text-capitalize mb-3 wow fadeInRight" data-wow-delay="0.3s">
+                                Giải pháp đột phá <br> Ưu đãi doanh nghiệp
+                            </h1>
+                            <p class="text-dark wow fadeInRight mb-3" data-wow-delay="0.5s">
+                                Trả góp 0% lên đến 12 tháng
+                            </p>
+                            <a class="btn btn-primary rounded-pill py-2 px-4 wow fadeInRight" data-wow-delay="0.7s"
                                 href="#">Mua ngay</a>
                         </div>
                     </div>
+
                 </div>
             </div>
-            <div class="col-12 col-lg-5 col-xl-3 wow fadeInRight" data-wow-delay="0.1s">
-                <div class="carousel-header-banner h-100">
+
+            <div class="col-12 col-lg-4 wow fadeInRight" data-wow-delay="0.1s">
+                <div class="carousel-header-banner position-relative"
+                    style="height: var(--slide-height) !important; overflow: hidden; background: #000;">
+
                     <img src="{{ asset('public/client/img/Vision-Pro-Banner.jpg') }}" class="img-fluid w-100 h-100"
-                        style="object-fit: cover;" alt="Image">
-                    <div class="carousel-banner-offer">
-                        <p class="bg-primary text-white rounded fs-5 py-2 px-4 mb-0 me-3"> Giảm ngay 10%</p>
-                        <p class="text-primary fs-5 fw-bold mb-0">Khuyến mãi đặc biệt</p>
+                        style="object-fit: cover; object-position: center;" alt="Image">
+
+                    <div class="carousel-banner-offer" style="position: absolute; top: 20px; right: 20px; z-index: 2;">
+                        <p class="bg-primary text-white rounded fs-6 py-1 px-3 mb-0 d-inline-block">Giảm 10%</p>
+                        <p class="text-primary fs-6 fw-bold mb-0 text-end mt-1">Hot Deal</p>
                     </div>
-                    <div class="carousel-banner">
-                        <div class="carousel-banner-content text-center p-4">
-                            <a href="#" class="d-block mb-2"> Vision Pro</a>
-                            <a href="#" class="d-block text-white fs-3"> So Visionary <br>So Pro.</a>
-                            <del class="me-2 text-white fs-5">86.990.000đ</del>
-                            <span class="text-primary fs-5">85.399.000đ</span>
+
+                    <div class="carousel-banner"
+                        style="position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 20px;">
+                        <div class="carousel-banner-content text-start">
+                            <h3 class="text-white fw-bold mb-1">Vision Pro</h3>
+                            <p class="text-warning fs-4 fw-bold mb-0">85.399.000đ</p>
+                            <del class="text-white-50 fs-6">86.990.000đ</del>
                         </div>
-                        <a href="#" class="btn btn-primary rounded-pill py-2 px-4"><i class=" me-2"></i> Khám phá
-                            ngay </a>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
     <!-- Carousel End -->
@@ -279,562 +328,6 @@
                             @endforeach
                         </div>
                     </div>
-                    {{-- <div id="tab-2" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-3.png') }}"
-                                                class="img-fluid rounded-top" alt="">
-                                            <div class="product-new">New</div>
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="{{ $product->id }}" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.3s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-4.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="">
-                                            <div class="product-new">New</div>
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.5s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-5.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="">
-                                            <div class="product-new">New</div>
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.7s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-6.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="Image">
-                                            <div class="product-new">New</div>
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-3" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-9.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="">
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.3s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-10.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="Image">
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.5s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-11.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="Image">
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.7s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-12.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="Image">
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-4" class="tab-pane fade show p-0">
-                        <div class="row g-4">
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-14.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="Image">
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.3s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-15.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="Image">
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.5s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-17.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="Image">
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4 col-xl-3">
-                                <div class="product-item rounded wow fadeInUp" data-wow-delay="0.7s">
-                                    <div class="product-item-inner border rounded">
-                                        <div class="product-item-inner-item">
-                                            <img src="{{ asset('public/client/img/product-16.png') }}"
-                                                class="img-fluid w-100 rounded-top" alt="Image">
-                                                    <div class="product-details">
-                                                        <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
-                                                    </div>
-                                        </div>
-                                        <div class="text-center rounded-bottom p-4">
-                                            <a href="#" class="d-block mb-2">SmartPhone</a>
-                                            <a href="#" class="d-block h4"> iPad Mini <br></a>
-                                            <del class="me-2 fs-5">$1,250.00</del>
-                                            <span class="text-primary fs-5">$1,050.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                        <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="1" 
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex">
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star text-primary"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
         </div>
