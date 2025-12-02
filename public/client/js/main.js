@@ -29,7 +29,6 @@
         autoplay: true,
         smartSpeed: 2000,
         autoplayTimeout: 2000,
-        autoplayHoverPause: true,
         center: false,
         dots: false,
         loop: true,
