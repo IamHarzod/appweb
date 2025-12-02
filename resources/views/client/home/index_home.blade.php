@@ -429,7 +429,8 @@
                                                 <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
                                                     class="img-fluid w-100 h-100" alt="Image">
                                                 <div class="products-mini-icon rounded-circle bg-primary">
-                                                    <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
+                                                    <a href="{{ route('product.detail', $product->id) }}"><i
+                                                            class="fa fa-eye fa-1x text-white"></i></a>
                                                 </div>
                                             </div>
                                         </div>

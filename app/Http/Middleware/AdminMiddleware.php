@@ -15,9 +15,9 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth()->check() && auth()->user()->role === 'admin'){
-            return $next($request);// cho phép admin truy cập và đi tiếp
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return $next($request); // cho phép admin truy cập và đi tiếp
         }
-        return redirect('/show-home')->with('error', 'You do not have admin access.');
+        return redirect('/')->with('error', 'You do not have admin access.');
     }
 }
