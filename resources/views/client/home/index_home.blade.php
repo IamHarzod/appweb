@@ -265,8 +265,7 @@
                                                     class="img-fluid w-100 rounded-top" alt="">
                                                 <div class="product-new">Mới</div>
                                                 <div class="product-details">
-                                                    <a href="{{ route('product.detail', $product->id) }}"><i
-                                                            class="fa fa-eye fa-1x"></i></a>
+                                                    <a href="    }}"><i class="fa fa-eye fa-1x"></i></a>
                                                 </div>
                                             </div>
                                             <div class="text-center rounded-bottom p-4">
