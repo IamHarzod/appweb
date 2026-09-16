@@ -108,11 +108,10 @@
                                     <div class="dropdown-divider"></div>
                                 @endif
                                 <a href="{{ url('/show-profile') }}" class="dropdown-item"> Thông tin cá nhân</a>
-                                <a href="{{ url('/dat-hang-thanh-cong/{id}') }}" class="dropdown-item"> Thông tin đơn
-                                    hàng</a>
+                                <a href="{{ route('orders.my') }}" class="dropdown-item"> Đơn hàng của tôi</a>
                                 <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
                             @else
-                                <a href="{{ route('admin') }}" class="dropdown-item"> Đăng nhập</a>
+                                <a href="{{ route('login') }}" class="dropdown-item"> Đăng nhập</a>
                             @endauth
                         </div>
                     </div>

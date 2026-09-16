@@ -41,7 +41,14 @@
                                                 </form>
                                             </td>
                                             <td>
-                                                {{-- future actions here --}}
+                                                @if ($u->id === auth()->id())
+                                                    <span class="badge badge-info">Đang đăng nhập</span>
+                                                @else
+                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                        onclick="DeleteData('{{ route('admin.users.destroy', $u->id) }}')">
+                                                        <i class="fa fa-trash"></i> Xoá
+                                                    </button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

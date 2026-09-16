@@ -18,17 +18,18 @@ use App\Http\Controllers\CouponController;
 
 
 // Home
-
 Route::get('/', [HomeController::class, 'show_home'])->name('home');
 Route::get('/show-category-home', [HomeController::class, 'show_category_home']);
 Route::get('/show-product-category-home/{id}', [HomeController::class, 'show_product_category_home'])->name('home.category.product');
 Route::get('/product/{id}', [HomeController::class, 'show_product_detail'])->name('product.detail');
-
+Route::get('/search', [ProductController::class, 'search'])->name('search');
+Route::get('/autocomplete-ajax', [ProductController::class, 'autocomplete_ajax'])->name('product.autocomplete_ajax');
 
 // Cart Routes (public)
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
-// Public cart summary for header counter (no auth required)
 Route::get('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
+Route::post('/check-coupon', [CartController::class, 'checkCoupon'])->name('check_coupon');
+Route::get('/remove-coupon', [CartController::class, 'removeCoupon'])->name('remove_coupon');
 
 // Cart Routes (authenticated)
 Route::middleware('auth')->group(function () {
@@ -81,8 +82,10 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/register-admin', [AdminController::class, 'register_admin']);
 Route::get('/admin', [AdminController::class, 'login'])->name('admin');
+Route::get('/login', [AdminController::class, 'login'])->name('login');
 Route::post('/submit-register-admin', [AdminController::class, 'submit_register']);
 Route::post('/submit-login-admin', [AdminController::class, 'submit_login']);
+Route::post('/login', [AdminController::class, 'submit_login']);
 
 // Password Reset Routes
 Route::get('/password/reset', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
@@ -124,8 +127,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/show-edit-product/{id}', [ProductController::class, 'show_edit'])->name('product.show_edit');
     Route::put('/update-product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::post('/update-product/{id}', [ProductController::class, 'update']);
-    Route::get('/search', [ProductController::class, 'search'])->name('search');
-    Route::get('/autocomplete-ajax', [ProductController::class, 'autocomplete_ajax'])->name('product.autocomplete_ajax');
 
     // Category
     Route::get('/show-category', [CategoryController::class, 'show_category'])->name('category.index');
@@ -134,9 +135,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/update-category/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::get('/delete-category/{id}', [CategoryController::class, 'destroy'])->name('delete-category');
     Route::get('/show-edit-category/{id}', [CategoryController::class, 'show_edit_modal'])->name('category.show_edit_modal');
+
     // Users management
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
     Route::post('/admin/users/{id}/role', [AdminController::class, 'update_user_role'])->name('admin.users.role');
+    Route::get('/admin/users/delete/{id}', [AdminController::class, 'destroy_user'])->name('admin.users.destroy');
+    Route::delete('/admin/users/{id}', [AdminController::class, 'destroy_user']);
 
     //Coupon management
     Route::get('/show-coupon', [CouponController::class, 'index'])->name('coupon.index');
@@ -145,9 +149,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/save', [CouponController::class, 'store'])->name('coupon.store');
     Route::get('/delete-coupon/{id}', [CouponController::class, 'destroy'])->name('coupon.delete');
     Route::post('/update-coupon/{id}', [CouponController::class, 'update'])->name('coupon.update');
-    // Route sử lý coupon
-    Route::post('/check-coupon', [CartController::class, 'checkCoupon'])->name('check_coupon');
-    Route::get('/remove-coupon', [CartController::class, 'removeCoupon'])->name('remove_coupon');
-    // thanh toan ok
-    // Route::get('/order-success/{id}', [CheckoutController::class, 'order_success'])->name('order.success');
 });

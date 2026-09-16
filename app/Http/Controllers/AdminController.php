@@ -74,6 +74,31 @@ class AdminController extends Controller
         return redirect()->route('admin.users')->with('success', 'Cập nhật quyền thành công');
     }
 
+    public function destroy_user($id)
+    {
+        try {
+            if (Auth::id() == $id) {
+                if (request()->ajax()) {
+                    return response()->json(['success' => false, 'message' => 'Không thể xóa tài khoản của chính bạn!'], 400);
+                }
+                return redirect()->back()->with('error', 'Không thể xóa tài khoản của chính bạn!');
+            }
+
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            if (request()->ajax()) {
+                return true;
+            }
+            return redirect()->route('admin.users')->with('success', 'Xóa người dùng thành công!');
+        } catch (\Throwable $e) {
+            if (request()->ajax()) {
+                return false;
+            }
+            return redirect()->back()->with('error', 'Lỗi khi xóa người dùng: ' . $e->getMessage());
+        }
+    }
+
     public function submit_register(Request $request)
     {
 

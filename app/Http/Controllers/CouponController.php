@@ -36,8 +36,21 @@ class CouponController extends Controller
 
     public function destroy($id)
     {
-        Coupon::find($id)->delete();
-        return redirect()->back()->with('success', 'Đã xoá mã giảm giá!');
+        try {
+            $coupon = Coupon::find($id);
+            if ($coupon) {
+                $coupon->delete();
+            }
+            if (request()->ajax()) {
+                return true;
+            }
+            return redirect()->back()->with('success', 'Đã xoá mã giảm giá!');
+        } catch (\Throwable $e) {
+            if (request()->ajax()) {
+                return false;
+            }
+            return redirect()->back()->with('error', 'Lỗi khi xóa mã giảm giá: ' . $e->getMessage());
+        }
     }
 
     public function update(Request $request, $id)

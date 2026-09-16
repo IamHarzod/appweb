@@ -11,20 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->unsignedBigInteger('user_id');
-            $table->decimal('unitPrice', 10, 2);
-            $table->integer('quantity');
-            $table->decimal('totalPrice', 10, 2);
-
-            // Khóa ngoại: liên kết tới bảng users
-            $table->foreign('user_id')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
-        });
+        // Schema cũ đã được thay thế hoàn toàn bởi migration 2025_11_24_150504_create_orders_table.php
     }
 
     /**

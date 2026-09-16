@@ -22,37 +22,39 @@ class BrandController extends Controller
     // tạo mới thương hiệu
     public function create_brand(Request $request)
     {
-        $data = $request->all();
+        $validated = $request->validate([
+            'TenThuongHieu' => 'required|string|max:255',
+            'Logo' => 'required|image|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
+            'MoTa' => 'nullable|string',
+            'TrangThai' => 'required|in:0,1',
+        ]);
 
         $file = $request->file('Logo');
-        if (!$file || !$file->isValid()) {
-            return back()->withErrors(['Logo' => 'File không hợp lệ.']);
-        }
-
         $destDir = public_path('uploads/brands');
         if (!is_dir($destDir)) {
-            // tạo thư mục nếu chưa có
             mkdir($destDir, 0755, true);
         }
 
-        // 3) Tạo tên file an toàn
         $origNameNoExt = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $ext           = strtolower($file->getClientOriginalExtension());
-        $safeBase      = Str::slug($origNameNoExt);              // ví dụ: "logo-apple"
-        $filename      = time() . '_' . $safeBase . '.' . $ext;          // ví dụ: "1738320000_logo-apple.png"
+        $safeBase      = Str::slug($origNameNoExt);
+        $filename      = time() . '_' . $safeBase . '.' . $ext;
 
-        // 4) Di chuyển file bằng hàm PHP (move_uploaded_file thông qua UploadedFile::move)
-        //    Nếu bạn muốn dùng thật sự move_uploaded_file:
-        //    move_uploaded_file($file->getPathname(), $destDir.DIRECTORY_SEPARATOR.$filename);
         $file->move($destDir, $filename);
 
-        $brand = Brand::create([
-            'TenThuongHieu' => $data['TenThuongHieu'],
+        Brand::create([
+            'TenThuongHieu' => $validated['TenThuongHieu'],
             'Logo' => $filename,
-            'MoTa' => $data['MoTa'],
-            'TrangThai' => $data['TrangThai'],
+            'MoTa' => $validated['MoTa'] ?? null,
+            'TrangThai' => $validated['TrangThai'],
         ]);
-        return redirect("/show-brand");
+        return redirect("/show-brand")->with('success', 'Thêm thương hiệu thành công!');
+    }
+
+    // Hiển thị form tạo mới thương hiệu (Modal)
+    public function showCreate()
+    {
+        return view('admin.brand.add_brand');
     }
 
     // Xoá thương hiệu
@@ -87,49 +89,45 @@ class BrandController extends Controller
     public function update_brand(Request $request)
     {
         try {
-            $brand = Brand::where("id", $request->id)->first();
-            if ($brand == null) {
-                throw new Exception('Không tìm thấy thương hiệu');
-            }
+            $validated = $request->validate([
+                'id' => 'required|exists:brand,id',
+                'TenThuongHieu' => 'required|string|max:255',
+                'Logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:4096',
+                'MoTa' => 'nullable|string',
+                'TrangThai' => 'required|in:0,1',
+            ]);
 
-            $file = $request->file('Logo');
-            $filename = $file == null ? $brand->Logo : null;
-            if ($file != null) {
-                if (!$file || !$file->isValid()) {
-                    return back()->withErrors(['Logo' => 'File không hợp lệ.']);
-                }
+            $brand = Brand::findOrFail($validated['id']);
 
-                $destDir = public_path('uploads/brands/');
+            if ($request->hasFile('Logo') && $request->file('Logo')->isValid()) {
+                $file = $request->file('Logo');
+                $destDir = public_path('uploads/brands');
                 if (!is_dir($destDir)) {
-                    // tạo thư mục nếu chưa có
                     mkdir($destDir, 0755, true);
                 }
 
-                // 3) Tạo tên file an toàn
+                if ($brand->Logo && File::exists($destDir . DIRECTORY_SEPARATOR . $brand->Logo)) {
+                    File::delete($destDir . DIRECTORY_SEPARATOR . $brand->Logo);
+                }
+
                 $origNameNoExt = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $ext           = strtolower($file->getClientOriginalExtension());
-                $safeBase      = Str::slug($origNameNoExt);              // ví dụ: "logo-apple"
-                $filename      = time() . '_' . $safeBase . '.' . $ext;          // ví dụ: "1738320000_logo-apple.png"
+                $safeBase      = Str::slug($origNameNoExt);
+                $filename      = time() . '_' . $safeBase . '.' . $ext;
 
-                // 4) Di chuyển file bằng hàm PHP (move_uploaded_file thông qua UploadedFile::move)
-                //    Nếu bạn muốn dùng thật sự move_uploaded_file:
-                //    move_uploaded_file($file->getPathname(), $destDir.DIRECTORY_SEPARATOR.$filename);
                 $file->move($destDir, $filename);
-                if ($brand->Logo != null) {
-                    unlink($destDir . $brand->Logo);
-                }
+                $brand->Logo = $filename;
             }
 
-            $brand->TenThuongHieu = $request->TenThuongHieu;
-            $brand->Logo = $filename;
-            $brand->MoTa = $request->MoTa;
-            $brand->TrangThai = $request->TrangThai;
+            $brand->TenThuongHieu = $validated['TenThuongHieu'];
+            $brand->MoTa = $validated['MoTa'] ?? null;
+            $brand->TrangThai = $validated['TrangThai'];
 
             $brand->save();
-            return redirect("/show-brand");
+            return redirect("/show-brand")->with('success', 'Cập nhật thương hiệu thành công!');
         } catch (Exception $e) {
-            report($e);  // ghi log
-            throw $e;
+            report($e);
+            return redirect()->back()->with('error', 'Lỗi khi cập nhật thương hiệu: ' . $e->getMessage());
         }
     }
 }

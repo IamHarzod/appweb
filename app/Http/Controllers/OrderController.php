@@ -26,15 +26,17 @@ class OrderController extends Controller
     public function myOrders()
     {
         $user = Auth::user();
-        $orders = Order::with('oderItems')->where('user_id', $user->id)->orderByDesc('id')->paginate(15);
+        $orders = Order::with('orderItems.product')->where('user_id', $user->id)->orderByDesc('id')->paginate(15);
         return view('client.orders.my_orders', compact('orders'));
     }
 
     // Show single order (ensure ownership or admin)
     public function show($id)
     {
-        $order = Order::with(['oderItems.product', 'user'])->findOrFail($id);
-        $this->authorize('view', $order);
+        $order = Order::with(['orderItems.product', 'user'])->findOrFail($id);
+        if (Auth::user()->role !== 'admin' && $order->user_id !== Auth::id()) {
+            abort(403, 'Bạn không có quyền xem đơn hàng này.');
+        }
         return view('client.orders.show', compact('order'));
     }
 
@@ -263,6 +265,15 @@ class OrderController extends Controller
             ]);
 
             foreach ($orderData as $item) {
+                // Kiểm tra và trừ tồn kho
+                $prod = Product::find($item['product_id']);
+                if ($prod) {
+                    if ($prod->stockQuantity < $item['quantity']) {
+                        throw new \Exception('Sản phẩm "' . $prod->name . '" không đủ số lượng tồn kho (còn: ' . $prod->stockQuantity . ').');
+                    }
+                    $prod->decrement('stockQuantity', $item['quantity']);
+                }
+
                 OderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item['product_id'],
@@ -272,13 +283,20 @@ class OrderController extends Controller
                 ]);
             }
 
-            // 4. Xóa giỏ hàng sau khi đặt thành công
+            // Trừ số lượt sử dụng coupon nếu có
+            if ($couponCode) {
+                \App\Models\Coupon::where('code', $couponCode)->where('quantity', '>', 0)->decrement('quantity', 1);
+            }
+
+            // 4. Xóa giỏ hàng và coupon sau khi đặt thành công
             if (Auth::check() && $cartDB) {
                 \App\Models\CartItem::where('cart_id', $cartDB->id)->delete();
-                $cartDB->update(['totalPrice' => 0]);
+                $cartDB->totalAmount = 0;
+                $cartDB->save();
             } else {
                 Session::forget('cart');
             }
+            Session::forget('coupon');
 
             DB::commit();
 
