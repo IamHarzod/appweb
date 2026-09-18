@@ -20,7 +20,13 @@ class AdminController extends Controller
 
     public function show_dasboard()
     {
-        return view("layout.admin_layout");
+        $totalRevenue = \App\Models\Order::where('status', 'completed')->sum('total_amount') ?? 0;
+        $totalOrders = \App\Models\Order::count();
+        $totalProducts = \App\Models\Product::count();
+        $totalUsers = User::where('role', 'user')->count();
+        $recentOrders = \App\Models\Order::with('user')->orderBy('id', 'desc')->limit(5)->get();
+
+        return view("admin.dashboard", compact('totalRevenue', 'totalOrders', 'totalProducts', 'totalUsers', 'recentOrders'));
     }
 
     public function users()
@@ -69,6 +75,16 @@ class AdminController extends Controller
             'role' => 'required|in:admin,user',
         ]);
         $user = User::findOrFail($id);
+
+        if (Auth::id() == $id && $request->role !== 'admin') {
+            return redirect()->back()->with('error', 'Bạn không thể tự giáng quyền của chính mình!');
+        }
+
+        $adminCount = User::where('role', 'admin')->count();
+        if ($user->role === 'admin' && $request->role !== 'admin' && $adminCount <= 1) {
+            return redirect()->back()->with('error', 'Hệ thống phải có ít nhất 1 tài khoản Quản trị viên (Admin)!');
+        }
+
         $user->role = $request->role;
         $user->save();
         return redirect()->route('admin.users')->with('success', 'Cập nhật quyền thành công');
@@ -101,20 +117,36 @@ class AdminController extends Controller
 
     public function submit_register(Request $request)
     {
-
-        $credentials = $request->validate([
-            'name'    => ['required', 'string'],
-            'email'    => ['required', 'email'],
-            'phoneNumber'    => [
+        $request->validate([
+            'name'        => ['required', 'string', 'max:255'],
+            'email'       => ['required', 'email', 'max:255', 'unique:users,email'],
+            'phoneNumber' => [
                 'required',
                 'regex:/^(0|\+84)(3|5|7|8|9)\d{8}$/'
             ],
-            'password' => ['required', 'string', 'min:6'],
+            'password'    => ['required', 'string', 'min:6'],
+        ], [
+            'name.required'        => 'Vui lòng nhập họ tên.',
+            'email.required'       => 'Vui lòng nhập email.',
+            'email.unique'         => 'Email này đã được sử dụng.',
+            'phoneNumber.required' => 'Vui lòng nhập số điện thoại.',
+            'phoneNumber.regex'    => 'Số điện thoại không đúng định dạng.',
+            'password.required'    => 'Vui lòng nhập mật khẩu.',
+            'password.min'         => 'Mật khẩu phải từ 6 ký tự trở lên.',
         ]);
 
-        $arrayData = ['name' => $request->name, 'email' => $request->email, 'phoneNumber' => $request->phoneNumber, 'password' => bcrypt($request->password)];
-        User::create($arrayData);
-        return redirect()->intended(route('admin'));
+        $user = User::create([
+            'name'        => $request->name,
+            'email'       => $request->email,
+            'phoneNumber' => $request->phoneNumber,
+            'password'    => bcrypt($request->password),
+            'IsActive'    => 1,
+        ]);
+        
+        $user->role = 'user';
+        $user->save();
+
+        return redirect()->intended(route('admin'))->with('success', 'Đăng ký tài khoản thành công!');
     }
 
     public function logout_admin()

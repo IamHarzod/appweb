@@ -84,10 +84,9 @@
                                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                                             </button>
                                         @else
-                                            <button class="btn btn-warning btn-lg"
-                                                onclick="alert('Vui lòng đăng nhập để mua hàng')">
+                                            <a href="{{ route('login') }}" class="btn btn-warning btn-lg">
                                                 <i class="fas fa-lock me-2"></i> Đăng nhập để mua
-                                            </button>
+                                            </a>
                                         @endif
                                     </div>
                                 </div>

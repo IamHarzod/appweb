@@ -82,7 +82,7 @@ class CartManager {
                 );
                 // Try to redirect to login route if available
                 try {
-                    window.location.href = "/admin";
+                    window.location.href = "/login";
                 } catch (_) {}
                 return false;
             }

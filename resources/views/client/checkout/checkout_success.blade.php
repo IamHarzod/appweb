@@ -40,13 +40,16 @@
                                 </div>
 
                                 <h6 class="text-uppercase text-muted small mt-4">Phương thức thanh toán</h6>
-                                <p>
-                                    @if (($order->payment_method ?? 'cod') == 'cod')
+                                <p class="fw-bold">
+                                    @php
+                                        $pm = strtolower($order->payment_method ?? 'cod');
+                                    @endphp
+                                    @if ($pm === 'cod')
                                         Thanh toán khi nhận hàng (COD)
-                                    @elseif(($order->payment_method ?? '') == 'vnpay')
+                                    @elseif($pm === 'vnpay')
                                         Thanh toán qua VNPAY
                                     @else
-                                        Thanh toán qua Ngân hàng
+                                        Thanh toán qua Chuyển khoản ngân hàng
                                     @endif
                                 </p>
                             </div>

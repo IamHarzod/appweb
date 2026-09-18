@@ -24,7 +24,6 @@ class User extends Authenticatable implements CanResetPassword
         'phoneNumber',
         'password',
         'IsActive',
-        'role',
     ];
 
     /**

@@ -83,24 +83,36 @@ class OrderController extends Controller
 
         DB::beginTransaction();
         try {
+            $user = Auth::user();
             $order = Order::create([
-                'user_id'    => Auth::id(),
-                'unitPrice'  => $unitPrice,
-                'quantity'   => $totalQuantity,
-                'totalPrice' => $totalPrice,
+                'user_id'          => Auth::id(),
+                'shipping_name'    => $user->name ?? 'Khách hàng',
+                'shipping_email'   => $user->email ?? 'no-email@example.com',
+                'shipping_phone'   => $user->phoneNumber ?? '',
+                'shipping_address' => 'Địa chỉ mặc định',
+                'payment_method'   => 'COD',
+                'total_amount'     => $totalPrice,
+                'discount_amount'  => 0,
+                'shipping_fee'     => 0,
+                'status'           => 'pending',
             ]);
 
             foreach ($items as $cartItem) {
-                $product = $cartItem->product;
+                $product = Product::where('id', $cartItem->product_id)->lockForUpdate()->first();
                 if (!$product) {
                     continue;
                 }
+                if ($product->stockQuantity < $cartItem->quantity) {
+                    throw new \Exception('Sản phẩm "' . $product->name . '" không đủ tồn kho (còn: ' . $product->stockQuantity . ').');
+                }
+                $product->decrement('stockQuantity', $cartItem->quantity);
+
                 OderItem::create([
-                    'order_id'   => $order->id,
-                    'product_id' => $product->id,
-                    'quantity'   => (int) $cartItem->quantity,
-                    'UnitPrice'  => (float) $product->price,
-                    'totalPrice' => (float) $product->price * (int) $cartItem->quantity,
+                    'order_id'     => $order->id,
+                    'product_id'   => $product->id,
+                    'product_name' => $product->name,
+                    'quantity'     => (int) $cartItem->quantity,
+                    'price'        => (float) $product->price,
                 ]);
             }
             // Xóa cart items sau khi tạo order
@@ -110,10 +122,35 @@ class OrderController extends Controller
             DB::commit();
             // Xóa session cart legacy nếu còn
             session()->forget('cart');
-            return redirect()->route('orders.my')->with('success', 'Đặt hàng thành công!');
+            session(['last_placed_order_id' => $order->id]);
+            return redirect()->route('order.success', ['id' => $order->id])->with('success', 'Đặt hàng thành công!');
         } catch (\Throwable $e) {
             DB::rollBack();
             return back()->with('error', 'Có lỗi xảy ra khi tạo đơn hàng: ' . $e->getMessage());
+        }
+    }
+
+    // Update order status (Admin)
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,processing,shipping,completed,cancelled',
+        ]);
+
+        try {
+            $order = Order::findOrFail($id);
+            $order->status = $request->status;
+            $order->save();
+
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Cập nhật trạng thái đơn hàng thành công!']);
+            }
+            return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công!');
+        } catch (\Throwable $e) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Lỗi cập nhật trạng thái: ' . $e->getMessage());
         }
     }
 
@@ -121,25 +158,22 @@ class OrderController extends Controller
     public function destroy($id)
     {
         try {
-            // 1. Tìm đơn hàng
-            $order = Order::findOrFail($id);
+            DB::transaction(function () use ($id) {
+                $order = Order::findOrFail($id);
+                $order->orderItems()->delete();
+                $order->delete();
+            });
 
-            // 2. Xóa chi tiết đơn hàng trước (QUAN TRỌNG)
-            // Trong Model Order.php của bạn tên hàm là 'orderItems'
-            // Nên ở đây BẮT BUỘC phải gọi là 'orderItems()'
-            $order->orderItems()->delete();
-
-            // 3. Xóa đơn hàng chính
-            $order->delete();
-
-            // 4. Trả về true để hàm JS DeleteData hiểu là thành công và reload trang
-            return true;
+            if (request()->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Xóa đơn hàng thành công!']);
+            }
+            return redirect()->route('admin.orders.index')->with('success', 'Xóa đơn hàng thành công!');
         } catch (\Throwable $e) {
-            // Nếu có lỗi, ghi log hệ thống để kiểm tra (vào storage/logs/laravel.log xem)
             Log::error("Lỗi xóa đơn hàng: " . $e->getMessage());
-
-            // Trả về false để JS hiện thông báo lỗi
-            return false;
+            if (request()->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Lỗi khi xóa đơn hàng: ' . $e->getMessage());
         }
     }
 
@@ -265,8 +299,8 @@ class OrderController extends Controller
             ]);
 
             foreach ($orderData as $item) {
-                // Kiểm tra và trừ tồn kho
-                $prod = Product::find($item['product_id']);
+                // Kiểm tra và trừ tồn kho có khóa bi quan lockForUpdate
+                $prod = Product::where('id', $item['product_id'])->lockForUpdate()->first();
                 if ($prod) {
                     if ($prod->stockQuantity < $item['quantity']) {
                         throw new \Exception('Sản phẩm "' . $prod->name . '" không đủ số lượng tồn kho (còn: ' . $prod->stockQuantity . ').');
@@ -297,6 +331,7 @@ class OrderController extends Controller
                 Session::forget('cart');
             }
             Session::forget('coupon');
+            session(['last_placed_order_id' => $order->id]);
 
             DB::commit();
 
@@ -310,11 +345,17 @@ class OrderController extends Controller
     public function showSuccess($id)
     {
         // Lấy đơn hàng kèm theo chi tiết sản phẩm
-        $order = Order::with('orderItems')->findOrFail($id);
+        $order = Order::with('orderItems.product')->findOrFail($id);
 
-        // Kiểm tra quyền: Chỉ cho xem nếu là chủ đơn hàng (nếu bạn muốn bảo mật chặt hơn)
-        if (Auth::check() && $order->user_id !== Auth::id()) {
-            abort(403);
+        // Kiểm tra quyền chống IDOR: Chỉ cho xem nếu là chủ đơn hàng hoặc khách vừa đặt trong session
+        if (Auth::check()) {
+            if ($order->user_id && $order->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+                abort(403, 'Bạn không có quyền xem thông tin đơn hàng này.');
+            }
+        } else {
+            if (session('last_placed_order_id') != $id) {
+                abort(403, 'Bạn không có quyền xem thông tin đơn hàng này.');
+            }
         }
         $categories = \App\Models\Category::all();
 

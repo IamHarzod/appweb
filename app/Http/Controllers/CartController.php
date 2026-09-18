@@ -430,13 +430,19 @@ class CartController extends Controller
 
     public function checkCoupon(Request $request)
     {
-        $data = $request->all();
-        $coupon = Coupon::where('code', $data['code_input'])->first();
+        $request->validate([
+            'code_input' => 'required|string|max:50',
+        ], [
+            'code_input.required' => 'Vui lòng nhập mã giảm giá',
+        ]);
+
+        $code = trim($request->input('code_input'));
+        $coupon = Coupon::where('code', $code)->first();
 
         if (!$coupon) {
             return redirect()->back()->with('error', 'Mã giảm giá sai hoặc không tồn tại');
         }
-        if (Carbon::now()->gt(Carbon::parse($coupon->expiry_date))) {
+        if ($coupon->expiry_date && Carbon::now()->gt(Carbon::parse($coupon->expiry_date))) {
             return redirect()->back()->with('error', 'Mã giảm giá đã hết hạn');
         }
         if ($coupon->quantity <= 0) {

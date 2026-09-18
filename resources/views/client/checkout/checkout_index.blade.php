@@ -175,40 +175,24 @@
                                         </tr>
                                     @endforeach
                                     <tr>
-                                        <th scope="row">
-                                        </th>
-                                        <td class="py-4"></td>
-                                        <td class="py-4"></td>
-                                        <td class="py-4">
-                                            <p class="mb-0 text-dark py-2">Tạm tính</p>
-                                        </td>
-                                        <td class="py-4">
-                                            <div class="py-2 text-center border-bottom border-top">
-                                                <p class="mb-0 text-dark">{{ number_format($subtotal ?? 0, 0, ',', '.') }}
-                                                    VNĐ</p>
-                                            </div>
+                                        <td colspan="3" class="py-3 text-end fw-bold">Tạm tính:</td>
+                                        <td class="py-3 text-center fw-bold">
+                                            {{ number_format($subtotal ?? 0, 0, ',', '.') }} VNĐ
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row"></th>
-                                        <td class="py-4" colspan="2">
-                                            <p class="mb-0 text-dark py-2">Phí vận chuyển</p>
-                                        </td>
-                                        <td class="py-4">
-                                            <div class="py-2 text-center border-bottom">
-                                                @if (isset($shippingFee) && $shippingFee == 0)
-                                                    <p class="mb-0 text-success">Miễn phí</p>
-                                                @else
-                                                    <p class="mb-0 text-dark">
-                                                        {{ number_format($shippingFee ?? 50000, 0, ',', '.') }} VNĐ</p>
-                                                @endif
-                                            </div>
+                                        <td colspan="3" class="py-3 text-end">Phí vận chuyển:</td>
+                                        <td class="py-3 text-center">
+                                            @if (isset($shippingFee) && $shippingFee == 0)
+                                                <span class="text-success fw-bold">Miễn phí</span>
+                                            @else
+                                                <span class="text-dark">{{ number_format($shippingFee ?? 50000, 0, ',', '.') }} VNĐ</span>
+                                            @endif
                                         </td>
                                     </tr>
 
                                     <tr>
-                                        <th scope="row"></th>
-                                        <td class="py-4" colspan="3">
+                                        <td colspan="4" class="py-3">
                                             <div class="d-flex flex-column align-items-end">
                                                 @if (Session::has('coupon'))
                                                     <div
@@ -217,7 +201,7 @@
                                                             <i class="fa fa-tag"></i> Mã:
                                                             <strong>{{ Session::get('coupon')['code'] }}</strong>
                                                         </span>
-                                                        <span class="text-success">
+                                                        <span class="text-success fw-bold">
                                                             - {{ number_format($discountAmount ?? 0, 0, ',', '.') }} VNĐ
                                                         </span>
                                                     </div>
@@ -239,18 +223,11 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">
-                                        </th>
-                                        <td class="py-4">
-                                            <p class="mb-0 text-dark text-uppercase py-2">TỔNG CỘNG</p>
+                                        <td colspan="3" class="py-3 text-end text-uppercase fw-bold h5 mb-0 text-primary">
+                                            TỔNG CỘNG:
                                         </td>
-                                        <td class="py-4"></td>
-                                        <td class="py-4"></td>
-                                        <td class="py-4">
-                                            <div class="py-2 text-center border-bottom border-top">
-                                                <p class="mb-0 text-dark">
-                                                    {{ number_format($totalPrice ?? 0, 0, ',', '.') }} VNĐ</p>
-                                            </div>
+                                        <td class="py-3 text-center fw-bold h5 mb-0 text-primary border-top">
+                                            {{ number_format($finalTotalAmount ?? ($subtotal + ($shippingFee ?? 50000) - ($discountAmount ?? 0)), 0, ',', '.') }} VNĐ
                                         </td>
                                     </tr>
                                 </tbody>
@@ -386,6 +363,3 @@
         });
     </script>
 @endsection
-</body>
-
-</html>

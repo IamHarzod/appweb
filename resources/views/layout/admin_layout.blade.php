@@ -10,8 +10,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/admin/images/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/owl-carousel/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/owl-carousel/css/owl.theme.default.min.css') }}">
-    <link href="{{ asset('public/admin/vendor/jqvmap/css/jqvmap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/admin/css/style.css') }}" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/datatables/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/toastr/css/toastr.min.css') }}">
@@ -146,31 +146,7 @@
     <script src="{{ asset('public/admin/js/quixnav-init.js') }}"></script>
     <script src="{{ asset('public/admin/js/custom.min.js') }}"></script>
 
-
-    <!-- Vectormap -->
-    <script src="{{ asset('public/admin/vendor/raphael/raphael.min.js') }}"></script>
-    <script src="{{ asset('public/admin/vendor/morris/morris.min.js') }}"></script>
-
-
-    <script src="{{ asset('public/admin/vendor/circle-progress/circle-progress.min.js') }}"></script>
-    <script src="{{ asset('public/admin/vendor/chart.js/Chart.bundle.min.js') }}"></script>
-
-    <script src="{{ asset('public/admin/vendor/gaugeJS/dist/gauge.min.js') }}"></script>
-
-    <!--  flot-chart js -->
-    <script src="{{ asset('public/admin/vendor/flot/jquery.flot.js') }}"></script>
-    <script src="{{ asset('public/admin/vendor/flot/jquery.flot.resize.js') }}"></script>
-
-    <!-- Owl Carousel -->
-    <script src="{{ asset('public/admin/vendor/owl-carousel/js/owl.carousel.min.js') }}"></script>
-
-    <!-- Counter Up -->
-    <script src="{{ asset('public/admin/vendor/jqvmap/js/jquery.vmap.min.js') }}"></script>
-    <script src="{{ asset('public/admin/vendor/jqvmap/js/jquery.vmap.usa.js') }}"></script>
-    <script src="{{ asset('public/admin/vendor/jquery.counterup/jquery.counterup.min.js') }}"></script>
-
-
-    <script src="{{ asset('public/admin/js/dashboard/dashboard-1.js') }}"></script>
+    <!-- DataTables, SweetAlert2, Toastr -->
     <script src="{{ asset('public/admin/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('public/admin/vendor/toastr/js/toastr.min.js') }}"></script>

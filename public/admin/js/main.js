@@ -1,79 +1,67 @@
 function DeleteData(url) {
     Swal.fire({
-        title: "Xác nhận",
-        text: "Bạn có chắc muốn xoá dữ liệu này?",
+        title: "Xác nhận xóa",
+        text: "Bạn có chắc chắn muốn xoá dữ liệu này? Thao tác này không thể hoàn tác.",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Confirm",
-        cancelButtonText: "Cancel",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Đồng ý xóa",
+        cancelButtonText: "Hủy bỏ",
         reverseButtons: true,
         allowOutsideClick: false,
-        allowEscapeKey: true,
     }).then((result) => {
-        if (result.value) {
+        if (result.isConfirmed || result.value) {
+            const token = $('meta[name="csrf-token"]').attr('content') || $('input[name="_token"]').val();
             $.ajax({
-                method: "get",
+                method: "POST",
                 url: url,
+                data: {
+                    _method: "DELETE",
+                    _token: token
+                },
+                headers: {
+                    'X-CSRF-TOKEN': token
+                }
             })
-                .done(function (res) {
-                    if (res) {
-                        window.location.reload();
-                    } else {
-                        toastr.error("Đã có lỗi khi xoá dữ liệu", "Lỗi", {
-                            timeOut: 500000000,
-                            closeButton: !0,
-                            debug: !1,
-                            newestOnTop: !0,
-                            progressBar: !0,
-                            positionClass: "toast-top-right",
-                            preventDuplicates: !0,
-                            onclick: null,
-                            showDuration: "300",
-                            hideDuration: "1000",
-                            extendedTimeOut: "1000",
-                            showEasing: "swing",
-                            hideEasing: "linear",
-                            showMethod: "fadeIn",
-                            hideMethod: "fadeOut",
-                            tapToDismiss: !1,
-                        });
-                    }
-                })
-                .fail(function (xhr) {
-                    toastr.error("Đã có lỗi khi xoá dữ liệu", "Lỗi", {
-                        timeOut: 500000000,
-                        closeButton: !0,
-                        debug: !1,
-                        newestOnTop: !0,
-                        progressBar: !0,
-                        positionClass: "toast-top-right",
-                        preventDuplicates: !0,
-                        onclick: null,
-                        showDuration: "300",
-                        hideDuration: "1000",
-                        extendedTimeOut: "1000",
-                        showEasing: "swing",
-                        hideEasing: "linear",
-                        showMethod: "fadeIn",
-                        hideMethod: "fadeOut",
-                        tapToDismiss: !1,
-                    });
-                });
+            .done(function (res) {
+                toastr.success("Xóa dữ liệu thành công!", "Thành công");
+                setTimeout(function() {
+                    window.location.reload();
+                }, 500);
+            })
+            .fail(function (xhr) {
+                let msg = "Đã có lỗi khi xoá dữ liệu";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    msg = xhr.responseJSON.message;
+                }
+                toastr.error(msg, "Lỗi");
+            });
         }
     });
 }
 
 $(function () {
-    $("#myTable").DataTable({
-        // pageLength: 10,
-        // lengthMenu: [5, 10, 25, 50],
-        // order: [
-        //     [0, 'asc']
-        // ],
-        // language: {
-        //     url: '//cdn.datatables.net/plug-ins/1.10.18/i18n/Vietnamese.json'
-        // }
-    });
+    if ($("#myTable").length && !$.fn.DataTable.isDataTable("#myTable")) {
+        $("#myTable").DataTable({
+            pageLength: 10,
+            language: {
+                search: "Tìm kiếm:",
+                lengthMenu: "Hiển thị _MENU_ bản ghi",
+                info: "Hiển thị _START_ đến _END_ trong _TOTAL_ bản ghi",
+                infoEmpty: "Hiển thị 0 đến 0 trong 0 bản ghi",
+                infoFiltered: "(lọc từ _MAX_ tổng số bản ghi)",
+                zeroRecords: "Không tìm thấy dữ liệu phù hợp",
+                emptyTable: "Chưa có dữ liệu",
+                paginate: {
+                    first: "Đầu",
+                    previous: "Trước",
+                    next: "Tiếp",
+                    last: "Cuối"
+                }
+            }
+        });
+    }
 });
 
 window.CloseModal = function (id) {

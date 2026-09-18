@@ -170,9 +170,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="text-center rounded-bottom p-4">
-                                                    <a href="#" class="d-block mb-2">{{ $item->category->name }}</a>
+                                                    <a href="#" class="d-block mb-2">{{ $item->category?->name ?? 'Sản phẩm' }}</a>
                                                     <a href="{{ route('product.detail', $item->id) }}"
-                                                        class="d-block h4"><br>
+                                                        class="d-block h4">
                                                         {{ $item->name }}</a>
 
                                                     @php
@@ -180,7 +180,7 @@
                                                         $percent = (int) ($item->discountPercent ?? 0);
                                                         $percent = max(0, min(100, $percent)); // chặn ngoài 0–100
 
-                                                        // giá sau giảm (làm tròn đến đơn vị đồng; nếu muốn tới nghìn dùng round($..., -3))
+                                                        // giá sau giảm
                                                         $discounted = ($price * (100 - $percent)) / 100;
 
                                                         // format VND: 1.234.567đ
@@ -215,47 +215,67 @@
                                                         <a href="#"
                                                             class="text-primary d-flex align-items-center justify-content-center me-3"><span
                                                                 class="rounded-circle btn-sm-square border"><i
-                                                                    class="fas fa-random"></i></i></a>
+                                                                    class="fas fa-random"></i></span></a>
                                                         <a href="#"
                                                             class="text-primary d-flex align-items-center justify-content-center me-0"><span
                                                                 class="rounded-circle btn-sm-square border"><i
-                                                                    class="fas fa-heart"></i></a>
+                                                                    class="fas fa-heart"></i></span></a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
-                                {{-- <div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
-                                    <div class="pagination d-flex justify-content-center mt-5">
-                                        <a href="#" class="rounded">&laquo;</a>
-                                        <a href="#" class="active rounded">1</a>
-                                        <a href="#" class="rounded">2</a>
-                                        <a href="#" class="rounded">3</a>
-                                        <a href="#" class="rounded">4</a>
-                                        <a href="#" class="rounded">5</a>
-                                        <a href="#" class="rounded">6</a>
-                                        <a href="#" class="rounded">&raquo;</a>
-                                    </div>
-                                </div> --}}
                             </div>
                         </div>
                         <div id="tab-6" class="products tab-pane fade show p-0">
                             <div class="row g-4 products-mini">
-
-
-                                {{-- <div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
-                                    <div class="pagination d-flex justify-content-center mt-5">
-                                        <a href="#" class="rounded">&laquo;</a>
-                                        <a href="#" class="active rounded">1</a>
-                                        <a href="#" class="rounded">2</a>
-                                        <a href="#" class="rounded">3</a>
-                                        <a href="#" class="rounded">4</a>
-                                        <a href="#" class="rounded">5</a>
-                                        <a href="#" class="rounded">6</a>
-                                        <a href="#" class="rounded">&raquo;</a>
+                                @foreach ($product as $item)
+                                    @php
+                                        $price = (float) ($item->price ?? 0);
+                                        $percent = (int) ($item->discountPercent ?? 0);
+                                        $percent = max(0, min(100, $percent));
+                                        $discounted = ($price * (100 - $percent)) / 100;
+                                        $fmt = fn($n) => number_format($n, 0, ',', '.') . 'đ';
+                                    @endphp
+                                    <div class="col-md-6 col-lg-6 col-xl-4">
+                                        <div class="products-mini-item border rounded">
+                                            <div class="row g-0">
+                                                <div class="col-5">
+                                                    <div class="products-mini-img border-end h-100">
+                                                        <img src="{{ asset('public/uploads/products/' . $item->imageURL) }}"
+                                                            class="img-fluid w-100 h-100 rounded-start" alt="{{ $item->name }}">
+                                                        <div class="products-mini-icon rounded-circle bg-primary">
+                                                            <a href="{{ route('product.detail', $item->id) }}"><i
+                                                                    class="fa fa-eye fa-1x text-white"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-7">
+                                                    <div class="products-mini-content p-3">
+                                                        <a href="#" class="d-block mb-1 text-muted">{{ $item->category?->name ?? 'Sản phẩm' }}</a>
+                                                        <a href="{{ route('product.detail', $item->id) }}" class="d-block h5 mb-2">{{ $item->name }}</a>
+                                                        @if ($percent > 0)
+                                                            <del class="me-2 text-muted">{{ $fmt($price) }}</del>
+                                                            <span class="text-primary fw-bold">{{ $fmt($discounted) }}</span>
+                                                        @else
+                                                            <span class="text-primary fw-bold">{{ $fmt($price) }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="products-mini-add border-top p-3 d-flex justify-content-between align-items-center">
+                                                <button type="button"
+                                                    class="btn btn-primary btn-sm rounded-pill px-3 add-to-cart-btn"
+                                                    data-product-id="{{ $item->id }}"
+                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
+                                                    <i class="fas fa-shopping-cart me-1"></i> Mua ngay
+                                                </button>
+                                                <a href="{{ route('product.detail', $item->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Chi tiết</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div> --}}
+                                @endforeach
                             </div>
                         </div>
                     </div>
