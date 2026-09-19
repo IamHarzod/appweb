@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session; // <--- QUAN TRỌNG: Nhớ thêm dòng này để dùng Session
@@ -17,21 +18,33 @@ class CheckoutController extends Controller
         $subtotal = 0;
 
         $categories = Category::all();
-        $cartItems = [];
-
+        $cartItems = collect();
 
         if (Auth::check()) {
             $cart = Cart::where('user_id', Auth::id())->first();
 
             if ($cart) {
-
                 $cartItems = $cart->items()->with('product')->get();
-
 
                 foreach ($cartItems as $item) {
                     if ($item->product) {
                         $subtotal += $item->product->price * $item->quantity;
                     }
+                }
+            }
+        } else {
+            $sessionCart = Session::get('cart', []);
+            foreach ($sessionCart as $id => $details) {
+                $product = Product::find($id);
+                if ($product) {
+                    $qty = (int)($details['quantity'] ?? 1);
+                    $cartItems->push((object)[
+                        'product' => $product,
+                        'product_id' => $id,
+                        'quantity' => $qty,
+                        'price' => $product->price,
+                    ]);
+                    $subtotal += $product->price * $qty;
                 }
             }
         }

@@ -67,11 +67,27 @@
                                             @else
                                                 <span class="badge bg-info px-3 py-2 rounded-pill">{{ ucfirst($order->status ?? 'Đang xử lý') }}</span>
                                             @endif
+
+                                            @if($order->ghn_order_code)
+                                                <div class="mt-1">
+                                                    <a href="https://tracking.ghn.vn/?order_code={{ $order->ghn_order_code }}" target="_blank" class="badge bg-light text-primary border text-decoration-none" title="Tra cứu đơn hàng GHN">
+                                                        <i class="fas fa-shipping-fast text-warning me-1"></i>GHN: {{ $order->ghn_order_code }}
+                                                    </a>
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="py-3 px-4 text-end">
                                             <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                                 <i class="fas fa-eye me-1"></i> Xem
                                             </a>
+                                            @if($order->status === 'pending')
+                                                <form action="{{ route('orders.user_cancel', $order->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn hủy đơn #{{ $order->id }} không?');">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 ms-1" title="Hủy đơn hàng">
+                                                        <i class="fas fa-times"></i> Hủy
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

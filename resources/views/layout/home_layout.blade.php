@@ -14,6 +14,8 @@
     <meta name="route-cart-clear" content="{{ route('cart.clear') }}">
     <meta name="route-cart-summary" content="{{ route('cart.summary') }}">
     <meta name="route-cart-api" content="{{ route('cart.api') }}">
+    <meta name="route-checkout" content="{{ route('checkout.index') }}">
+    <meta name="route-login" content="{{ route('login') }}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,8 +89,9 @@
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
                     <a href="#" class="text-muted me-2"> Help</a><small> / </small>
                     <a href="#" class="text-muted mx-2"> Hỗ trợ</a><small> / </small>
-                    <a href="#" class="text-muted ms-2"> Liên hệ</a>
-
+                    <a href="{{ route('orders.lookup') }}" class="text-primary fw-bold ms-2">
+                        <i class="fas fa-shipping-fast me-1"></i> Tra cứu đơn hàng
+                    </a>
                 </div>
             </div>
             <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
@@ -109,8 +112,10 @@
                                 @endif
                                 <a href="{{ url('/show-profile') }}" class="dropdown-item"> Thông tin cá nhân</a>
                                 <a href="{{ route('orders.my') }}" class="dropdown-item"> Đơn hàng của tôi</a>
+                                <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
                                 <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
                             @else
+                                <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
                                 <a href="{{ route('login') }}" class="dropdown-item"> Đăng nhập</a>
                             @endauth
                         </div>
@@ -219,6 +224,10 @@
                                     {{ $cat->name }}
                                 </a>
                             @endforeach
+                            <a href="{{ route('orders.lookup') }}"
+                                class="nav-item nav-link {{ request()->routeIs('orders.lookup*') ? 'active text-white font-weight-bold' : 'text-white' }}">
+                                <i class="fas fa-shipping-fast me-1"></i> Tra cứu đơn
+                            </a>
                         </div>
 
                         <div class="d-flex align-items-center">
@@ -259,7 +268,17 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('public/client/js/main.js') }}"></script>
-    <script src="{{ asset('public/client/js/cart.js') }}"></script>
+    <script src="{{ asset('public/client/js/cart.js') }}?v={{ time() }}"></script>
+    <script>
+        // Fallback global handler if user clicks Mua Ngay
+        document.addEventListener('click', function(e) {
+            var btn = e.target.closest('.buy-now-btn');
+            if (btn && (!window.cartManager || typeof window.cartManager.buyNow !== 'function')) {
+                e.preventDefault();
+                window.location.href = "{{ route('checkout.index') }}";
+            }
+        });
+    </script>
     <!-- Script giữ vị trí cuộn trang -->
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {

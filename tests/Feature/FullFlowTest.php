@@ -182,6 +182,8 @@ class FullFlowTest extends TestCase
             'shipping_phone' => '0987654321',
             'shipping_email' => 'test@example.com',
             'shipping_address' => 'Số 123 Đường ABC',
+            'latitude' => 21.028511,
+            'longitude' => 105.854444,
             'tinh_thanh' => 'Hà Nội',
             'quan_huyen' => 'Cầu Giấy',
             'phuong_xa' => 'Dịch Vọng',
@@ -195,6 +197,8 @@ class FullFlowTest extends TestCase
         // Xác minh chuyển hướng sang trang đặt hàng thành công
         $order = Order::latest()->first();
         $this->assertNotNull($order);
+        $this->assertEquals(21.028511, (float)$order->latitude);
+        $this->assertEquals(105.854444, (float)$order->longitude);
         $placeOrderResponse->assertRedirect(route('order.success', ['id' => $order->id]));
 
         // Kiểm tra xem trang thành công
@@ -318,5 +322,127 @@ class FullFlowTest extends TestCase
         $selfDeleteResponse = $this->actingAs($admin)->get('/admin/users/delete/' . $admin->id);
         $selfDeleteResponse->assertSessionHas('error');
         $this->assertDatabaseHas('users', ['id' => $admin->id]);
+    }
+
+    public function test_10_buy_now_buttons_and_checkout_flow(): void
+    {
+        $data = $this->createSampleData();
+        $user = User::factory()->create(['role' => 'user']);
+
+        // 1. Kiểm tra nút Mua ngay xuất hiện trên trang chủ
+        $homeRes = $this->actingAs($user)->get('/');
+        $homeRes->assertStatus(200);
+        $homeRes->assertSee('buy-now-btn');
+        $homeRes->assertSee('Mua ngay');
+
+        // 2. Kiểm tra nút Mua ngay xuất hiện trên trang chi tiết sản phẩm
+        $detailRes = $this->actingAs($user)->get(route('product.detail', $data['product']->id));
+        $detailRes->assertStatus(200);
+        $detailRes->assertSee('buy-now-btn');
+        $detailRes->assertSee('Mua ngay');
+
+        // 3. Thêm sản phẩm vào giỏ hàng
+        $addRes = $this->actingAs($user)->postJson(route('cart.add'), [
+            'product_id' => $data['product']->id,
+            'quantity' => 1,
+        ]);
+        $addRes->assertStatus(200);
+        $addRes->assertJson(['success' => true]);
+
+        // 4. Kiểm tra trang checkout /show-checkout
+        $checkoutRes = $this->actingAs($user)->get(route('checkout.index'));
+        $checkoutRes->assertStatus(200);
+        $checkoutRes->assertSee('iPhone 15 Pro Max');
+    }
+
+    public function test_11_guest_buy_now_and_checkout_flow(): void
+    {
+        $data = $this->createSampleData();
+
+        // 1. Khách vãng lai bấm Mua ngay (gửi request cart.add mà không đăng nhập)
+        $addRes = $this->postJson(route('cart.add'), [
+            'product_id' => $data['product']->id,
+            'quantity' => 1,
+        ]);
+        $addRes->assertStatus(200);
+        $addRes->assertJson(['success' => true]);
+
+        // 2. Khách vãng lai chuyển thẳng đến trang /show-checkout
+        $checkoutRes = $this->get(route('checkout.index'));
+        $checkoutRes->assertStatus(200);
+        $checkoutRes->assertSee('iPhone 15 Pro Max');
+    }
+
+    public function test_12_customer_cancel_order_and_lookup(): void
+    {
+        $data = $this->createSampleData();
+        $user1 = User::factory()->create(['role' => 'user']);
+        $user2 = User::factory()->create(['role' => 'user']);
+
+        $order = Order::create([
+            'user_id' => $user1->id,
+            'shipping_name' => 'Nguyen Van A',
+            'shipping_email' => 'nguyenvana@test.com',
+            'shipping_phone' => '0987654321',
+            'shipping_address' => 'Số 123 Đường Cầu Giấy, Hà Nội',
+            'total_amount' => 60000000,
+            'status' => 'pending',
+            'payment_method' => 'COD',
+            'ghn_order_code' => 'GHN123456VN',
+        ]);
+
+        \App\Models\OderItem::create([
+            'order_id' => $order->id,
+            'product_id' => $data['product']->id,
+            'product_name' => $data['product']->name,
+            'quantity' => 2,
+            'price' => 30000000,
+        ]);
+
+        // Đảm bảo ban đầu stock là 10
+        $data['product']->update(['stockQuantity' => 10]);
+
+        // 1. Kiểm tra trang show order hiển thị Timeline và GHN Tracking
+        $showRes = $this->actingAs($user1)->get(route('orders.show', $order->id));
+        $showRes->assertStatus(200);
+        $showRes->assertSee('Đặt hàng thành công');
+        $showRes->assertSee('GHN123456VN');
+        $showRes->assertSee('tracking.ghn.vn');
+        $showRes->assertSee('Hủy đơn hàng');
+
+        // 2. User 2 không thể hủy đơn của User 1 (403)
+        $unauthCancel = $this->actingAs($user2)->post(route('orders.user_cancel', $order->id));
+        $unauthCancel->assertStatus(403);
+
+        // 3. User 1 hủy đơn -> Thành công, trạng thái thành cancelled, hoàn tồn kho
+        $cancelRes = $this->actingAs($user1)->post(route('orders.user_cancel', $order->id));
+        $cancelRes->assertRedirect();
+        $this->assertEquals('cancelled', $order->fresh()->status);
+        $this->assertEquals(12, $data['product']->fresh()->stockQuantity); // 10 + 2 = 12
+
+        // 4. Không thể hủy lại khi đã cancelled
+        $reCancelRes = $this->actingAs($user1)->post(route('orders.user_cancel', $order->id));
+        $reCancelRes->assertSessionHas('error');
+
+        // 5. Kiểm tra tính năng tra cứu đơn hàng công khai (Lookup form)
+        $lookupFormRes = $this->get(route('orders.lookup'));
+        $lookupFormRes->assertStatus(200);
+        $lookupFormRes->assertSee('Tra Cứu Đơn Hàng');
+
+        // 6. Tra cứu đúng mã đơn và số điện thoại
+        $lookupQueryRes = $this->post(route('orders.lookup.post'), [
+            'order_id' => $order->id,
+            'phone' => '0987654321',
+        ]);
+        $lookupQueryRes->assertStatus(200);
+        $lookupQueryRes->assertSee('Đơn hàng #' . $order->id);
+        $lookupQueryRes->assertSee('Đơn hàng đã bị hủy');
+
+        // 7. Tra cứu sai số điện thoại -> Báo lỗi
+        $lookupFailRes = $this->post(route('orders.lookup.post'), [
+            'order_id' => $order->id,
+            'phone' => '0111222333',
+        ]);
+        $lookupFailRes->assertSessionHas('error');
     }
 }

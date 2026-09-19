@@ -25,6 +25,7 @@ class Product extends Model
         'category_id',
         'style',
         'id_brand',
+        'weight',
     ];
 
     // Quan hệ với Category (nếu có bảng categories)

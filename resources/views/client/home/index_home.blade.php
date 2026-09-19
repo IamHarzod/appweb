@@ -296,12 +296,26 @@
                                         </div>
                                         <div
                                             class="product-item-add border border-top-0 rounded-bottom text-center p-4 pt-0">
-                                            <button
-                                                class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="{{ $product->id }}"
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                            </button>
+                                            <div class="d-flex justify-content-center gap-2 mb-4 px-1">
+                                                <button type="button"
+                                                    class="btn btn-outline-primary border-secondary rounded-pill py-2 px-2 add-to-cart-btn flex-fill text-nowrap"
+                                                    style="font-size: 13px;"
+                                                    data-product-id="{{ $product->id }}"
+                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                    onclick="if(window.addToCartDirect){window.addToCartDirect({{ $product->id }}, this);}"
+                                                    title="Thêm vào giỏ hàng">
+                                                    <i class="fas fa-shopping-cart me-1"></i> Thêm giỏ
+                                                </button>
+                                                <button type="button"
+                                                    class="btn btn-primary border-secondary rounded-pill py-2 px-2 buy-now-btn flex-fill text-nowrap text-white"
+                                                    style="font-size: 13px;"
+                                                    data-product-id="{{ $product->id }}"
+                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                    onclick="if(window.buyNowDirect){window.buyNowDirect({{ $product->id }}, this);}else{window.location.href='{{ route('checkout.index') }}';}"
+                                                    title="Mua ngay">
+                                                    <i class="fas fa-bolt me-1"></i> Mua ngay
+                                                </button>
+                                            </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex">
                                                     <i class="fas fa-star text-primary"></i>
@@ -387,12 +401,27 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="products-mini-add border p-3">
-                                <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="{{ $product->id }}"
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                    <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                </button>
+                            <div class="products-mini-add border p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <div class="d-flex gap-2">
+                                    <button type="button"
+                                        class="btn btn-outline-primary border-secondary rounded-pill py-2 px-3 add-to-cart-btn text-nowrap"
+                                        style="font-size: 13px;"
+                                        data-product-id="{{ $product->id }}"
+                                        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                        onclick="if(window.addToCartDirect){window.addToCartDirect({{ $product->id }}, this);}"
+                                        title="Thêm vào giỏ hàng">
+                                        <i class="fas fa-shopping-cart me-1"></i> Thêm giỏ
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-primary border-secondary rounded-pill py-2 px-3 buy-now-btn text-nowrap text-white"
+                                        style="font-size: 13px;"
+                                        data-product-id="{{ $product->id }}"
+                                        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                        onclick="if(window.buyNowDirect){window.buyNowDirect({{ $product->id }}, this);}else{window.location.href='{{ route('checkout.index') }}';}"
+                                        title="Mua ngay">
+                                        <i class="fas fa-bolt me-1"></i> Mua ngay
+                                    </button>
+                                </div>
                                 <div class="d-flex">
                                     <a href="#"
                                         class="text-primary d-flex align-items-center justify-content-center me-3"><span
@@ -455,13 +484,27 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="products-mini-add border p-3">
-                                        <button
-                                            class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                            data-product-id="{{ $product->id }}"
-                                            data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
+                                    <div class="products-mini-add border p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                        <div class="d-flex gap-2">
+                                            <button type="button"
+                                                class="btn btn-outline-primary border-secondary rounded-pill py-2 px-3 add-to-cart-btn text-nowrap"
+                                                style="font-size: 13px;"
+                                                data-product-id="{{ $product->id }}"
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                onclick="if(window.addToCartDirect){window.addToCartDirect({{ $product->id }}, this);}"
+                                                title="Thêm vào giỏ hàng">
+                                                <i class="fas fa-shopping-cart me-1"></i> Thêm giỏ
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary border-secondary rounded-pill py-2 px-3 buy-now-btn text-nowrap text-white"
+                                                style="font-size: 13px;"
+                                                data-product-id="{{ $product->id }}"
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                onclick="if(window.buyNowDirect){window.buyNowDirect({{ $product->id }}, this);}else{window.location.href='{{ route('checkout.index') }}';}"
+                                                title="Mua ngay">
+                                                <i class="fas fa-bolt me-1"></i> Mua ngay
+                                            </button>
+                                        </div>
                                         <div class="d-flex">
                                             <a href="#"
                                                 class="text-primary d-flex align-items-center justify-content-center me-3"><span

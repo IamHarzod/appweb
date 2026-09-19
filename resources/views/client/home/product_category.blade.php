@@ -197,12 +197,26 @@
                                             </div>
                                             <div
                                                 class="product-item-add border border-top-0 rounded-bottom  text-center p-4 pt-0">
-                                                <button type="button"
-                                                    class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                    data-product-id="{{ $item->id }}"
-                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                                    <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                                </button>
+                                                <div class="d-flex justify-content-center gap-2 mb-4 px-1">
+                                                    <button type="button"
+                                                        class="btn btn-outline-primary border-secondary rounded-pill py-2 px-2 add-to-cart-btn flex-fill text-nowrap"
+                                                        style="font-size: 13px;"
+                                                        data-product-id="{{ $item->id }}"
+                                                        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                        onclick="if(window.addToCartDirect){window.addToCartDirect({{ $item->id }}, this);}"
+                                                        title="Thêm vào giỏ hàng">
+                                                        <i class="fas fa-shopping-cart me-1"></i> Thêm giỏ
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-primary border-secondary rounded-pill py-2 px-2 buy-now-btn flex-fill text-nowrap text-white"
+                                                        style="font-size: 13px;"
+                                                        data-product-id="{{ $item->id }}"
+                                                        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                        onclick="if(window.buyNowDirect){window.buyNowDirect({{ $item->id }}, this);}else{window.location.href='{{ route('checkout.index') }}';}"
+                                                        title="Mua ngay">
+                                                        <i class="fas fa-bolt me-1"></i> Mua ngay
+                                                    </button>
+                                                </div>
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="d-flex">
                                                         <i class="fas fa-star text-primary"></i>
@@ -264,13 +278,25 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="products-mini-add border-top p-3 d-flex justify-content-between align-items-center">
-                                                <button type="button"
-                                                    class="btn btn-primary btn-sm rounded-pill px-3 add-to-cart-btn"
-                                                    data-product-id="{{ $item->id }}"
-                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                                    <i class="fas fa-shopping-cart me-1"></i> Mua ngay
-                                                </button>
+                                            <div class="products-mini-add border-top p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                                <div class="d-flex gap-2">
+                                                    <button type="button"
+                                                        class="btn btn-outline-primary btn-sm rounded-pill px-3 add-to-cart-btn text-nowrap"
+                                                        data-product-id="{{ $item->id }}"
+                                                        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                        onclick="if(window.addToCartDirect){window.addToCartDirect({{ $item->id }}, this);}"
+                                                        title="Thêm vào giỏ hàng">
+                                                        <i class="fas fa-shopping-cart me-1"></i> Thêm giỏ
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-primary btn-sm rounded-pill px-3 buy-now-btn text-nowrap text-white"
+                                                        data-product-id="{{ $item->id }}"
+                                                        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                        onclick="if(window.buyNowDirect){window.buyNowDirect({{ $item->id }}, this);}else{window.location.href='{{ route('checkout.index') }}';}"
+                                                        title="Mua ngay">
+                                                        <i class="fas fa-bolt me-1"></i> Mua ngay
+                                                    </button>
+                                                </div>
                                                 <a href="{{ route('product.detail', $item->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Chi tiết</a>
                                             </div>
                                         </div>

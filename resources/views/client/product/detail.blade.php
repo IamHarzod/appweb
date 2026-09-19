@@ -77,17 +77,20 @@
                                     </div>
                                     <div class="col-md-8">
                                         <label class="form-label">&nbsp;</label><br>
-                                        @if (Auth::check())
-                                            <button class="btn btn-primary btn-lg add-to-cart-btn"
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button type="button" class="btn btn-outline-primary btn-lg add-to-cart-btn"
                                                 data-product-id="{{ $product->id }}"
-                                                data-quantity-selector="#product-quantity" data-authenticated="true">
+                                                data-quantity-selector="#product-quantity"
+                                                onclick="if(window.addToCartDirect){window.addToCartDirect({{ $product->id }}, this);}">
                                                 <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                                             </button>
-                                        @else
-                                            <a href="{{ route('login') }}" class="btn btn-warning btn-lg">
-                                                <i class="fas fa-lock me-2"></i> Đăng nhập để mua
-                                            </a>
-                                        @endif
+                                            <button type="button" class="btn btn-primary btn-lg buy-now-btn text-white"
+                                                data-product-id="{{ $product->id }}"
+                                                data-quantity-selector="#product-quantity"
+                                                onclick="var q=document.getElementById('product-quantity')?.value||1; if(window.cartManager){window.cartManager.buyNow({{ $product->id }}, q, this);}else{window.location.href='{{ route('checkout.index') }}';}">
+                                                <i class="fas fa-bolt me-2"></i> Mua ngay
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

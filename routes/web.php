@@ -13,6 +13,8 @@ use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CouponController;
 
 
@@ -28,17 +30,26 @@ Route::get('/autocomplete-ajax', [ProductController::class, 'autocomplete_ajax']
 // Cart Routes (public)
 Route::get('/show-cart', [CartController::class, 'show_cart'])->name('cart');
 Route::get('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::post('/check-coupon', [CartController::class, 'checkCoupon'])->name('check_coupon');
 Route::get('/remove-coupon', [CartController::class, 'removeCoupon'])->name('remove_coupon');
 
 // Cart Routes (authenticated)
 Route::middleware('auth')->group(function () {
     // Cart API endpoints
-    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
     Route::put('/cart/update/{cartItemId}', [CartController::class, 'updateCartItem'])->name('cart.update');
     Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::delete('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
     Route::get('/cart/api', [CartController::class, 'getCart'])->name('cart.api');
+});
+
+// GHN Locations & Shipping Fee Routes
+Route::prefix('locations')->name('locations.')->group(function () {
+    Route::get('/provinces', [LocationController::class, 'getProvinces'])->name('provinces');
+    Route::get('/districts/{provinceId}', [LocationController::class, 'getDistricts'])->name('districts');
+    Route::get('/wards/{districtId}', [LocationController::class, 'getWards'])->name('wards');
+    Route::post('/calculate-fee', [LocationController::class, 'getShippingFee'])->name('fee');
+    Route::post('/reverse-geocode', [LocationController::class, 'reverseGeocode'])->name('reverse_geocode');
 });
 
 // Checkout Routes
@@ -52,15 +63,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my');
     Route::post('/orders/from-cart', [OrderController::class, 'storeFromCart'])->name('orders.store_from_cart');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{id}/cancel', [OrderController::class, 'userCancel'])->name('orders.user_cancel');
 });
 
+// Tra cứu đơn hàng (công khai cho khách vãng lai và thành viên)
+Route::get('/tra-cuu-don-hang', [OrderController::class, 'showLookupForm'])->name('orders.lookup');
+Route::post('/tra-cuu-don-hang', [OrderController::class, 'processLookup'])->name('orders.lookup.post');
+
 // Orders (admin scope)
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::match(['get', 'delete'], '/admin/orders/delete/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
-    Route::delete('/admin/orders/{id}', [OrderController::class, 'destroy']);
-    Route::post('/admin/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.status');
-    Route::get('/admin/orders/detail/{id}', [OrderController::class, 'showDetail'])->name('admin.orders.detail');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('orders', AdminOrderController::class)->except(['create', 'store', 'edit', 'update']);
+    Route::post('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('/orders/{id}/cancel', [AdminOrderController::class, 'cancel'])->name('orders.cancel');
+    Route::post('/orders/{id}/push-ghn', [AdminOrderController::class, 'pushGhn'])->name('orders.push_ghn');
+    Route::match(['get', 'delete'], '/orders/delete/{id}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
 });
 
 //Profile

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/datatables/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/admin/vendor/toastr/css/toastr.min.css') }}">
-
+    @yield('styles')
 
 </head>
 
@@ -133,6 +133,7 @@
 
         <div class="content-body">
             @yield('view-content')
+            @yield('content')
         </div>
     </div>
     <div class="modal fade" id="ModalEdit" tabindex="-1" aria-labelledby="ModalEditLabel" aria-hidden="true"
@@ -151,14 +152,7 @@
     <script src="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('public/admin/vendor/toastr/js/toastr.min.js') }}"></script>
     <script src="{{ asset('public/admin/js/main.js') }}"></script>
-    {{-- <script>
-        function CloseModal(id) {
-            debugger;
-            const $m = $("#" + id);
-            // DÙNG plugin của Bootstrap, KHÔNG dùng .hide()
-            $m.modal("hide");
-        }
-    </script> --}}
+    @yield('scripts')
 </body>
 
 </html>

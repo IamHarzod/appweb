@@ -37,6 +37,22 @@ class CartController extends Controller
                     $subtotal += $item->product->price * $item->quantity;
                 }
             }
+        } else {
+            $sessionCart = Session::get('cart', []);
+            foreach ($sessionCart as $id => $details) {
+                $product = Product::find($id);
+                if ($product) {
+                    $qty = (int)($details['quantity'] ?? 1);
+                    $cartItems->push((object)[
+                        'id' => $id,
+                        'product' => $product,
+                        'product_id' => $id,
+                        'quantity' => $qty,
+                        'price' => $product->price,
+                    ]);
+                    $subtotal += $product->price * $qty;
+                }
+            }
         }
         if (Session::has('coupon')) {
             $coupon = Session::get('coupon');
@@ -79,17 +95,54 @@ class CartController extends Controller
             'ip' => $request->ip()
         ]);
 
-        if (!Auth::check()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng'
-            ], 401);
-        }
-
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1'
         ]);
+
+        if (!Auth::check()) {
+            $product = Product::findOrFail($request->product_id);
+
+            // Kiểm tra tồn kho
+            if ($product->stockQuantity < $request->quantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số lượng sản phẩm không đủ trong kho'
+                ], 400);
+            }
+
+            $sessionCart = Session::get('cart', []);
+            $productId = $request->product_id;
+            $currentQty = isset($sessionCart[$productId]) ? (int)$sessionCart[$productId]['quantity'] : 0;
+            $newQuantity = $currentQty + (int)$request->quantity;
+
+            if ($product->stockQuantity < $newQuantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số lượng sản phẩm vượt quá tồn kho'
+                ], 400);
+            }
+
+            $sessionCart[$productId] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'price' => (float)$product->price,
+                'quantity' => $newQuantity,
+                'image' => $product->imageURL,
+            ];
+            Session::put('cart', $sessionCart);
+
+            $cartTotal = 0;
+            foreach ($sessionCart as $item) {
+                $cartTotal += ($item['price'] * $item['quantity']);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Thêm sản phẩm vào giỏ hàng thành công',
+                'cart_total' => $cartTotal
+            ]);
+        }
 
         try {
             DB::beginTransaction();
@@ -365,11 +418,19 @@ class CartController extends Controller
     public function getCartSummary()
     {
         if (!\Illuminate\Support\Facades\Auth::check()) {
+            $sessionCart = Session::get('cart', []);
+            $totalItems = 0;
+            $totalAmount = 0;
+            foreach ($sessionCart as $item) {
+                $qty = (int)($item['quantity'] ?? 1);
+                $totalItems += $qty;
+                $totalAmount += ((float)($item['price'] ?? 0)) * $qty;
+            }
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'total_items' => 0,
-                    'total_amount' => 0,
+                    'total_items' => $totalItems,
+                    'total_amount' => $totalAmount,
                 ]
             ]);
         }

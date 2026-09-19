@@ -40,6 +40,101 @@ class OrderController extends Controller
         return view('client.orders.show', compact('order'));
     }
 
+    // Customer cancel own order (only allowed when pending)
+    public function userCancel(Request $request, $id)
+    {
+        $order = Order::with('orderItems')->findOrFail($id);
+
+        if ($order->user_id !== Auth::id()) {
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
+
+        if ($order->status !== 'pending') {
+            return redirect()->back()->with('error', 'Đơn hàng này hiện tại không thể hủy vì đã được xác nhận hoặc đang vận chuyển.');
+        }
+
+        DB::beginTransaction();
+        try {
+            // Hoàn lại tồn kho cho các sản phẩm
+            foreach ($order->orderItems as $item) {
+                if ($item->product_id) {
+                    Product::where('id', $item->product_id)->increment('stockQuantity', (int)$item->quantity);
+                }
+            }
+
+            $order->status = 'cancelled';
+            $order->notes = trim(($order->notes ? $order->notes . ' | ' : '') . 'Khách hàng tự hủy đơn vào ' . now()->format('d/m/Y H:i'));
+            $order->save();
+
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Đã hủy đơn hàng thành công!']);
+            }
+            return redirect()->back()->with('success', 'Đã hủy đơn hàng thành công!');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Lỗi khi khách hủy đơn: ' . $e->getMessage());
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Lỗi khi hủy đơn hàng: ' . $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Lỗi khi hủy đơn: ' . $e->getMessage());
+        }
+    }
+
+    // Show guest order lookup page
+    public function showLookupForm(Request $request)
+    {
+        $order = null;
+        $orderId = $request->query('order_id');
+        $phone = $request->query('phone');
+
+        if ($orderId && $phone) {
+            $order = Order::with(['orderItems.product'])
+                ->where('id', $orderId)
+                ->where(function ($q) use ($phone) {
+                    $q->where('shipping_phone', $phone)
+                      ->orWhere('shipping_phone', 'like', '%' . substr($phone, -9));
+                })
+                ->first();
+        }
+
+        return view('client.orders.lookup', compact('order', 'orderId', 'phone'));
+    }
+
+    // Process lookup form POST
+    public function processLookup(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|numeric',
+            'phone'    => 'required|string',
+        ], [
+            'order_id.required' => 'Vui lòng nhập mã đơn hàng.',
+            'order_id.numeric'  => 'Mã đơn hàng phải là số.',
+            'phone.required'    => 'Vui lòng nhập số điện thoại đặt hàng.',
+        ]);
+
+        $order = Order::with(['orderItems.product'])
+            ->where('id', $request->order_id)
+            ->where(function ($q) use ($request) {
+                $q->where('shipping_phone', $request->phone)
+                  ->orWhere('shipping_phone', 'like', '%' . substr($request->phone, -9));
+            })
+            ->first();
+
+        if (!$order) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Không tìm thấy đơn hàng với thông tin đã nhập. Vui lòng kiểm tra lại Mã đơn và Số điện thoại.');
+        }
+
+        return view('client.orders.lookup', [
+            'order'    => $order,
+            'orderId' => $request->order_id,
+            'phone'   => $request->phone,
+        ]);
+    }
+
     // Create order from session cart
     public function storeFromCart(Request $request)
     {
@@ -240,7 +335,7 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Giỏ hàng trống! Vui lòng chọn sản phẩm.');
         }
 
-        $shippingFee = 50000;
+        $shippingFee = $request->filled('shipping_fee') ? (float) $request->shipping_fee : 50000;
         $discountAmount = 0;
         $couponCode = null;
 
@@ -279,23 +374,36 @@ class OrderController extends Controller
         if ($finalTotalAmount < 0) $finalTotalAmount = 0;
         DB::beginTransaction();
         try {
-            $fullAddress = $request->shipping_address . ', ' . $request->phuong_xa . ', ' . $request->quan_huyen . ', ' . $request->tinh_thanh;
+            $phuong = $request->phuong_xa_name ?: $request->phuong_xa;
+            $quan = $request->quan_huyen_name ?: $request->quan_huyen;
+            $tinh = $request->tinh_thanh_name ?: $request->tinh_thanh;
+            $fullAddress = trim($request->shipping_address . ', ' . $phuong . ', ' . $quan . ', ' . $tinh, ', ');
 
             $order = Order::create([
-                'user_id' => Auth::id() ?? null,
-                'shipping_name' => $request->shipping_name,
-                'shipping_email' => $request->shipping_email,
-                'shipping_phone' => $request->shipping_phone,
+                'user_id'          => Auth::id() ?? null,
+                'shipping_name'    => $request->shipping_name,
+                'name'             => $request->shipping_name,
+                'shipping_email'   => $request->shipping_email,
+                'shipping_phone'   => $request->shipping_phone,
+                'phone'            => $request->shipping_phone,
                 'shipping_address' => $fullAddress,
-                'notes' => $request->ghichu,
-                'payment_method' => $request->payment_method ?? 'COD',
+                'address'          => $fullAddress,
+                'latitude'         => $request->filled('latitude') ? (float) $request->latitude : null,
+                'longitude'        => $request->filled('longitude') ? (float) $request->longitude : null,
+                'to_district_id'   => $request->to_district_id ? (int) $request->to_district_id : null,
+                'to_ward_code'     => $request->to_ward_code ? (string) $request->to_ward_code : null,
+                'notes'            => $request->ghichu,
+                'payment_method'   => $request->payment_method ?? 'COD',
 
                 // LƯU CÁC SỐ QUAN TRỌNG
-                'total_amount' => $finalTotalAmount,       // Tổng thực trả
-                'discount_amount' => $discountAmount,      // Lưu số tiền đã giảm
-                'shipping_fee' => $shippingFee,            // Lưu phí vận chuyển
+                'total_amount'     => $finalTotalAmount,       // Tổng thực trả
+                'total_price'      => $finalTotalAmount,
+                'discount_amount'  => $discountAmount,      // Lưu số tiền đã giảm
+                'shipping_fee'     => $shippingFee,            // Lưu phí vận chuyển
+                'ghn_total_fee'    => (int) $shippingFee,
 
-                'status' => 'pending',
+                'status'           => 'pending',
+                'shipping_status'  => 'pending',
             ]);
 
             foreach ($orderData as $item) {
@@ -334,6 +442,25 @@ class OrderController extends Controller
             session(['last_placed_order_id' => $order->id]);
 
             DB::commit();
+
+            // Đẩy đơn tự động sang GHN nếu có thông tin quận huyện
+            if ($order->to_district_id && $order->to_ward_code) {
+                try {
+                    $ghnOrderService = app(\App\Services\GHNOrderService::class);
+                    $isPaid = in_array(strtoupper($order->payment_method ?? ''), ['MOMO', 'VNPAY', 'PAID']);
+                    $ghnRes = $ghnOrderService->create($order, $isPaid);
+                    if (!empty($ghnRes['data']['order_code'])) {
+                        $order->ghn_order_code = $ghnRes['data']['order_code'];
+                        $order->shipping_status = 'ready_to_pick';
+                        $order->save();
+                        Log::info('GHN Order created successfully', ['order_id' => $order->id, 'ghn_code' => $order->ghn_order_code]);
+                    } else {
+                        Log::warning('GHN Order creation returned note/error', ['order_id' => $order->id, 'response' => $ghnRes]);
+                    }
+                } catch (\Throwable $e) {
+                    Log::error('GHN Order creation exception: ' . $e->getMessage(), ['order_id' => $order->id]);
+                }
+            }
 
             return redirect()->route('order.success', ['id' => $order->id])->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {
