@@ -39,9 +39,17 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id'); // chú ý: đúng tên cột
     }
 
-    use HasFactory;
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * @deprecated Use orderItems()
+     */
     public function oderItems()
     {
-        return $this->hasMany(OderItem::class);
+        return $this->orderItems();
     }
 }
+

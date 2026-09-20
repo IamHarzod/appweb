@@ -16,72 +16,29 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 
+use App\Services\CartService;
 use function Symfony\Component\Clock\now;
 
 class CartController extends Controller
 {
+    protected CartService $cartService;
+
+    public function __construct(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
+
     public function show_cart()
     {
-        $shippingFee = 50000;
-        $discountAmount = 0;
-        $subtotal = 0;
         $categories = Category::orderBy("id", "desc")->get();
-        $cart = null;
-        $cartItems = collect();
+        $cartData = $this->cartService->getCartData(50000);
 
-        if (Auth::check()) {
-            $cart = Cart::where('user_id', Auth::id())->first();
-            if ($cart) {
-                $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
-                foreach ($cartItems as $item) {
-                    $subtotal += $item->product->price * $item->quantity;
-                }
-            }
-        } else {
-            $sessionCart = Session::get('cart', []);
-            foreach ($sessionCart as $id => $details) {
-                $product = Product::find($id);
-                if ($product) {
-                    $qty = (int)($details['quantity'] ?? 1);
-                    $cartItems->push((object)[
-                        'id' => $id,
-                        'product' => $product,
-                        'product_id' => $id,
-                        'quantity' => $qty,
-                        'price' => $product->price,
-                    ]);
-                    $subtotal += $product->price * $qty;
-                }
-            }
-        }
-        if (Session::has('coupon')) {
-            $coupon = Session::get('coupon');
-
-            if ($coupon['type'] == 'free_ship') {
-                $shippingFee = $shippingFee - $coupon['value'];
-                if ($shippingFee < 0) {
-                    $shippingFee = 0; //ko dc am
-                }
-            } elseif ($coupon['type'] == 'fixed') {
-                $discountAmount = $coupon['value'];
-            } elseif ($coupon['type'] == 'percent') {
-                $discountAmount = ($subtotal * $coupon['value']) / 100;
-            }
-        }
-        $totalPrice = $subtotal + $shippingFee - $discountAmount;
-
-        if ($totalPrice < 0) $totalPrice = 0;
-
-        return view("client.cart.show_cart")->with(compact(
-            "categories",
-            "cart",
-            "cartItems",
-            "subtotal",
-            "shippingFee",
-            "discountAmount",
-            "totalPrice"
+        return view("client.cart.show_cart")->with(array_merge(
+            compact("categories"),
+            $cartData
         ));
     }
+
 
     /**
      * Thêm sản phẩm vào giỏ hàng
@@ -461,31 +418,19 @@ class CartController extends Controller
 
     public function applyCoupon($request)
     {
-        $code = $request->input('coupon_code');
-        $coupon = Coupon::where('code', $code)->first();
+        $code = (string) ($request instanceof Request ? $request->input('coupon_code') : ($request['coupon_code'] ?? ''));
+        $result = $this->cartService->applyCoupon($code);
 
-        if (!$coupon) {
-            return redirect()->back()->with('error', 'Mã giảm giá sai hoặc không tồn tại!');
-        }
-        if ($coupon->quantity <= 0) {
-            return redirect()->back()->with('error', 'Mã giảm giá đã hết lượt sử dụng!');
-        }
-        if ($coupon->expiry_date && now() > ($coupon->expiry_date)) {
-            return redirect()->back()->with('error', 'Mã giảm giá đã hết hạn');
+        if (!$result['success']) {
+            return redirect()->back()->with('error', $result['message']);
         }
 
-        session()->put('coupon', [
-            'code' => $coupon->code,
-            'type' => $coupon->type,
-            'value'  => $coupon->value,
-        ]);
-
-        return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
+        return redirect()->back()->with('success', $result['message']);
     }
 
     public function removeCoupon()
     {
-        Session::forget('coupon');
+        $this->cartService->removeCoupon();
         return redirect()->back()->with('success', 'Đã gỡ bỏ mã giảm giá!');
     }
 
@@ -497,26 +442,12 @@ class CartController extends Controller
             'code_input.required' => 'Vui lòng nhập mã giảm giá',
         ]);
 
-        $code = trim($request->input('code_input'));
-        $coupon = Coupon::where('code', $code)->first();
+        $result = $this->cartService->applyCoupon((string) $request->input('code_input'));
 
-        if (!$coupon) {
-            return redirect()->back()->with('error', 'Mã giảm giá sai hoặc không tồn tại');
+        if (!$result['success']) {
+            return redirect()->back()->with('error', $result['message']);
         }
-        if ($coupon->expiry_date && Carbon::now()->gt(Carbon::parse($coupon->expiry_date))) {
-            return redirect()->back()->with('error', 'Mã giảm giá đã hết hạn');
-        }
-        if ($coupon->quantity <= 0) {
-            return redirect()->back()->with('error', 'Mã giảm giá đã hết số lượng!');
-        }
-        // nếu ok
-        Session::put('coupon', [
-            'id' => $coupon->id,
-            'code' => $coupon->code,
-            'type' => $coupon->type,
-            'value' => $coupon->value,
-        ]);
 
-        return redirect()->back()->with('success', 'Áp dụng mã thành công');
+        return redirect()->back()->with('success', $result['message']);
     }
 }

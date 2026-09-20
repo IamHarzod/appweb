@@ -93,17 +93,20 @@ class Order extends Model
 
     public function items()
     {
-        return $this->hasMany(OderItem::class, 'order_id');
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 
     public function orderItems()
     {
-        return $this->hasMany(OderItem::class, 'order_id');
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 
+    /**
+     * @deprecated Use orderItems() or items()
+     */
     public function oderItems()
     {
-        return $this->hasMany(OderItem::class, 'order_id');
+        return $this->orderItems();
     }
 
     public function user()

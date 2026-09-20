@@ -7,10 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\OderItem;
 use App\Models\Product;
+use App\Services\OrderService;
+use App\Http\Requests\PlaceOrderRequest;
 use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\OderItemController;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -202,7 +204,7 @@ class OrderController extends Controller
                 }
                 $product->decrement('stockQuantity', $cartItem->quantity);
 
-                OderItem::create([
+                OrderItem::create([
                     'order_id'     => $order->id,
                     'product_id'   => $product->id,
                     'product_name' => $product->name,
@@ -272,202 +274,32 @@ class OrderController extends Controller
         }
     }
 
-    public function placeOrder(Request $request)
+    public function placeOrder(PlaceOrderRequest $request, OrderService $orderService)
     {
-        // DEBUG: Kiểm tra session ngay đầu
-        Log::info('=== START placeOrder ===');
-        Log::info('Session has coupon?', ['has' => Session::has('coupon')]);
-        if (Session::has('coupon')) {
-            Log::info('Coupon in session', Session::get('coupon'));
-        }
+        Log::info('=== START placeOrder ===', ['user_id' => Auth::id()]);
 
-        // 1. Validate dữ liệu
-        $request->validate([
-            'shipping_name' => 'required',
-            'shipping_phone' => 'required',
-            'shipping_address' => 'required',
-            'tinh_thanh' => 'required',
-            'quan_huyen' => 'required',
-            'phuong_xa' => 'required',
-        ]);
-
-        // 2. Lấy dữ liệu giỏ hàng (Xử lý cả 2 trường hợp: Login và Chưa Login)
-        $subtotal = 0;
-        $orderData = [];
-        $productTotal = 0; // Đổi tên biến này thành Tiền Hàng cho dễ hiểu
-        $cartDB = null;
-
-        if (Auth::check()) {
-            // TRƯỜNG HỢP 1: Đã đăng nhập -> Lấy từ Database
-            $cartDB = \App\Models\Cart::with('cartItems.product')
-                ->where('user_id', Auth::id())
-                ->first();
-
-            if ($cartDB && $cartDB->cartItems->count() > 0) {
-                foreach ($cartDB->cartItems as $item) {
-                    $orderData[] = [
-                        'product_id' => $item->product_id,
-                        'name' => $item->product->name,
-                        'price' => $item->product->price,
-                        'quantity' => $item->quantity,
-                        'total' => $item->product->price * $item->quantity
-                    ];
-                    $productTotal += $item->product->price * $item->quantity;
-                }
-            }
-        } else {
-            // TRƯỜNG HỢP 2: Khách vãng lai -> Lấy từ Session
-            $sessionCart = Session::get('cart', []);
-            foreach ($sessionCart as $id => $details) {
-                $orderData[] = [
-                    'product_id' => $id,
-                    'name' => $details['name'],
-                    'price' => $details['price'],
-                    'quantity' => $details['quantity'],
-                    'total' => $details['price'] * $details['quantity']
-                ];
-                $productTotal += $details['price'] * $details['quantity'];
-            }
-        }
-
-        // Kiểm tra lại lần cuối xem có hàng không
-        if (empty($orderData)) {
-            return redirect()->back()->with('error', 'Giỏ hàng trống! Vui lòng chọn sản phẩm.');
-        }
-
-        $shippingFee = $request->filled('shipping_fee') ? (float) $request->shipping_fee : 50000;
-        $discountAmount = 0;
-        $couponCode = null;
-
-        // Tính toán discount từ coupon session (giống CheckoutController)
-        if (Session::has('coupon')) {
-            $coupon = Session::get('coupon');
-            $couponCode = $coupon['code'] ?? null;
-
-            Log::info('Coupon applied in placeOrder', [
-                'code' => $couponCode,
-                'type' => $coupon['type'] ?? null,
-                'value' => $coupon['value'] ?? null
-            ]);
-
-            if ($coupon['type'] == 'free_ship') {
-                $tempShipping = $shippingFee - $coupon['value'];
-                $shippingFee = $tempShipping < 0 ? 0 : $tempShipping;
-                Log::info('Free ship applied', ['new_shipping_fee' => $shippingFee]);
-            } elseif ($coupon['type'] == 'fixed') {
-                // Giảm giá cố định (VD: 100.000đ)
-                $discountAmount = $coupon['value'];
-            } elseif ($coupon['type'] == 'percent') {
-                // Giảm giá theo % (VD: 10%)
-                $discountAmount = ($productTotal * $coupon['value']) / 100;
-            }
-        } else {
-            Log::info('No coupon in session when placing order');
-        }
-
-        // Miễn phí ship nếu đơn hàng > 10 triệu
-        if ($productTotal > 10000000) {
-            $shippingFee = 0;
-        }
-
-        $finalTotalAmount = $productTotal + $shippingFee - $discountAmount;
-        if ($finalTotalAmount < 0) $finalTotalAmount = 0;
-        DB::beginTransaction();
         try {
-            $phuong = $request->phuong_xa_name ?: $request->phuong_xa;
-            $quan = $request->quan_huyen_name ?: $request->quan_huyen;
-            $tinh = $request->tinh_thanh_name ?: $request->tinh_thanh;
-            $fullAddress = trim($request->shipping_address . ', ' . $phuong . ', ' . $quan . ', ' . $tinh, ', ');
-
-            $order = Order::create([
-                'user_id'          => Auth::id() ?? null,
-                'shipping_name'    => $request->shipping_name,
-                'name'             => $request->shipping_name,
-                'shipping_email'   => $request->shipping_email,
-                'shipping_phone'   => $request->shipping_phone,
-                'phone'            => $request->shipping_phone,
-                'shipping_address' => $fullAddress,
-                'address'          => $fullAddress,
-                'latitude'         => $request->filled('latitude') ? (float) $request->latitude : null,
-                'longitude'        => $request->filled('longitude') ? (float) $request->longitude : null,
-                'to_district_id'   => $request->to_district_id ? (int) $request->to_district_id : null,
-                'to_ward_code'     => $request->to_ward_code ? (string) $request->to_ward_code : null,
-                'notes'            => $request->ghichu,
-                'payment_method'   => $request->payment_method ?? 'COD',
-
-                // LƯU CÁC SỐ QUAN TRỌNG
-                'total_amount'     => $finalTotalAmount,       // Tổng thực trả
-                'total_price'      => $finalTotalAmount,
-                'discount_amount'  => $discountAmount,      // Lưu số tiền đã giảm
-                'shipping_fee'     => $shippingFee,            // Lưu phí vận chuyển
-                'ghn_total_fee'    => (int) $shippingFee,
-
-                'status'           => 'pending',
-                'shipping_status'  => 'pending',
+            $shippingData = array_merge($request->validated(), [
+                'shipping_fee'     => $request->input('shipping_fee'),
+                'tinh_thanh_name'   => $request->input('tinh_thanh_name'),
+                'quan_huyen_name'  => $request->input('quan_huyen_name'),
+                'phuong_xa_name'   => $request->input('phuong_xa_name'),
+                'latitude'         => $request->input('latitude'),
+                'longitude'        => $request->input('longitude'),
+                'to_district_id'   => $request->input('to_district_id'),
+                'to_ward_code'     => $request->input('to_ward_code'),
+                'ghichu'           => $request->input('ghichu'),
+                'payment_method'   => $request->input('payment_method', 'COD'),
             ]);
 
-            foreach ($orderData as $item) {
-                // Kiểm tra và trừ tồn kho có khóa bi quan lockForUpdate
-                $prod = Product::where('id', $item['product_id'])->lockForUpdate()->first();
-                if ($prod) {
-                    if ($prod->stockQuantity < $item['quantity']) {
-                        throw new \Exception('Sản phẩm "' . $prod->name . '" không đủ số lượng tồn kho (còn: ' . $prod->stockQuantity . ').');
-                    }
-                    $prod->decrement('stockQuantity', $item['quantity']);
-                }
-
-                OderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['product_id'],
-                    'product_name' => $item['name'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                ]);
-            }
-
-            // Trừ số lượt sử dụng coupon nếu có
-            if ($couponCode) {
-                \App\Models\Coupon::where('code', $couponCode)->where('quantity', '>', 0)->decrement('quantity', 1);
-            }
-
-            // 4. Xóa giỏ hàng và coupon sau khi đặt thành công
-            if (Auth::check() && $cartDB) {
-                \App\Models\CartItem::where('cart_id', $cartDB->id)->delete();
-                $cartDB->totalAmount = 0;
-                $cartDB->save();
-            } else {
-                Session::forget('cart');
-            }
-            Session::forget('coupon');
-            session(['last_placed_order_id' => $order->id]);
-
-            DB::commit();
-
-            // Đẩy đơn tự động sang GHN nếu có thông tin quận huyện
-            if ($order->to_district_id && $order->to_ward_code) {
-                try {
-                    $ghnOrderService = app(\App\Services\GHNOrderService::class);
-                    $isPaid = in_array(strtoupper($order->payment_method ?? ''), ['MOMO', 'VNPAY', 'PAID']);
-                    $ghnRes = $ghnOrderService->create($order, $isPaid);
-                    if (!empty($ghnRes['data']['order_code'])) {
-                        $order->ghn_order_code = $ghnRes['data']['order_code'];
-                        $order->shipping_status = 'ready_to_pick';
-                        $order->save();
-                        Log::info('GHN Order created successfully', ['order_id' => $order->id, 'ghn_code' => $order->ghn_order_code]);
-                    } else {
-                        Log::warning('GHN Order creation returned note/error', ['order_id' => $order->id, 'response' => $ghnRes]);
-                    }
-                } catch (\Throwable $e) {
-                    Log::error('GHN Order creation exception: ' . $e->getMessage(), ['order_id' => $order->id]);
-                }
-            }
+            $order = $orderService->placeOrder($shippingData, $request);
 
             return redirect()->route('order.success', ['id' => $order->id])->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {
-            DB::rollBack();
             return redirect()->back()->with('error', 'Lỗi hệ thống: ' . $e->getMessage());
         }
     }
+
 
     public function showSuccess($id)
     {
