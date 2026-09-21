@@ -84,7 +84,7 @@
                                             <td>{{ $item->category?->name ?? 'Chưa phân loại' }}</td>
                                             <td>{{ $item->style }}</td>
                                             <td>
-                                                @if ($item->Status)
+                                                @if ($item->status)
                                                     <span class="badge badge-success">Đang kinh doanh</span>
                                                 @else
                                                     <span class="badge badge-warning">Ngừng kinh doanh</span>
@@ -105,6 +105,9 @@
                                                         Thao tác
                                                     </button>
                                                     <div class="dropdown-menu">
+                                                        <a class="dropdown-item text-primary" href="{{ route('product.detail', $item->id) }}" target="_blank">
+                                                            <i class="fa fa-eye mr-1"></i> Xem ngoài web
+                                                        </a>
                                                         <button class="dropdown-item" type="button"
                                                             onclick="OpenModal(null, '{{ url('/show-edit-product/' . $item->id) }}')">
                                                             <i class="fa fa-pencil mr-1"></i> Sửa

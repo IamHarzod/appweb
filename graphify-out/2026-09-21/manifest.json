@@ -54,9 +54,9 @@
     "semantic_hash": "72bf3c9b96c49dae95ccc41366b4e056"
   },
   "app/Http/Controllers/HomeController.php": {
-    "mtime": 1789971204.7179284,
-    "seen": 1789971408.1784687,
-    "ast_hash": "9faf1c4c42320a1665d45f278b085d98",
+    "mtime": 1789959345.0760634,
+    "seen": 1789959554.7187827,
+    "ast_hash": "7198abaac0a49395a9ede7ef2e4e6a13",
     "semantic_hash": ""
   },
   "app/Http/Controllers/LocationController.php": {
@@ -174,9 +174,9 @@
     "semantic_hash": "824707f7ce2a84625a256231e1a0fe39"
   },
   "app/Models/Product.php": {
-    "mtime": 1789971160.430508,
-    "seen": 1789971408.1784914,
-    "ast_hash": "0c1d176d1b9e466a3586dd71c57cb603",
+    "mtime": 1789970614.7924562,
+    "seen": 1789970781.5192087,
+    "ast_hash": "3218600cf34ed7aa01ad01aef3764f01",
     "semantic_hash": ""
   },
   "app/Models/User.php": {
@@ -708,9 +708,9 @@
     "semantic_hash": "ff307febed84d83a92a19664ca983658"
   },
   "resources/views/client/product/detail.blade.php": {
-    "mtime": 1789971360.6017578,
-    "seen": 1789971408.1785834,
-    "ast_hash": "68f5a593259b4ac3505858944f615ab3",
+    "mtime": 1789970749.2521775,
+    "seen": 1789970781.5193806,
+    "ast_hash": "57e89552d36c858567fd57c3278d4c02",
     "semantic_hash": ""
   },
   "resources/views/errors/404.blade.php": {
@@ -768,10 +768,10 @@
     "semantic_hash": "3c6ce2e6d16444282b24a9aa63885563"
   },
   "routes/web.php": {
-    "mtime": 1789971172.8172674,
-    "seen": 1789971408.178593,
-    "ast_hash": "f9520ee469edda6aa3baefce777e914a",
-    "semantic_hash": ""
+    "mtime": 1789832100.824922,
+    "seen": 1789869063.584852,
+    "ast_hash": "d11ff1595229639b9f31ea18a8a18989",
+    "semantic_hash": "d11ff1595229639b9f31ea18a8a18989"
   },
   "tests/Feature/AdminOrderManagementTest.php": {
     "mtime": 1789832252.0088336,
@@ -939,18 +939,6 @@
     "mtime": 1789970575.655608,
     "seen": 1789970781.519312,
     "ast_hash": "b931ce9997f1d9f287fe9d2179f5623d",
-    "semantic_hash": ""
-  },
-  "app/Models/ProductReview.php": {
-    "mtime": 1789971149.8658962,
-    "seen": 1789971408.1784933,
-    "ast_hash": "933b347e926683822c940ed53125d9cf",
-    "semantic_hash": ""
-  },
-  "database/migrations/2026_09_21_000002_create_product_reviews_table.php": {
-    "mtime": 1789971139.2426345,
-    "seen": 1789971408.178544,
-    "ast_hash": "de2394cc4b13ec6f110469e458c14a53",
     "semantic_hash": ""
   }
 }

@@ -26,6 +26,8 @@ class Product extends Model
         'style',
         'id_brand',
         'weight',
+        'variants',
+        'colors',
     ];
 
     // Quan hệ với Category (nếu có bảng categories)
@@ -42,6 +44,11 @@ class Product extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class, 'product_id', 'id');
     }
 
     /**

@@ -41,6 +41,9 @@ class ProductController extends Controller
             'imageURL' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'id_brand' => 'required|integer',
             'category_id' => 'required|integer',
+            'weight' => 'nullable|numeric|min:0',
+            'variants' => 'nullable|string|max:500',
+            'colors' => 'nullable|string|max:500',
         ]);
 
         $filename = null;
@@ -76,6 +79,9 @@ class ProductController extends Controller
             'style' => $validated['style'] ?? null,
             'category_id' => $validated['category_id'],
             'id_brand' => $validated['id_brand'],
+            'weight' => $validated['weight'] ?? null,
+            'variants' => $validated['variants'] ?? null,
+            'colors' => $validated['colors'] ?? null,
         ]);
 
         return redirect("/show-product")->with('success', 'Thêm sản phẩm thành công!');
@@ -124,6 +130,9 @@ class ProductController extends Controller
             'imageURL' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'id_brand' => 'required|integer',
             'category_id' => 'required|integer',
+            'weight' => 'nullable|numeric|min:0',
+            'variants' => 'nullable|string|max:500',
+            'colors' => 'nullable|string|max:500',
         ]);
 
         if ($request->hasFile('imageURL') && $request->file('imageURL')->isValid()) {
@@ -158,6 +167,9 @@ class ProductController extends Controller
         $product->style = $validated['style'] ?? null;
         $product->category_id = $validated['category_id'];
         $product->id_brand = $validated['id_brand'];
+        $product->weight = $validated['weight'] ?? $product->weight;
+        $product->variants = $validated['variants'] ?? null;
+        $product->colors = $validated['colors'] ?? null;
 
         $product->save();
 

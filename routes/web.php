@@ -24,6 +24,7 @@ Route::get('/', [HomeController::class, 'show_home'])->name('home');
 Route::get('/show-category-home', [HomeController::class, 'show_category_home']);
 Route::get('/show-product-category-home/{id}', [HomeController::class, 'show_product_category_home'])->name('home.category.product');
 Route::get('/product/{id}', [HomeController::class, 'show_product_detail'])->name('product.detail');
+Route::post('/product/{id}/review', [HomeController::class, 'store_product_review'])->name('product.review.store');
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/autocomplete-ajax', [ProductController::class, 'autocomplete_ajax'])->name('product.autocomplete_ajax');
 
