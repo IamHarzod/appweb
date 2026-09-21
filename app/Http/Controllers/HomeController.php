@@ -77,7 +77,7 @@ class HomeController extends Controller
             $userId = $user->id;
             $authorName = $user->name ?: ($user->email ? explode('@', $user->email)[0] : 'Thành viên');
             $isVerified = OrderItem::whereHas('order', function ($q) use ($userId) {
-                $q->where('user_id', $userId);
+                $q->where('user_id', $userId)->where('status', '!=', 'cancelled')->where(fn ($order) => $order->whereIn('status', ['completed', 'delivered'])->orWhere('shipping_status', 'delivered'));
             })->where('product_id', $id)->exists();
         }
 

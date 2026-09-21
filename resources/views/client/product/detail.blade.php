@@ -14,13 +14,13 @@
     $mainImgUrl = null;
     if (!empty($product->imageURL)) {
         if (file_exists(public_path('uploads/products/' . $product->imageURL))) {
-            $mainImgUrl = asset('public/uploads/products/' . $product->imageURL);
+            $mainImgUrl = asset('uploads/products/' . $product->imageURL);
         } elseif (file_exists(public_path('client/img/' . $product->imageURL))) {
-            $mainImgUrl = asset('public/client/img/' . $product->imageURL);
+            $mainImgUrl = asset('client/img/' . $product->imageURL);
         }
     }
     if (!$mainImgUrl) {
-        $mainImgUrl = asset('public/client/img/product-1.png');
+        $mainImgUrl = asset('client/img/product-1.png');
     }
 
     $isAirPods = str_contains(strtolower($product->name), 'airpods') || str_contains(strtolower($product->name), 'tai nghe');
@@ -31,12 +31,12 @@
 
     if ($isAirPods) {
         if (file_exists(public_path('uploads/products/airpods-pro.jpg'))) {
-            $gallery[] = ['type' => 'image', 'url' => asset('public/uploads/products/airpods-pro.jpg'), 'alt' => 'Tai nghe AirPods Pro'];
+            $gallery[] = ['type' => 'image', 'url' => asset('uploads/products/airpods-pro.jpg'), 'alt' => 'Tai nghe AirPods Pro'];
         } elseif (file_exists(public_path('client/img/airpods-pro.jpg'))) {
-            $gallery[] = ['type' => 'image', 'url' => asset('public/client/img/airpods-pro.jpg'), 'alt' => 'Tai nghe AirPods Pro'];
+            $gallery[] = ['type' => 'image', 'url' => asset('client/img/airpods-pro.jpg'), 'alt' => 'Tai nghe AirPods Pro'];
         }
         if (file_exists(public_path('uploads/products/airpods-pro-2.jpg')) && $product->imageURL !== 'airpods-pro-2.jpg') {
-            $gallery[] = ['type' => 'image', 'url' => asset('public/uploads/products/airpods-pro-2.jpg'), 'alt' => 'AirPods Pro 2 góc nghiêng'];
+            $gallery[] = ['type' => 'image', 'url' => asset('uploads/products/airpods-pro-2.jpg'), 'alt' => 'AirPods Pro 2 góc nghiêng'];
         }
         $gallery[] = ['type' => 'image', 'url' => 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=800&auto=format&fit=crop&q=80', 'alt' => 'Chi tiết dock sạc'];
         $gallery[] = ['type' => 'video', 'url' => 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=800&auto=format&fit=crop&q=80', 'video_url' => 'https://www.youtube.com/embed/fWL8k3nN1x8', 'alt' => 'Video mở hộp & trải nghiệm'];
@@ -90,8 +90,8 @@
     // Xử lý dữ liệu Đánh giá
     $reviewsList = $product->reviews ?? collect();
     $realReviewsCount = $reviewsList->count();
-    $reviewsCount = $realReviewsCount > 0 ? $realReviewsCount : 128;
-    $avgRating = $realReviewsCount > 0 ? round($reviewsList->avg('rating'), 1) : 4.8;
+    $reviewsCount = $realReviewsCount;
+    $avgRating = $realReviewsCount > 0 ? round($reviewsList->avg('rating'), 1) : 0;
 @endphp
 
 <div class="product-detail-page py-4">
@@ -566,42 +566,11 @@
 
                                 <!-- Biểu đồ thanh tỉ lệ sao -->
                                 <div class="rating-bars-list text-start">
-                                    <div class="d-flex align-items-center gap-2 mb-1.5 small">
-                                        <span style="width: 45px;">5 <i class="fas fa-star text-warning small"></i></span>
-                                        <div class="progress flex-grow-1" style="height: 6px;">
-                                            <div class="progress-bar bg-warning" style="width: 82%;"></div>
-                                        </div>
-                                        <span class="text-muted" style="width: 32px;">82%</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mb-1.5 small">
-                                        <span style="width: 45px;">4 <i class="fas fa-star text-warning small"></i></span>
-                                        <div class="progress flex-grow-1" style="height: 6px;">
-                                            <div class="progress-bar bg-warning" style="width: 14%;"></div>
-                                        </div>
-                                        <span class="text-muted" style="width: 32px;">14%</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mb-1.5 small">
-                                        <span style="width: 45px;">3 <i class="fas fa-star text-warning small"></i></span>
-                                        <div class="progress flex-grow-1" style="height: 6px;">
-                                            <div class="progress-bar bg-warning" style="width: 3%;"></div>
-                                        </div>
-                                        <span class="text-muted" style="width: 32px;">3%</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mb-1.5 small">
-                                        <span style="width: 45px;">2 <i class="fas fa-star text-warning small"></i></span>
-                                        <div class="progress flex-grow-1" style="height: 6px;">
-                                            <div class="progress-bar bg-warning" style="width: 1%;"></div>
-                                        </div>
-                                        <span class="text-muted" style="width: 32px;">1%</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 small">
-                                        <span style="width: 45px;">1 <i class="fas fa-star text-warning small"></i></span>
-                                        <div class="progress flex-grow-1" style="height: 6px;">
-                                            <div class="progress-bar bg-warning" style="width: 0%;"></div>
-                                        </div>
-                                        <span class="text-muted" style="width: 32px;">0%</span>
-                                    </div>
-                                </div>
+@for ($star = 5; $star >= 1; $star--)
+@php($percentage = $reviewsCount ? round($reviewsList->where('rating', $star)->count() / $reviewsCount * 100) : 0)
+<div class="d-flex align-items-center gap-2 mb-2 small"><span>{{ $star }} ★</span><div class="progress flex-grow-1" style="height:6px"><div class="progress-bar bg-warning" style="width:{{ $percentage }}%"></div></div><span>{{ $percentage }}%</span></div>
+@endfor
+</div>
                             </div>
                         </div>
 
@@ -698,40 +667,7 @@
                                         </div>
                                     @endforeach
 
-                                    <!-- Đánh giá mẫu xác thực -->
-                                    @if ($reviewsList->isEmpty() || $reviewsList->count() < 2)
-                                        <div class="review-item pb-3 mb-3 border-bottom">
-                                            <div class="d-flex align-items-center justify-content-between mb-1.5">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <strong class="text-dark">Hoàng Minh Tú</strong>
-                                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small">
-                                                        <i class="fas fa-check-circle me-1"></i>Đã mua hàng
-                                                    </span>
-                                                </div>
-                                                <span class="text-muted small">2 ngày trước</span>
-                                            </div>
-                                            <div class="text-warning small mb-1">
-                                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                            </div>
-                                            <p class="text-muted mb-0 small">Chống ồn cực đỉnh, kết nối nhanh với iPhone và Mac. Cổng USB-C tiện lợi không cần mang nhiều dây cáp.</p>
-                                        </div>
-
-                                        <div class="review-item pb-3 mb-3 border-bottom">
-                                            <div class="d-flex align-items-center justify-content-between mb-1.5">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <strong class="text-dark">Nguyễn Linh Chi</strong>
-                                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small">
-                                                        <i class="fas fa-check-circle me-1"></i>Đã mua hàng
-                                                    </span>
-                                                </div>
-                                                <span class="text-muted small">1 tuần trước</span>
-                                            </div>
-                                            <div class="text-warning small mb-1">
-                                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                            </div>
-                                            <p class="text-muted mb-0 small">Âm bass chắc, pin trâu dùng cả tuần sạc 1 lần. Rất hài lòng với dịch vụ giao hàng nhanh của shop.</p>
-                                        </div>
-                                    @endif
+                                    @if ($reviewsList->isEmpty())<p class="text-muted">Chưa có đánh giá. Hãy chia sẻ trải nghiệm của bạn!</p>@endif
                                 </div>
                             </div>
                         </div>
@@ -1611,6 +1547,7 @@
 
         // Xử lý gửi Form Đánh giá qua AJAX
         const formReview = document.getElementById('formSubmitReview');
+        if (window.location.hash === '#pills-reviews') document.getElementById('pills-reviews-tab')?.click();
         const btnSendReview = document.getElementById('btn-send-review');
         const reviewsList = document.getElementById('reviews-feed-list');
         const reviewsCounter = document.getElementById('reviews-feed-counter');
@@ -1642,61 +1579,8 @@
                 })
                 .then(data => {
                     if (data.success) {
-                        // Tạo HTML cho đánh giá mới
-                        const rev = data.review;
-                        let starsHtml = '';
-                        for (let i = 1; i <= 5; i++) {
-                            starsHtml += i <= rev.rating 
-                                ? '<i class="fas fa-star"></i>' 
-                                : '<i class="far fa-star"></i>';
-                        }
-
-                        const verifiedBadge = rev.is_verified_purchase 
-                            ? `<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small">
-                                <i class="fas fa-check-circle me-1"></i>Đã mua hàng
-                               </span>` 
-                            : '';
-
-                        const safeAuthor = (rev.author_name || 'Khách hàng')
-                            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                        const safeComment = (rev.comment || '')
-                            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-                        const newReviewHtml = `
-                            <div class="review-item pb-3 mb-3 border-bottom animate__animated animate__fadeIn" style="background-color: #fffaf5; border-radius: 8px; padding: 12px;">
-                                <div class="d-flex align-items-center justify-content-between mb-1.5">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <strong class="text-dark">${safeAuthor}</strong>
-                                        ${verifiedBadge}
-                                    </div>
-                                    <span class="text-muted small">${rev.created_at || 'Vừa xong'}</span>
-                                </div>
-                                <div class="text-warning small mb-1">
-                                    ${starsHtml}
-                                </div>
-                                <p class="text-dark mb-0 small">${safeComment}</p>
-                            </div>
-                        `;
-
-                        if (reviewsList) {
-                            reviewsList.insertAdjacentHTML('afterbegin', newReviewHtml);
-                        }
-
-                        if (reviewsCounter) {
-                            const cur = parseInt(reviewsCounter.textContent) || 0;
-                            reviewsCounter.textContent = cur + 1;
-                        }
-
-                        // Reset trường bình luận
-                        const commentInput = document.getElementById('review-comment-input');
-                        if (commentInput) commentInput.value = '';
-
-                        // Thông báo
-                        if (window.cartManager && typeof window.cartManager.showMessage === 'function') {
-                            window.cartManager.showMessage(data.message || 'Cảm ơn bạn đã gửi đánh giá!', 'success');
-                        } else {
-                            alert(data.message || 'Cảm ơn bạn đã gửi đánh giá!');
-                        }
+                        window.location.hash = 'pills-reviews';
+                        window.location.reload();
                     } else {
                         alert(data.message || 'Có lỗi xảy ra khi gửi đánh giá!');
                     }

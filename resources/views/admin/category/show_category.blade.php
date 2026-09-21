@@ -51,7 +51,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 @if ($item->ImageURL)
-                                                    <img src="{{ asset('public/uploads/categories/' . $item->ImageURL) }}"
+                                                    <img src="{{ asset('uploads/categories/' . $item->ImageURL) }}"
                                                         width="50" alt="">
                                                 @else
                                                     <span class="text-muted">Không có ảnh</span>

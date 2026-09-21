@@ -152,7 +152,7 @@
                                 </div>
                             </div>
                             @if ($product->imageURL)
-                                <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                <img src="{{ asset('uploads/products/' . $product->imageURL) }}"
                                     width="100" height="100" alt="Ảnh sản phẩm">
                             @endif
                         </div>

@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Trang Admin</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/admin/images/favicon.png') }}">
-    <link rel="stylesheet" href="{{ asset('public/admin/vendor/owl-carousel/css/owl.carousel.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/admin/vendor/owl-carousel/css/owl.theme.default.min.css') }}">
-    <link href="{{ asset('public/admin/css/style.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin/images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ asset('admin/vendor/owl-carousel/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/vendor/owl-carousel/css/owl.theme.default.min.css') }}">
+    <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="{{ asset('public/admin/vendor/datatables/css/jquery.dataTables.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/admin/vendor/toastr/css/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/vendor/datatables/css/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/vendor/sweetalert2/dist/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/vendor/toastr/css/toastr.min.css') }}">
     @yield('styles')
 
 </head>
@@ -30,9 +30,9 @@
     <div id="main-wrapper">
         <div class="nav-header">
             <a href="{{ url('/admin/dashboard') }}" class="brand-logo">
-                <img class="logo-abbr" src="{{ asset('public/admin/images/logo.png') }}" alt="">
-                <img class="logo-compact" src="{{ asset('public/admin/images/logo-text.png') }}" alt="">
-                <img class="brand-title" src="{{ asset('public/admin/images/logo-text.png') }}" alt="">
+                <img class="logo-abbr" src="{{ asset('admin/images/logo.png') }}" alt="">
+                <img class="logo-compact" src="{{ asset('admin/images/logo-text.png') }}" alt="">
+                <img class="brand-title" src="{{ asset('admin/images/logo-text.png') }}" alt="">
             </a>
 
             <div class="nav-control">
@@ -111,7 +111,7 @@
                     </li>
                     <li>
                         <a href="{{ route('admin.orders.index') }}" aria-expanded="false">
-                            <i class="icon icon-notebook"></i>
+                            <i class="ti-clipboard" aria-hidden="true"></i>
                             <span class="nav-text">Quản lý đơn hàng</span>
                         </a>
                     </li>
@@ -125,6 +125,18 @@
                         <a href="{{ route('coupon.index') }}" aria-expanded="false">
                             <i class="icon icon-tag"></i>
                             <span class="nav-text">Quản lý mã khuyến mãi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}" aria-expanded="false">
+                            <i class="ti-bar-chart" aria-hidden="true"></i>
+                            <span class="nav-text">Thống kê & báo cáo</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.reviews.index') }}" aria-expanded="false">
+                            <i class="ti-star" aria-hidden="true"></i>
+                            <span class="nav-text">Đánh giá sản phẩm</span>
                         </a>
                     </li>
                 </ul>
@@ -143,15 +155,15 @@
 
 
     <!-- Required vendors -->
-    <script src="{{ asset('public/admin/vendor/global/global.min.js') }}"></script>
-    <script src="{{ asset('public/admin/js/quixnav-init.js') }}"></script>
-    <script src="{{ asset('public/admin/js/custom.min.js') }}"></script>
+    <script src="{{ asset('admin/vendor/global/global.min.js') }}"></script>
+    <script src="{{ asset('admin/js/quixnav-init.js') }}"></script>
+    <script src="{{ asset('admin/js/custom.min.js') }}"></script>
 
     <!-- DataTables, SweetAlert2, Toastr -->
-    <script src="{{ asset('public/admin/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('public/admin/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('public/admin/vendor/toastr/js/toastr.min.js') }}"></script>
-    <script src="{{ asset('public/admin/js/main.js') }}"></script>
+    <script src="{{ asset('admin/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('admin/vendor/toastr/js/toastr.min.js') }}"></script>
+    <script src="{{ asset('admin/js/main.js') }}"></script>
     @yield('scripts')
 </body>
 

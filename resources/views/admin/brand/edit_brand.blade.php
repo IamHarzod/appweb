@@ -17,7 +17,7 @@
                             <input type="hidden" name="id" value="{{ $brand->id }}">
                             @if ($brand->Logo != null)
                                 <div>
-                                    <img src="{{ asset('public/uploads/brands/' . $brand->Logo) }}" alt=""
+                                    <img src="{{ asset('uploads/brands/' . $brand->Logo) }}" alt=""
                                         width="50">
                                 </div>
                             @endif

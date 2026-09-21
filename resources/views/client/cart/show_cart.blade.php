@@ -32,7 +32,7 @@
                             @foreach ($cartItems as $item)
                                 <tr id="cart-item-{{ $item->id }}">
                                     <td>
-                                        <img src="{{ asset('public/uploads/products/' . $item->product->imageURL) }}"
+                                        <img src="{{ asset('uploads/products/' . $item->product->imageURL) }}"
                                             alt="{{ $item->product->name }}"
                                             style="width: 80px; height: 80px; object-fit: cover;">
                                     </td>

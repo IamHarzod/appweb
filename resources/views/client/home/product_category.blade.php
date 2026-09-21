@@ -161,7 +161,7 @@
                                         <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
                                             <div class="product-item-inner border rounded">
                                                 <div class="product-item-inner-item">
-                                                    <img src="{{ asset('public/uploads/products/' . $item->imageURL) }}"
+                                                    <img src="{{ asset('uploads/products/' . $item->imageURL) }}"
                                                         class="img-fluid w-100 rounded-top" alt="">
                                                     <div class="product-new">New</div>
                                                     <div class="product-details">
@@ -257,7 +257,7 @@
                                             <div class="row g-0">
                                                 <div class="col-5">
                                                     <div class="products-mini-img border-end h-100">
-                                                        <img src="{{ asset('public/uploads/products/' . $item->imageURL) }}"
+                                                        <img src="{{ asset('uploads/products/' . $item->imageURL) }}"
                                                             class="img-fluid w-100 h-100 rounded-start" alt="{{ $item->name }}">
                                                         <div class="products-mini-icon rounded-circle bg-primary">
                                                             <a href="{{ route('product.detail', $item->id) }}"><i

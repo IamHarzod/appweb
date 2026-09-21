@@ -43,7 +43,7 @@
 
                     <div class="row g-0 header-carousel-item align-items-center">
                         <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                            <img src="{{ asset('public/client/img/macbook-banner.png') }}" class="img-fluid" alt="Image">
+                            <img src="{{ asset('client/img/macbook-banner.png') }}" class="img-fluid" alt="Image">
                         </div>
                         <div class="col-xl-6 carousel-content p-4">
                             <h4 class="text-uppercase fw-bold mb-3 wow fadeInRight" data-wow-delay="0.1s"
@@ -63,7 +63,7 @@
 
                     <div class="row g-0 header-carousel-item align-items-center">
                         <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                            <img src="{{ asset('public/client/img/Mac-studio-banner.png') }}" class="img-fluid"
+                            <img src="{{ asset('client/img/Mac-studio-banner.png') }}" class="img-fluid"
                                 alt="Image">
                         </div>
                         <div class="col-xl-6 carousel-content p-4">
@@ -89,7 +89,7 @@
                 <div class="carousel-header-banner position-relative"
                     style="height: var(--slide-height) !important; overflow: hidden; background: #000;">
 
-                    <img src="{{ asset('public/client/img/Vision-Pro-Banner.jpg') }}" class="img-fluid w-100 h-100"
+                    <img src="{{ asset('client/img/Vision-Pro-Banner.jpg') }}" class="img-fluid w-100 h-100"
                         style="object-fit: cover; object-position: center;" alt="Image">
 
                     <div class="carousel-banner-offer" style="position: absolute; top: 20px; right: 20px; z-index: 2;">
@@ -198,7 +198,7 @@
                             <h1 class="display-3 text-secondary mb-0">40% <span class="text-primary fw-normal">Off</span>
                             </h1>
                         </div>
-                        <img src="{{ asset('public/client/img/product-1.png') }}" class="img-fluid" alt="">
+                        <img src="{{ asset('client/img/product-1.png') }}" class="img-fluid" alt="">
                     </a>
                 </div>
                 <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.3s">
@@ -210,7 +210,7 @@
                             <h1 class="display-3 text-secondary mb-0">20% <span class="text-primary fw-normal">Off</span>
                             </h1>
                         </div>
-                        <img src="{{ asset('public/client/img/product-2.png') }}" class="img-fluid" alt="">
+                        <img src="{{ asset('client/img/product-2.png') }}" class="img-fluid" alt="">
                     </a>
                 </div>
             </div>
@@ -261,7 +261,7 @@
                                     <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="product-item-inner border rounded">
                                             <div class="product-item-inner-item">
-                                                <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                                <img src="{{ asset('uploads/products/' . $product->imageURL) }}"
                                                     class="img-fluid w-100 rounded-top" alt="">
                                                 <div class="product-new">Mới</div>
                                                 <div class="product-details">
@@ -363,7 +363,7 @@
                             <div class="row g-0">
                                 <div class="col-5">
                                     <div class="products-mini-img border-end h-100">
-                                        <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                        <img src="{{ asset('uploads/products/' . $product->imageURL) }}"
                                             class="img-fluid w-100 h-100" alt="Image">
                                         <div class="products-mini-icon rounded-circle bg-primary">
                                             <a href="{{ route('product.detail', $product->id) }}"><i
@@ -461,7 +461,7 @@
                                     <div class="row g-0">
                                         <div class="col-5">
                                             <div class="products-mini-img border-end h-100">
-                                                <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                                <img src="{{ asset('uploads/products/' . $product->imageURL) }}"
                                                     class="img-fluid w-100 h-100" alt="Image">
                                                 <div class="products-mini-icon rounded-circle bg-primary">
                                                     <a href="{{ route('product.detail', $product->id) }}"><i

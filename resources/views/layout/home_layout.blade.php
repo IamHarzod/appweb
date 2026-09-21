@@ -29,16 +29,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="{{ asset('public/client/lib/animate/animate.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/client/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/lib/animate/animate.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
 
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="{{ asset('public/client/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="{{ asset('public/client/css/style.css') }}" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/client/img/favicon.png') }}">
+    <link href="{{ asset('client/css/style.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('client/img/favicon.png') }}">
     <style>
         /* Hiệu ứng khi di chuột vào sản phẩm gợi ý */
         .search-item:hover {
@@ -262,13 +262,13 @@
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('public/client/lib/wow/wow.min.js') }}"></script>
-    <script src="{{ asset('public/client/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('client/lib/wow/wow.min.js') }}"></script>
+    <script src="{{ asset('client/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
 
     <!-- Template Javascript -->
-    <script src="{{ asset('public/client/js/main.js') }}"></script>
-    <script src="{{ asset('public/client/js/cart.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('client/js/main.js') }}"></script>
+    <script src="{{ asset('client/js/cart.js') }}?v={{ time() }}"></script>
     <script>
         // Fallback global handler if user clicks Mua Ngay
         document.addEventListener('click', function(e) {

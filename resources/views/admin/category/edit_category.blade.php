@@ -17,7 +17,7 @@
                                 <label>Ảnh danh mục</label>
                                 @if (!empty($category->ImageURL))
                                     <div class="mb-2">
-                                        <img src="{{ asset('public/uploads/categories/' . $category->ImageURL) }}" alt=""
+                                        <img src="{{ asset('uploads/categories/' . $category->ImageURL) }}" alt=""
                                             width="60">
                                     </div>
                                 @endif

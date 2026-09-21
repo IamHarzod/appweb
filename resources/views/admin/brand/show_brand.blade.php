@@ -51,7 +51,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration++ }}</td>
                                             <td>
-                                                <img src="{{ asset('public/uploads/brands/' . $item->Logo) }}"
+                                                <img src="{{ asset('uploads/brands/' . $item->Logo) }}"
                                                     width="50" alt="">
                                             </td>
                                             <td>{{ $item->TenThuongHieu }}</td>

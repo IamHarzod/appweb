@@ -73,6 +73,9 @@ Route::post('/tra-cuu-don-hang', [OrderController::class, 'processLookup'])->nam
 
 // Orders (admin scope)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/reports/orders/{format}', [\App\Http\Controllers\Admin\ReportController::class, 'export'])->whereIn('format', ['xlsx', 'pdf'])->name('reports.export');
+    Route::get('/reviews', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');
+    Route::patch('/reviews/{review}', [\App\Http\Controllers\Admin\ReviewController::class, 'update'])->name('reviews.update');
     Route::resource('orders', AdminOrderController::class)->except(['create', 'store', 'edit', 'update']);
     Route::post('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
     Route::post('/orders/{id}/cancel', [AdminOrderController::class, 'cancel'])->name('orders.cancel');
@@ -90,7 +93,7 @@ Route::get('/show-category-cart', [CartController::class, 'show_category_cart'])
 
 // ADMIN & AUTH ROUTES
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'show_dasboard'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.dashboard');
 });
 
 Route::middleware('auth')->group(function () {

@@ -212,7 +212,7 @@
                                             <td class="py-3 px-4">
                                                 <div class="d-flex align-items-center">
                                                     @if($item->product && $item->product->imageURL)
-                                                        <img src="{{ asset('public/uploads/products/' . $item->product->imageURL) }}"
+                                                        <img src="{{ asset('uploads/products/' . $item->product->imageURL) }}"
                                                              alt="{{ $item->product_name ?? ($item->product->name ?? 'SP') }}"
                                                              style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-3 border">
                                                     @endif

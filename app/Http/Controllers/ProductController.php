@@ -201,7 +201,7 @@ class ProductController extends Controller
 
             if ($product->count() > 0) {
                 foreach ($product as $key => $val) {
-                    $image = asset('public/uploads/products/' . $val->imageURL);
+                    $image = asset('uploads/products/' . $val->imageURL);
                     $link = url('/product/' . $val->id);
                     $safeName = htmlspecialchars($val->name, ENT_QUOTES, 'UTF-8');
 
