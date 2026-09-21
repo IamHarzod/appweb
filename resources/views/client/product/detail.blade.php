@@ -620,26 +620,38 @@
                                         <label class="form-label fw-semibold text-dark small mb-1">
                                             Mức độ hài lòng: <span id="star-rating-label" class="text-warning fw-bold">Tuyệt vời (5 sao)</span>
                                         </label>
-                                        <div class="star-rating-selector d-flex align-items-center gap-1 fs-4 text-warning" id="interactive-star-picker" style="cursor: pointer;">
-                                            <i class="fas fa-star star-pick" data-val="1"></i>
-                                            <i class="fas fa-star star-pick" data-val="2"></i>
-                                            <i class="fas fa-star star-pick" data-val="3"></i>
-                                            <i class="fas fa-star star-pick" data-val="4"></i>
-                                            <i class="fas fa-star star-pick" data-val="5"></i>
+                                        <div class="star-rating-selector d-flex align-items-center gap-2 fs-3 text-warning" id="interactive-star-picker" style="cursor: pointer;">
+                                            <i class="fas fa-star star-pick" data-val="1" title="Rất tệ (1 sao)"></i>
+                                            <i class="fas fa-star star-pick" data-val="2" title="Tệ (2 sao)"></i>
+                                            <i class="fas fa-star star-pick" data-val="3" title="Bình thường (3 sao)"></i>
+                                            <i class="fas fa-star star-pick" data-val="4" title="Hài lòng (4 sao)"></i>
+                                            <i class="fas fa-star star-pick" data-val="5" title="Tuyệt vời (5 sao)"></i>
                                         </div>
                                         <input type="hidden" name="rating" id="review-rating-input" value="5">
                                     </div>
 
-                                    <!-- Tên người đánh giá -->
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold text-dark small mb-1">Họ và tên của bạn</label>
-                                        @if (Auth::check())
-                                            <input type="text" class="form-control" name="author_name" value="{{ Auth::user()->name ?? 'Thành viên' }}" readonly style="background-color: #f8fafc;">
-                                            <small class="text-success"><i class="fas fa-check-circle me-1"></i> Đăng nhập dưới tên: {{ Auth::user()->name }}</small>
-                                        @else
-                                            <input type="text" class="form-control" name="author_name" placeholder="Nhập tên hiển thị của bạn (Ví dụ: Nguyễn Văn A)" required>
-                                        @endif
-                                    </div>
+                                    <!-- Thông tin tài khoản đánh giá (Tự động lấy tên tài khoản, không cần nhập) -->
+                                    @if (Auth::check())
+                                        <div class="mb-3 p-2.5 px-3 rounded-3 bg-light border d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="fas fa-user-circle text-primary fs-5"></i>
+                                                <span class="small text-muted">Đánh giá với tài khoản: <strong class="text-dark">{{ Auth::user()->name ?? Auth::user()->email }}</strong></span>
+                                            </div>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill small">
+                                                <i class="fas fa-check-circle me-1"></i>Đã đăng nhập
+                                            </span>
+                                        </div>
+                                    @else
+                                        <div class="mb-3 p-2.5 px-3 rounded-3 bg-light border d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="fas fa-user-circle text-secondary fs-5"></i>
+                                                <span class="small text-muted">Đánh giá với tư cách: <strong class="text-dark">Khách hàng</strong></span>
+                                            </div>
+                                            <a href="{{ route('login') }}" class="btn btn-sm btn-outline-orange py-0 px-2 fw-semibold" style="font-size: 12px;">
+                                                <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
+                                            </a>
+                                        </div>
+                                    @endif
 
                                     <!-- Nội dung nhận xét -->
                                     <div class="mb-3">
@@ -1146,6 +1158,20 @@
         background-color: #475569;
     }
 
+    /* Interactive Star Picker */
+    .star-rating-selector {
+        user-select: none;
+    }
+    .star-rating-selector .star-pick {
+        cursor: pointer;
+        padding: 4px 6px;
+        transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-block;
+    }
+    .star-rating-selector .star-pick:hover {
+        transform: scale(1.3);
+    }
+
     /* Stepper Counter */
     .stepper-counter-box {
         border: 1.5px solid #e2e8f0;
@@ -1509,7 +1535,13 @@
                         } else {
                             alert('Đã sao chép liên kết sản phẩm!');
                         }
+                    }).catch(() => {
+                        alert('Liên kết sản phẩm: ' + window.location.href);
                     });
+                } else {
+                    alert('Liên kết sản phẩm: ' + window.location.href);
+                }
+            });
         }
 
         // --- 5. ĐÁNH GIÁ SẢN PHẨM (STAR PICKER & AJAX FORM) ---
@@ -1529,7 +1561,7 @@
 
             function renderStars(rating) {
                 stars.forEach(s => {
-                    const val = parseInt(s.getAttribute('data-val'));
+                    const val = parseInt(s.getAttribute('data-val'), 10);
                     if (val <= rating) {
                         s.classList.remove('far');
                         s.classList.add('fas');
@@ -1543,21 +1575,36 @@
                 }
             }
 
-            stars.forEach(s => {
-                s.addEventListener('mouseenter', function () {
-                    const val = parseInt(this.getAttribute('data-val'));
-                    renderStars(val);
-                });
+            // Khởi tạo hiển thị ban đầu (5 sao)
+            const initialRating = parseInt(starInput.value, 10) || 5;
+            renderStars(initialRating);
 
-                s.addEventListener('click', function () {
-                    const val = parseInt(this.getAttribute('data-val'));
+            // Bắt sự kiện click vào sao
+            starContainer.addEventListener('click', function (e) {
+                const star = e.target.closest('.star-pick');
+                if (!star) return;
+                e.preventDefault();
+                e.stopPropagation();
+                const val = parseInt(star.getAttribute('data-val'), 10);
+                if (val >= 1 && val <= 5) {
                     starInput.value = val;
                     renderStars(val);
-                });
+                }
             });
 
+            // Rê chuột xem trước số sao
+            starContainer.addEventListener('mouseover', function (e) {
+                const star = e.target.closest('.star-pick');
+                if (!star) return;
+                const val = parseInt(star.getAttribute('data-val'), 10);
+                if (val >= 1 && val <= 5) {
+                    renderStars(val);
+                }
+            });
+
+            // Rời chuột khôi phục số sao đã chọn
             starContainer.addEventListener('mouseleave', function () {
-                const currentVal = parseInt(starInput.value) || 5;
+                const currentVal = parseInt(starInput.value, 10) || 5;
                 renderStars(currentVal);
             });
         }

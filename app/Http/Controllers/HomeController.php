@@ -68,19 +68,17 @@ class HomeController extends Controller
             'author_name' => 'nullable|string|max:100',
         ]);
 
-        $authorName = $validated['author_name'] ?? null;
         $userId = null;
+        $authorName = 'Khách hàng';
         $isVerified = false;
 
         if (Auth::check()) {
             $user = Auth::user();
             $userId = $user->id;
-            $authorName = $user->name ?? $authorName ?? 'Khách hàng';
+            $authorName = $user->name ?: ($user->email ? explode('@', $user->email)[0] : 'Thành viên');
             $isVerified = OrderItem::whereHas('order', function ($q) use ($userId) {
                 $q->where('user_id', $userId);
             })->where('product_id', $id)->exists();
-        } else {
-            $authorName = $authorName ?: 'Khách hàng';
         }
 
         $review = ProductReview::create([

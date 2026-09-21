@@ -12446,7 +12446,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "app/Http/Controllers/HomeController.php",
-      "source_location": "L86",
+      "source_location": "L84",
       "weight": 1.0
     },
     {
@@ -30246,5 +30246,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d46a96752014f45de9648094201af98d6df84c76"
+  "built_at_commit": "f0ebd39a82cc92b6a8ec70fb268bc613efdc622d"
 }
