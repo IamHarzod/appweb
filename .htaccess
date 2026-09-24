@@ -3,6 +3,8 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    DirectoryIndex index.php
+
     RewriteEngine On
 
     # Handle Authorization Header
@@ -12,6 +14,13 @@
     # Handle X-XSRF-Token Header
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # If static asset exists in public/, rewrite to public/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{DOCUMENT_ROOT}/appweb/public/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/appweb/public/$1 -d
+    RewriteRule ^(.*)$ public/$1 [L]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
