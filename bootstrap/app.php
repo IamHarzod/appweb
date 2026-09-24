@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => \App\Http\Middleware\Authenticate::class,
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            'momo-ipn',
+            'vnpay-ipn',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

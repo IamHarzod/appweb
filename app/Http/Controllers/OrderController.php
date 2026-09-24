@@ -12,6 +12,8 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\OderItemController;
 use Illuminate\Support\Facades\Log;
+use App\Services\MoMoService;
+use App\Services\VNPayService;
 
 class OrderController extends Controller
 {
@@ -204,7 +206,7 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Giỏ hàng trống! Vui lòng chọn sản phẩm.');
         }
 
-        $shippingFee = 50000;
+        $shippingFee = (float) Session::get('ghn_shipping_fee', 50000);
         $discountAmount = 0;
         $couponCode = null;
 
@@ -245,6 +247,9 @@ class OrderController extends Controller
         try {
             $fullAddress = $request->shipping_address . ', ' . $request->phuong_xa . ', ' . $request->quan_huyen . ', ' . $request->tinh_thanh;
 
+            $paymentMethod = $request->payment_method ?? 'COD';
+            $paymentStatus = ($paymentMethod === 'COD') ? 'unpaid' : 'unpaid';
+
             $order = Order::create([
                 'user_id' => Auth::id() ?? null,
                 'shipping_name' => $request->shipping_name,
@@ -252,7 +257,8 @@ class OrderController extends Controller
                 'shipping_phone' => $request->shipping_phone,
                 'shipping_address' => $fullAddress,
                 'notes' => $request->ghichu,
-                'payment_method' => $request->payment_method ?? 'COD',
+                'payment_method' => $paymentMethod,
+                'payment_status' => $paymentStatus,
 
                 // LƯU CÁC SỐ QUAN TRỌNG
                 'total_amount' => $finalTotalAmount,       // Tổng thực trả
@@ -282,11 +288,200 @@ class OrderController extends Controller
 
             DB::commit();
 
+            // Nếu người dùng chọn thanh toán qua VNPAY -> Redirect trực tiếp sang cổng VNPAY Sandbox
+            if ($paymentMethod === 'VNPAY') {
+                $vnpayService = new VNPayService();
+                $vnpayUrl = $vnpayService->createPaymentUrl($order);
+                return redirect()->away($vnpayUrl);
+            }
+
+            // Nếu người dùng chọn thanh toán qua MoMo
+            if ($paymentMethod === 'MOMO') {
+                $momoService = new MoMoService();
+                $momoRes = $momoService->createPayment($order);
+
+                if ($momoRes['success'] && !empty($momoRes['payUrl'])) {
+                    return redirect()->away($momoRes['payUrl']);
+                }
+
+                // Nếu MoMo API lỗi/tài khoản test khóa (vd: lỗi 13), tự động chuyển sang trang MoMo Giả lập để test luồng
+                return redirect()->route('momo.mock_pay', ['order_id' => $order->id]);
+            }
+
             return redirect()->route('order.success', ['id' => $order->id])->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Lỗi hệ thống: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Callback Redirect từ MoMo sau khi khách thanh toán xong
+     */
+    public function momoReturn(Request $request)
+    {
+        Log::info('MoMo Return parameters:', $request->all());
+
+        $momoService = new MoMoService();
+        $isValidSignature = $momoService->verifySignature($request->all());
+
+        $orderIdParam = $request->input('orderId');
+        $resultCode = $request->input('resultCode');
+        $transId = $request->input('transId');
+        $message = $request->input('message');
+
+        // Extract order_id thực tế từ chuỗi orderId (VD: "12_1726000000" -> 12)
+        $orderIdParts = explode('_', $orderIdParam ?? '');
+        $orderId = $orderIdParts[0] ?? null;
+
+        $order = Order::find($orderId);
+
+        if (!$order) {
+            return redirect()->route('home')->with('error', 'Không tìm thấy thông tin đơn hàng thanh toán.');
+        }
+
+        if ($resultCode == 0) {
+            $order->update([
+                'payment_status' => 'paid',
+                'transaction_id' => $transId ?? $orderIdParam,
+            ]);
+
+            return redirect()->route('order.success', ['id' => $order->id])
+                ->with('success', 'Thanh toán qua Ví MoMo thành công!');
+        } else {
+            $order->update([
+                'payment_status' => 'failed',
+            ]);
+
+            return redirect()->route('order.success', ['id' => $order->id])
+                ->with('error', 'Thanh toán MoMo không thành công hoặc đã bị hủy: ' . ($message ?? ''));
+        }
+    }
+
+    /**
+     * IPN Webhook ngầm từ MoMo server gửi về
+     */
+    public function momoIpn(Request $request)
+    {
+        Log::info('MoMo IPN Callback payload:', $request->all());
+
+        $momoService = new MoMoService();
+        $isValidSignature = $momoService->verifySignature($request->all());
+
+        if (!$isValidSignature) {
+            Log::warning('MoMo IPN invalid signature!');
+            return response()->json(['message' => 'Invalid signature'], 400);
+        }
+
+        $orderIdParam = $request->input('orderId');
+        $resultCode = $request->input('resultCode');
+        $transId = $request->input('transId');
+
+        $orderIdParts = explode('_', $orderIdParam ?? '');
+        $orderId = $orderIdParts[0] ?? null;
+
+        $order = Order::find($orderId);
+
+        if ($order) {
+            if ($resultCode == 0) {
+                $order->update([
+                    'payment_status' => 'paid',
+                    'transaction_id' => $transId ?? $orderIdParam,
+                ]);
+            } else {
+                $order->update([
+                    'payment_status' => 'failed',
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Received'], 200);
+    }
+
+    /**
+     * Callback Redirect từ VNPay sau khi khách thanh toán xong
+     */
+    public function vnpayReturn(Request $request)
+    {
+        Log::info('VNPay Return parameters:', $request->all());
+
+        $vnpayService = new VNPayService();
+        $isValidSignature = $vnpayService->verifySignature($request->all());
+
+        $vnp_TxnRef = $request->input('vnp_TxnRef');
+        $vnp_ResponseCode = $request->input('vnp_ResponseCode');
+        $vnp_TransactionNo = $request->input('vnp_TransactionNo');
+
+        $orderIdParts = explode('_', $vnp_TxnRef ?? '');
+        $orderId = $orderIdParts[0] ?? null;
+
+        $order = Order::find($orderId);
+
+        if (!$order) {
+            return redirect()->route('home')->with('error', 'Không tìm thấy thông tin đơn hàng thanh toán.');
+        }
+
+        if ($isValidSignature && $vnp_ResponseCode == '00') {
+            $order->update([
+                'payment_status' => 'paid',
+                'transaction_id' => $vnp_TransactionNo ?? $vnp_TxnRef,
+            ]);
+
+            return redirect()->route('order.success', ['id' => $order->id])
+                ->with('success', 'Thanh toán qua VNPAY thành công!');
+        } else {
+            $order->update([
+                'payment_status' => 'failed',
+            ]);
+
+            return redirect()->route('order.success', ['id' => $order->id])
+                ->with('error', 'Thanh toán VNPAY không thành công hoặc đã bị hủy (Mã lỗi: ' . $vnp_ResponseCode . ').');
+        }
+    }
+
+    /**
+     * IPN Webhook ngầm từ VNPay Server gửi về
+     */
+    public function vnpayIpn(Request $request)
+    {
+        Log::info('VNPay IPN parameters:', $request->all());
+
+        $vnpayService = new VNPayService();
+        $isValidSignature = $vnpayService->verifySignature($request->all());
+
+        if (!$isValidSignature) {
+            return response()->json(['RspCode' => '97', 'Message' => 'Invalid Checksum'], 200);
+        }
+
+        $vnp_TxnRef = $request->input('vnp_TxnRef');
+        $vnp_ResponseCode = $request->input('vnp_ResponseCode');
+        $vnp_TransactionNo = $request->input('vnp_TransactionNo');
+
+        $orderIdParts = explode('_', $vnp_TxnRef ?? '');
+        $orderId = $orderIdParts[0] ?? null;
+
+        $order = Order::find($orderId);
+
+        if (!$order) {
+            return response()->json(['RspCode' => '01', 'Message' => 'Order Not Found'], 200);
+        }
+
+        if ($order->payment_status === 'paid') {
+            return response()->json(['RspCode' => '02', 'Message' => 'Order already confirmed'], 200);
+        }
+
+        if ($vnp_ResponseCode == '00') {
+            $order->update([
+                'payment_status' => 'paid',
+                'transaction_id' => $vnp_TransactionNo ?? $vnp_TxnRef,
+            ]);
+        } else {
+            $order->update([
+                'payment_status' => 'failed',
+            ]);
+        }
+
+        return response()->json(['RspCode' => '00', 'Message' => 'Confirm Success'], 200);
     }
 
     public function showSuccess($id)
@@ -311,5 +506,13 @@ class OrderController extends Controller
 
         // Trả về một View riêng (Partial View) chỉ chứa nội dung modal
         return view('admin.orders.detail_modal', compact('order'));
+    }
+
+    public function momoMockPay($order_id)
+    {
+        $order = Order::findOrFail($order_id);
+        $categories = \App\Models\Category::all();
+
+        return view('client.checkout.momo_mock', compact('order', 'categories'));
     }
 }

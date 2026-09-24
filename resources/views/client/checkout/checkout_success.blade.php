@@ -22,6 +22,22 @@
                                         class="text-primary">#{{ $order->id ?? 'DH0000' }}</strong></p>
                             </div>
 
+                            @if (session('warning'))
+                                <div class="alert alert-warning mb-4">
+                                    {{ session('warning') }}
+                                </div>
+                            @endif
+                            @if (session('error'))
+                                <div class="alert alert-danger mb-4">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+                            @if (session('success'))
+                                <div class="alert alert-success mb-4">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
                             <!-- Chi tiết đơn hàng -->
                             <div class="text-start">
                                 <h4 class="mb-3 border-bottom pb-2">Thông tin đơn hàng</h4>
@@ -39,16 +55,34 @@
                                     </div>
                                 </div>
 
-                                <h6 class="text-uppercase text-muted small mt-4">Phương thức thanh toán</h6>
-                                <p>
-                                    @if (($order->payment_method ?? 'cod') == 'cod')
-                                        Thanh toán khi nhận hàng (COD)
-                                    @elseif(($order->payment_method ?? '') == 'vnpay')
-                                        Thanh toán qua VNPAY
-                                    @else
-                                        Thanh toán qua Ngân hàng
-                                    @endif
-                                </p>
+                                <div class="row mt-2">
+                                    <div class="col-md-6 mb-3">
+                                        <h6 class="text-uppercase text-muted small">Phương thức thanh toán</h6>
+                                        <p class="fw-bold">
+                                            @if (strtoupper($order->payment_method ?? '') == 'COD')
+                                                Thanh toán khi nhận hàng (COD)
+                                            @elseif(strtoupper($order->payment_method ?? '') == 'VNPAY')
+                                                Thanh toán qua VNPAY
+                                            @elseif(strtoupper($order->payment_method ?? '') == 'MOMO')
+                                                Thanh toán qua Ví MoMo
+                                            @else
+                                                {{ $order->payment_method ?? 'Khác' }}
+                                            @endif
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <h6 class="text-uppercase text-muted small">Trạng thái thanh toán</h6>
+                                        <p>
+                                            @if (($order->payment_status ?? 'unpaid') == 'paid')
+                                                <span class="badge bg-success text-white fs-6">Đã thanh toán</span>
+                                            @elseif(($order->payment_status ?? '') == 'failed')
+                                                <span class="badge bg-danger text-white fs-6">Thanh toán thất bại</span>
+                                            @else
+                                                <span class="badge bg-warning text-dark fs-6">Chưa thanh toán</span>
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Tóm tắt số tiền -->

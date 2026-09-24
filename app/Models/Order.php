@@ -20,6 +20,8 @@ class Order extends Model
         'shipping_address', // Thêm dòng này
         'notes',            // Thêm dòng này
         'payment_method',   // Thêm dòng này
+        'payment_status',   // Trạng thái thanh toán (unpaid, paid, failed)
+        'transaction_id',   // Mã giao dịch MoMo/VNPAY
         'total_amount',     // Thêm dòng này
         'discount_amount',  // Thêm cột discount_amount
         'shipping_fee',     // Thêm cột shipping_fee

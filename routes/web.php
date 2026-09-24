@@ -14,6 +14,13 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\GHNController;
+
+// GHN API Routes (Location & Fee)
+Route::get('/ghn/provinces', [GHNController::class, 'getProvinces'])->name('ghn.provinces');
+Route::get('/ghn/districts/{provinceId}', [GHNController::class, 'getDistricts'])->name('ghn.districts');
+Route::get('/ghn/wards/{districtId}', [GHNController::class, 'getWards'])->name('ghn.wards');
+Route::post('/ghn/calculate-fee', [GHNController::class, 'calculateFee'])->name('ghn.calculate_fee');
 
 
 
@@ -43,6 +50,16 @@ Route::middleware('auth')->group(function () {
 // Checkout Routes
 Route::get('/show-checkout', [CheckoutController::class, 'show_checkout'])->name('checkout.index');
 Route::post('/thanh-toan', [CheckoutController::class, 'processOrder'])->name('checkout.process');
+
+// MoMo Payment Callback Routes
+Route::get('/momo-return', [OrderController::class, 'momoReturn'])->name('momo.return');
+Route::post('/momo-ipn', [OrderController::class, 'momoIpn'])->name('momo.ipn');
+Route::get('/momo/mock-pay/{order_id}', [OrderController::class, 'momoMockPay'])->name('momo.mock_pay');
+
+// VNPay Payment Callback Routes
+Route::get('/vnpay-return', [OrderController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::get('/vnpay-ipn', [OrderController::class, 'vnpayIpn'])->name('vnpay.ipn');
+Route::post('/vnpay-ipn', [OrderController::class, 'vnpayIpn']);
 
 // Orders (user scope)
 Route::middleware('auth')->group(function () {

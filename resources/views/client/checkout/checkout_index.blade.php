@@ -120,7 +120,14 @@
                             <label class="form-label my-3">Tỉnh / Thành phố<sup>*</sup></label>
                             <select name="tinh_thanh" id="tinh" class="form-select" title="Chọn tỉnh / thành phố"
                                 required>
-                                <option value="">--Chọn--</option>
+                                <option value="">--Chọn Tỉnh / Thành--</option>
+                                @if (isset($provinces) && count($provinces) > 0)
+                                    @foreach ($provinces as $province)
+                                        <option value="{{ $province['ProvinceName'] }}" data-id="{{ $province['ProvinceID'] }}">
+                                            {{ $province['ProvinceName'] }}
+                                        </option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                         <div class="form-item">
@@ -192,14 +199,14 @@
                                     <tr>
                                         <th scope="row"></th>
                                         <td class="py-4" colspan="2">
-                                            <p class="mb-0 text-dark py-2">Phí vận chuyển</p>
+                                            <p class="mb-0 text-dark py-2">Phí vận chuyển (GHN)</p>
                                         </td>
                                         <td class="py-4">
                                             <div class="py-2 text-center border-bottom">
                                                 @if (isset($shippingFee) && $shippingFee == 0)
-                                                    <p class="mb-0 text-success">Miễn phí</p>
+                                                    <p class="mb-0 text-success" id="shipping-fee-display">Miễn phí</p>
                                                 @else
-                                                    <p class="mb-0 text-dark">
+                                                    <p class="mb-0 text-dark" id="shipping-fee-display">
                                                         {{ number_format($shippingFee ?? 50000, 0, ',', '.') }} VNĐ</p>
                                                 @endif
                                             </div>
@@ -248,7 +255,7 @@
                                         <td class="py-4"></td>
                                         <td class="py-4">
                                             <div class="py-2 text-center border-bottom border-top">
-                                                <p class="mb-0 text-dark">
+                                                <p class="mb-0 text-dark" id="total-price-display">
                                                     {{ number_format($totalPrice ?? 0, 0, ',', '.') }} VNĐ</p>
                                             </div>
                                         </td>
@@ -310,79 +317,120 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Lấy danh sách Tỉnh/Thành phố
-            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
-                if (data_tinh.error == 0) {
-                    $.each(data_tinh.data, function(key_tinh, val_tinh) {
-                        // SỬA: Lưu Tên vào value, Lưu ID vào data-id
-                        $("#tinh").append('<option value="' + val_tinh.full_name + '" data-id="' +
-                            val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                    });
+            var subtotal = {{ $subtotal ?? 0 }};
+            var discountAmount = {{ $discountAmount ?? 0 }};
 
-                    // Sự kiện khi chọn Tỉnh
-                    $("#tinh").change(function(e) {
-                        // Lấy ID từ data-id để gọi API
-                        var idtinh = $(this).find(':selected').data('id');
+            // 1. Tải danh sách Tỉnh/Thành từ GHN API (Nếu server chưa render sẵn)
+            if ($("#tinh option").length <= 1) {
+                $.ajax({
+                    url: "{{ route('ghn.provinces') }}",
+                    type: "GET",
+                    success: function(data) {
+                        if (data && data.length > 0) {
+                            $("#tinh").html('<option value="">--Chọn Tỉnh / Thành--</option>');
+                            $.each(data, function(key, val) {
+                                $("#tinh").append('<option value="' + val.ProvinceName + '" data-id="' + val.ProvinceID + '">' + val.ProvinceName + '</option>');
+                            });
+                        } else {
+                            loadEsgooProvinces();
+                        }
+                    },
+                    error: function() {
+                        loadEsgooProvinces();
+                    }
+                });
+            }
 
-                        // Reset Quận/Phường
-                        $("#quan").html('<option value="">--Chọn Quận/Huyện--</option>');
-                        $("#phuong").html('<option value="">--Chọn Phường/Xã--</option>');
+            // Sự kiện khi chọn Tỉnh
+            $("#tinh").change(function() {
+                var provinceId = $(this).find(':selected').data('id');
+                $("#quan").html('<option value="">--Chọn Quận / Huyện--</option>');
+                $("#phuong").html('<option value="">--Chọn Phường / Xã--</option>');
 
-                        if (idtinh) {
-                            $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm',
-                                function(data_quan) {
-                                    if (data_quan.error == 0) {
-                                        $.each(data_quan.data, function(key_quan, val_quan) {
-                                            $("#quan").append('<option value="' +
-                                                val_quan.full_name + '" data-id="' +
-                                                val_quan.id + '">' + val_quan
-                                                .full_name + '</option>');
-                                        });
-
-                                        // Sự kiện khi chọn Quận
-                                        $("#quan").change(function(e) {
-                                            var idquan = $(this).find(':selected').data(
-                                                'id');
-                                            $("#phuong").html(
-                                                '<option value="">--Chọn Phường/Xã--</option>'
-                                            );
-
-                                            if (idquan) {
-                                                $.getJSON(
-                                                    'https://esgoo.net/api-tinhthanh/3/' +
-                                                    idquan + '.htm',
-                                                    function(data_phuong) {
-                                                        if (data_phuong.error ==
-                                                            0) {
-                                                            $.each(data_phuong.data,
-                                                                function(
-                                                                    key_phuong,
-                                                                    val_phuong
-                                                                ) {
-                                                                    $("#phuong")
-                                                                        .append(
-                                                                            '<option value="' +
-                                                                            val_phuong
-                                                                            .full_name +
-                                                                            '" data-id="' +
-                                                                            val_phuong
-                                                                            .id +
-                                                                            '">' +
-                                                                            val_phuong
-                                                                            .full_name +
-                                                                            '</option>'
-                                                                        );
-                                                                });
-                                                        }
-                                                    });
-                                            }
-                                        });
-                                    }
+                if (provinceId) {
+                    $.ajax({
+                        url: "{{ url('/ghn/districts') }}/" + provinceId,
+                        type: "GET",
+                        success: function(data) {
+                            if (data && data.length > 0) {
+                                $.each(data, function(key, val) {
+                                    $("#quan").append('<option value="' + val.DistrictName + '" data-id="' + val.DistrictID + '">' + val.DistrictName + '</option>');
                                 });
+                            }
                         }
                     });
                 }
             });
+
+            // Sự kiện khi chọn Quận
+            $("#quan").change(function() {
+                var districtId = $(this).find(':selected').data('id');
+                $("#phuong").html('<option value="">--Chọn Phường / Xã--</option>');
+
+                if (districtId) {
+                    $.ajax({
+                        url: "{{ url('/ghn/wards') }}/" + districtId,
+                        type: "GET",
+                        success: function(data) {
+                            if (data && data.length > 0) {
+                                $.each(data, function(key, val) {
+                                    $("#phuong").append('<option value="' + val.WardName + '" data-code="' + val.WardCode + '">' + val.WardName + '</option>');
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Sự kiện khi chọn Phường -> TÍNH PHÍ VẬN CHUYỂN DYNAMIC QUA GHN
+            $("#phuong").change(function() {
+                var districtId = $("#quan").find(':selected').data('id');
+                var wardCode = $(this).find(':selected').data('code');
+
+                if (districtId && wardCode) {
+                    $("#shipping-fee-display").html('<i class="fa fa-spinner fa-spin"></i> Đang tính phí...');
+
+                    $.ajax({
+                        url: "{{ route('ghn.calculate_fee') }}",
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            to_district_id: districtId,
+                            to_ward_code: wardCode,
+                            subtotal: subtotal
+                        },
+                        success: function(res) {
+                            if (res.success) {
+                                var fee = res.fee;
+                                var feeFormatted = res.fee_formatted;
+                                $("#shipping-fee-display").html('<strong class="text-primary">' + feeFormatted + '</strong> <span class="badge bg-success ms-1">GHN</span>');
+
+                                var finalTotal = subtotal + fee - discountAmount;
+                                if (finalTotal < 0) finalTotal = 0;
+
+                                var formattedTotal = new Intl.NumberFormat('vi-VN').format(finalTotal) + ' VNĐ';
+                                $("#total-price-display").text(formattedTotal);
+                            } else {
+                                $("#shipping-fee-display").html('30.000 VNĐ (Tạm tính)');
+                            }
+                        },
+                        error: function() {
+                            $("#shipping-fee-display").html('50.000 VNĐ');
+                        }
+                    });
+                }
+            });
+
+            // Fallback Esgoo API nếu chưa nhập Token GHN
+            function loadEsgooProvinces() {
+                $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+                    if (data_tinh.error == 0) {
+                        $.each(data_tinh.data, function(key_tinh, val_tinh) {
+                            $("#tinh").append('<option value="' + val_tinh.full_name + '" data-id="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                        });
+                    }
+                });
+            }
         });
     </script>
 @endsection

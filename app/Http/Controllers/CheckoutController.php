@@ -61,13 +61,17 @@ class CheckoutController extends Controller
         }
 
 
+        $ghnService = new \App\Services\GHNService();
+        $provinces = $ghnService->getProvinces();
+
         return view("client.checkout.checkout_index", compact(
             'categories',
             'cartItems',
             'subtotal',
             'shippingFee',
             'discountAmount',
-            'totalPrice'
+            'totalPrice',
+            'provinces'
         ));
     }
 
