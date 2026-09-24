@@ -1,27 +1,31 @@
 @extends('layout.admin_layout')
 
-{{-- Alert sau thao tác --}}
-@if (session('success'))
-    <div class="alert alert-primary alert-dismissible alert-alt fade show">
-        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-            <span><i class="mdi mdi-close"></i></span>
-        </button>
-        <strong>Success!</strong> {{ session('success') }}
-    </div>
-@endif
-
-@if (session('error'))
-    <div class="alert alert-danger alert-dismissible alert-alt fade show">
-        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-            <span><i class="mdi mdi-close"></i></span>
-        </button>
-        <strong>Error!</strong> {{ session('error') }}
-    </div>
-@endif
-
 @section('view-content')
     <div class="container-fluid">
-        <button type="button" class="btn btn-primary" onclick="OpenModal('ModalCreateCategory')">Thêm mới</button>
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa fa-check-circle mr-2"></i>{{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa fa-exclamation-triangle mr-2"></i>{{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="card-title mb-0">Danh sách danh mục</h4>
+            <button type="button" class="btn btn-primary" onclick="OpenModal('ModalCreateCategory')">
+                <i class="fa fa-plus mr-1"></i> Thêm mới
+            </button>
+        </div>
 
         <div class="row mt-3">
             <div class="col-12">
@@ -47,7 +51,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 @if ($item->ImageURL)
-                                                    <img src="{{ asset('public/uploads/categories/' . $item->ImageURL) }}"
+                                                    <img src="{{ asset('uploads/categories/' . $item->ImageURL) }}"
                                                         width="50" alt="">
                                                 @else
                                                     <span class="text-muted">Không có ảnh</span>

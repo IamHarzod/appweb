@@ -153,6 +153,29 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="weight">Trọng lượng (g)</label>
+                                                <div class="col-lg-6">
+                                                    <input type="number" step="0.1" class="form-control" id="weight"
+                                                        name="weight" placeholder="VD: 61 hoặc 250 (gram)" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="variants">Phiên bản</label>
+                                                <div class="col-lg-6">
+                                                    <input type="text" class="form-control" id="variants"
+                                                        name="variants" placeholder="VD: USB-C, MagSafe Qi" />
+                                                    <small class="text-muted">Cách nhau bằng dấu phẩy (,)</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-form-label" for="colors">Màu sắc</label>
+                                                <div class="col-lg-6">
+                                                    <input type="text" class="form-control" id="colors"
+                                                        name="colors" placeholder="VD: Trắng, Xám không gian" />
+                                                    <small class="text-muted">Cách nhau bằng dấu phẩy (,)</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Logo</label>
                                                 <div class="col-sm-10">
                                                     <div class="input-group mb-3">

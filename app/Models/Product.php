@@ -25,6 +25,9 @@ class Product extends Model
         'category_id',
         'style',
         'id_brand',
+        'weight',
+        'variants',
+        'colors',
     ];
 
     // Quan hệ với Category (nếu có bảng categories)
@@ -38,9 +41,22 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id'); // chú ý: đúng tên cột
     }
 
-    use HasFactory;
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class, 'product_id', 'id');
+    }
+
+    /**
+     * @deprecated Use orderItems()
+     */
     public function oderItems()
     {
-        return $this->hasMany(OderItem::class);
+        return $this->orderItems();
     }
 }
+

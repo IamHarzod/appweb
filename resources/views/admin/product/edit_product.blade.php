@@ -116,6 +116,29 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Trọng lượng (g)</label>
+                        <div class="col-sm-9">
+                            <input type="number" step="0.1" class="form-control" name="weight" value="{{ $product->weight }}"
+                                placeholder="Ví dụ: 61 hoặc 250 (gram)">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Phiên bản</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="variants" value="{{ $product->variants }}"
+                                placeholder="VD: USB-C, MagSafe Qi (cách nhau bởi dấu phẩy)">
+                            <small class="text-muted">Các phiên bản cách nhau bởi dấu phẩy (,)</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Màu sắc</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="colors" value="{{ $product->colors }}"
+                                placeholder="VD: Trắng, Xám không gian (cách nhau bởi dấu phẩy)">
+                            <small class="text-muted">Các màu sắc cách nhau bởi dấu phẩy (,)</small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Hình ảnh</label>
                         <div class="col-sm-9">
                             <div class="input-group mb-3">
@@ -129,7 +152,7 @@
                                 </div>
                             </div>
                             @if ($product->imageURL)
-                                <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                <img src="{{ asset('uploads/products/' . $product->imageURL) }}"
                                     width="100" height="100" alt="Ảnh sản phẩm">
                             @endif
                         </div>

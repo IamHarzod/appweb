@@ -107,7 +107,7 @@
                                                             onclick="OpenModal(null, '{{ url('/edit-coupon/' . $item->id) }}')">Sửa</button>
                                                         <button type="button"
                                                             class="dropdown-item text-danger btn-open-delete"
-                                                            onclick="DeleteData('{{ url('/delete-product/' . $item->id) }}')">
+                                                            onclick="DeleteData('{{ url('/delete-coupon/' . $item->id) }}')">
                                                             Xoá
                                                         </button>
                                                     </div>

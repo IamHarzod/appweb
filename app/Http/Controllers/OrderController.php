@@ -7,10 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\OderItem;
 use App\Models\Product;
+use App\Services\OrderService;
+use App\Http\Requests\PlaceOrderRequest;
 use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\OderItemController;
 use Illuminate\Support\Facades\Log;
 use App\Services\MoMoService;
 use App\Services\VNPayService;
@@ -28,16 +30,113 @@ class OrderController extends Controller
     public function myOrders()
     {
         $user = Auth::user();
-        $orders = Order::with('oderItems')->where('user_id', $user->id)->orderByDesc('id')->paginate(15);
+        $orders = Order::with('orderItems.product')->where('user_id', $user->id)->orderByDesc('id')->paginate(15);
         return view('client.orders.my_orders', compact('orders'));
     }
 
     // Show single order (ensure ownership or admin)
     public function show($id)
     {
-        $order = Order::with(['oderItems.product', 'user'])->findOrFail($id);
-        $this->authorize('view', $order);
+        $order = Order::with(['orderItems.product', 'user'])->findOrFail($id);
+        if (Auth::user()->role !== 'admin' && $order->user_id !== Auth::id()) {
+            abort(403, 'Bạn không có quyền xem đơn hàng này.');
+        }
         return view('client.orders.show', compact('order'));
+    }
+
+    // Customer cancel own order (only allowed when pending)
+    public function userCancel(Request $request, $id)
+    {
+        $order = Order::with('orderItems')->findOrFail($id);
+
+        if ($order->user_id !== Auth::id()) {
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
+
+        if ($order->status !== 'pending') {
+            return redirect()->back()->with('error', 'Đơn hàng này hiện tại không thể hủy vì đã được xác nhận hoặc đang vận chuyển.');
+        }
+
+        DB::beginTransaction();
+        try {
+            // Hoàn lại tồn kho cho các sản phẩm
+            foreach ($order->orderItems as $item) {
+                if ($item->product_id) {
+                    Product::where('id', $item->product_id)->increment('stockQuantity', (int)$item->quantity);
+                }
+            }
+
+            $order->status = 'cancelled';
+            $order->notes = trim(($order->notes ? $order->notes . ' | ' : '') . 'Khách hàng tự hủy đơn vào ' . now()->format('d/m/Y H:i'));
+            $order->save();
+
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Đã hủy đơn hàng thành công!']);
+            }
+            return redirect()->back()->with('success', 'Đã hủy đơn hàng thành công!');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Lỗi khi khách hủy đơn: ' . $e->getMessage());
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Lỗi khi hủy đơn hàng: ' . $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Lỗi khi hủy đơn: ' . $e->getMessage());
+        }
+    }
+
+    // Show guest order lookup page
+    public function showLookupForm(Request $request)
+    {
+        $order = null;
+        $orderId = $request->query('order_id');
+        $phone = $request->query('phone');
+
+        if ($orderId && $phone) {
+            $order = Order::with(['orderItems.product'])
+                ->where('id', $orderId)
+                ->where(function ($q) use ($phone) {
+                    $q->where('shipping_phone', $phone)
+                      ->orWhere('shipping_phone', 'like', '%' . substr($phone, -9));
+                })
+                ->first();
+        }
+
+        return view('client.orders.lookup', compact('order', 'orderId', 'phone'));
+    }
+
+    // Process lookup form POST
+    public function processLookup(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|numeric',
+            'phone'    => 'required|string',
+        ], [
+            'order_id.required' => 'Vui lòng nhập mã đơn hàng.',
+            'order_id.numeric'  => 'Mã đơn hàng phải là số.',
+            'phone.required'    => 'Vui lòng nhập số điện thoại đặt hàng.',
+        ]);
+
+        $order = Order::with(['orderItems.product'])
+            ->where('id', $request->order_id)
+            ->where(function ($q) use ($request) {
+                $q->where('shipping_phone', $request->phone)
+                  ->orWhere('shipping_phone', 'like', '%' . substr($request->phone, -9));
+            })
+            ->first();
+
+        if (!$order) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Không tìm thấy đơn hàng với thông tin đã nhập. Vui lòng kiểm tra lại Mã đơn và Số điện thoại.');
+        }
+
+        return view('client.orders.lookup', [
+            'order'    => $order,
+            'orderId' => $request->order_id,
+            'phone'   => $request->phone,
+        ]);
     }
 
     // Create order from session cart
@@ -83,24 +182,36 @@ class OrderController extends Controller
 
         DB::beginTransaction();
         try {
+            $user = Auth::user();
             $order = Order::create([
-                'user_id'    => Auth::id(),
-                'unitPrice'  => $unitPrice,
-                'quantity'   => $totalQuantity,
-                'totalPrice' => $totalPrice,
+                'user_id'          => Auth::id(),
+                'shipping_name'    => $user->name ?? 'Khách hàng',
+                'shipping_email'   => $user->email ?? 'no-email@example.com',
+                'shipping_phone'   => $user->phoneNumber ?? '',
+                'shipping_address' => 'Địa chỉ mặc định',
+                'payment_method'   => 'COD',
+                'total_amount'     => $totalPrice,
+                'discount_amount'  => 0,
+                'shipping_fee'     => 0,
+                'status'           => 'pending',
             ]);
 
             foreach ($items as $cartItem) {
-                $product = $cartItem->product;
+                $product = Product::where('id', $cartItem->product_id)->lockForUpdate()->first();
                 if (!$product) {
                     continue;
                 }
-                OderItem::create([
-                    'order_id'   => $order->id,
-                    'product_id' => $product->id,
-                    'quantity'   => (int) $cartItem->quantity,
-                    'UnitPrice'  => (float) $product->price,
-                    'totalPrice' => (float) $product->price * (int) $cartItem->quantity,
+                if ($product->stockQuantity < $cartItem->quantity) {
+                    throw new \Exception('Sản phẩm "' . $product->name . '" không đủ tồn kho (còn: ' . $product->stockQuantity . ').');
+                }
+                $product->decrement('stockQuantity', $cartItem->quantity);
+
+                OrderItem::create([
+                    'order_id'     => $order->id,
+                    'product_id'   => $product->id,
+                    'product_name' => $product->name,
+                    'quantity'     => (int) $cartItem->quantity,
+                    'price'        => (float) $product->price,
                 ]);
             }
             // Xóa cart items sau khi tạo order
@@ -110,10 +221,35 @@ class OrderController extends Controller
             DB::commit();
             // Xóa session cart legacy nếu còn
             session()->forget('cart');
-            return redirect()->route('orders.my')->with('success', 'Đặt hàng thành công!');
+            session(['last_placed_order_id' => $order->id]);
+            return redirect()->route('order.success', ['id' => $order->id])->with('success', 'Đặt hàng thành công!');
         } catch (\Throwable $e) {
             DB::rollBack();
             return back()->with('error', 'Có lỗi xảy ra khi tạo đơn hàng: ' . $e->getMessage());
+        }
+    }
+
+    // Update order status (Admin)
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,processing,shipping,completed,cancelled',
+        ]);
+
+        try {
+            $order = Order::findOrFail($id);
+            $order->status = $request->status;
+            $order->save();
+
+            if ($request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Cập nhật trạng thái đơn hàng thành công!']);
+            }
+            return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công!');
+        } catch (\Throwable $e) {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Lỗi cập nhật trạng thái: ' . $e->getMessage());
         }
     }
 
@@ -121,172 +257,50 @@ class OrderController extends Controller
     public function destroy($id)
     {
         try {
-            // 1. Tìm đơn hàng
-            $order = Order::findOrFail($id);
+            DB::transaction(function () use ($id) {
+                $order = Order::findOrFail($id);
+                $order->orderItems()->delete();
+                $order->delete();
+            });
 
-            // 2. Xóa chi tiết đơn hàng trước (QUAN TRỌNG)
-            // Trong Model Order.php của bạn tên hàm là 'orderItems'
-            // Nên ở đây BẮT BUỘC phải gọi là 'orderItems()'
-            $order->orderItems()->delete();
-
-            // 3. Xóa đơn hàng chính
-            $order->delete();
-
-            // 4. Trả về true để hàm JS DeleteData hiểu là thành công và reload trang
-            return true;
+            if (request()->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Xóa đơn hàng thành công!']);
+            }
+            return redirect()->route('admin.orders.index')->with('success', 'Xóa đơn hàng thành công!');
         } catch (\Throwable $e) {
-            // Nếu có lỗi, ghi log hệ thống để kiểm tra (vào storage/logs/laravel.log xem)
             Log::error("Lỗi xóa đơn hàng: " . $e->getMessage());
-
-            // Trả về false để JS hiện thông báo lỗi
-            return false;
+            if (request()->ajax()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', 'Lỗi khi xóa đơn hàng: ' . $e->getMessage());
         }
     }
 
-    public function placeOrder(Request $request)
+    public function placeOrder(PlaceOrderRequest $request, OrderService $orderService)
     {
-        // DEBUG: Kiểm tra session ngay đầu
-        Log::info('=== START placeOrder ===');
-        Log::info('Session has coupon?', ['has' => Session::has('coupon')]);
-        if (Session::has('coupon')) {
-            Log::info('Coupon in session', Session::get('coupon'));
-        }
+        Log::info('=== START placeOrder ===', ['user_id' => Auth::id()]);
 
-        // 1. Validate dữ liệu
-        $request->validate([
-            'shipping_name' => 'required',
-            'shipping_phone' => 'required',
-            'shipping_address' => 'required',
-            'tinh_thanh' => 'required',
-            'quan_huyen' => 'required',
-            'phuong_xa' => 'required',
-        ]);
-
-        // 2. Lấy dữ liệu giỏ hàng (Xử lý cả 2 trường hợp: Login và Chưa Login)
-        $subtotal = 0;
-        $orderData = [];
-        $productTotal = 0; // Đổi tên biến này thành Tiền Hàng cho dễ hiểu
-        $cartDB = null;
-
-        if (Auth::check()) {
-            // TRƯỜNG HỢP 1: Đã đăng nhập -> Lấy từ Database
-            $cartDB = \App\Models\Cart::with('cartItems.product')
-                ->where('user_id', Auth::id())
-                ->first();
-
-            if ($cartDB && $cartDB->cartItems->count() > 0) {
-                foreach ($cartDB->cartItems as $item) {
-                    $orderData[] = [
-                        'product_id' => $item->product_id,
-                        'name' => $item->product->name,
-                        'price' => $item->product->price,
-                        'quantity' => $item->quantity,
-                        'total' => $item->product->price * $item->quantity
-                    ];
-                    $productTotal += $item->product->price * $item->quantity;
-                }
-            }
-        } else {
-            // TRƯỜNG HỢP 2: Khách vãng lai -> Lấy từ Session
-            $sessionCart = Session::get('cart', []);
-            foreach ($sessionCart as $id => $details) {
-                $orderData[] = [
-                    'product_id' => $id,
-                    'name' => $details['name'],
-                    'price' => $details['price'],
-                    'quantity' => $details['quantity'],
-                    'total' => $details['price'] * $details['quantity']
-                ];
-                $productTotal += $details['price'] * $details['quantity'];
-            }
-        }
-
-        // Kiểm tra lại lần cuối xem có hàng không
-        if (empty($orderData)) {
-            return redirect()->back()->with('error', 'Giỏ hàng trống! Vui lòng chọn sản phẩm.');
-        }
-
-        $shippingFee = (float) Session::get('ghn_shipping_fee', 50000);
-        $discountAmount = 0;
-        $couponCode = null;
-
-        // Tính toán discount từ coupon session (giống CheckoutController)
-        if (Session::has('coupon')) {
-            $coupon = Session::get('coupon');
-            $couponCode = $coupon['code'] ?? null;
-
-            Log::info('Coupon applied in placeOrder', [
-                'code' => $couponCode,
-                'type' => $coupon['type'] ?? null,
-                'value' => $coupon['value'] ?? null
-            ]);
-
-            if ($coupon['type'] == 'free_ship') {
-                $tempShipping = $shippingFee - $coupon['value'];
-                $shippingFee = $tempShipping < 0 ? 0 : $tempShipping;
-                Log::info('Free ship applied', ['new_shipping_fee' => $shippingFee]);
-            } elseif ($coupon['type'] == 'fixed') {
-                // Giảm giá cố định (VD: 100.000đ)
-                $discountAmount = $coupon['value'];
-            } elseif ($coupon['type'] == 'percent') {
-                // Giảm giá theo % (VD: 10%)
-                $discountAmount = ($productTotal * $coupon['value']) / 100;
-            }
-        } else {
-            Log::info('No coupon in session when placing order');
-        }
-
-        // Miễn phí ship nếu đơn hàng > 10 triệu
-        if ($productTotal > 10000000) {
-            $shippingFee = 0;
-        }
-
-        $finalTotalAmount = $productTotal + $shippingFee - $discountAmount;
-        if ($finalTotalAmount < 0) $finalTotalAmount = 0;
-        DB::beginTransaction();
         try {
-            $fullAddress = $request->shipping_address . ', ' . $request->phuong_xa . ', ' . $request->quan_huyen . ', ' . $request->tinh_thanh;
-
-            $paymentMethod = $request->payment_method ?? 'COD';
-            $paymentStatus = ($paymentMethod === 'COD') ? 'unpaid' : 'unpaid';
-
-            $order = Order::create([
-                'user_id' => Auth::id() ?? null,
-                'shipping_name' => $request->shipping_name,
-                'shipping_email' => $request->shipping_email,
-                'shipping_phone' => $request->shipping_phone,
-                'shipping_address' => $fullAddress,
-                'notes' => $request->ghichu,
-                'payment_method' => $paymentMethod,
-                'payment_status' => $paymentStatus,
-
-                // LƯU CÁC SỐ QUAN TRỌNG
-                'total_amount' => $finalTotalAmount,       // Tổng thực trả
-                'discount_amount' => $discountAmount,      // Lưu số tiền đã giảm
-                'shipping_fee' => $shippingFee,            // Lưu phí vận chuyển
-
-                'status' => 'pending',
+            $paymentMethod = $request->input('payment_method', 'COD');
+            $shippingData = array_merge($request->validated(), [
+                'shipping_name'    => $request->input('shipping_name'),
+                'shipping_phone'   => $request->input('shipping_phone'),
+                'shipping_email'   => $request->input('shipping_email'),
+                'shipping_address' => $request->input('shipping_address'),
+                'shipping_fee'     => $request->input('shipping_fee'),
+                'tinh_thanh_name'   => $request->input('tinh_thanh_name', $request->input('tinh_thanh')),
+                'quan_huyen_name'  => $request->input('quan_huyen_name', $request->input('quan_huyen')),
+                'phuong_xa_name'   => $request->input('phuong_xa_name', $request->input('phuong_xa')),
+                'latitude'         => $request->input('latitude'),
+                'longitude'        => $request->input('longitude'),
+                'to_district_id'   => $request->input('to_district_id'),
+                'to_ward_code'     => $request->input('to_ward_code'),
+                'ghichu'           => $request->input('ghichu'),
+                'payment_method'   => $paymentMethod,
+            ]);
             ]);
 
-            foreach ($orderData as $item) {
-                OderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['product_id'],
-                    'product_name' => $item['name'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                ]);
-            }
-
-            // 4. Xóa giỏ hàng sau khi đặt thành công
-            if (Auth::check() && $cartDB) {
-                \App\Models\CartItem::where('cart_id', $cartDB->id)->delete();
-                $cartDB->update(['totalPrice' => 0]);
-            } else {
-                Session::forget('cart');
-            }
-
-            DB::commit();
+            $order = $orderService->placeOrder($shippingData, $request);
 
             // Nếu người dùng chọn thanh toán qua VNPAY -> Redirect trực tiếp sang cổng VNPAY Sandbox
             if ($paymentMethod === 'VNPAY') {
@@ -310,7 +324,6 @@ class OrderController extends Controller
 
             return redirect()->route('order.success', ['id' => $order->id])->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {
-            DB::rollBack();
             return redirect()->back()->with('error', 'Lỗi hệ thống: ' . $e->getMessage());
         }
     }
@@ -487,11 +500,17 @@ class OrderController extends Controller
     public function showSuccess($id)
     {
         // Lấy đơn hàng kèm theo chi tiết sản phẩm
-        $order = Order::with('orderItems')->findOrFail($id);
+        $order = Order::with('orderItems.product')->findOrFail($id);
 
-        // Kiểm tra quyền: Chỉ cho xem nếu là chủ đơn hàng (nếu bạn muốn bảo mật chặt hơn)
-        if (Auth::check() && $order->user_id !== Auth::id()) {
-            abort(403);
+        // Kiểm tra quyền chống IDOR: Chỉ cho xem nếu là chủ đơn hàng hoặc khách vừa đặt trong session
+        if (Auth::check()) {
+            if ($order->user_id && $order->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+                abort(403, 'Bạn không có quyền xem thông tin đơn hàng này.');
+            }
+        } else {
+            if (session('last_placed_order_id') != $id) {
+                abort(403, 'Bạn không có quyền xem thông tin đơn hàng này.');
+            }
         }
         $categories = \App\Models\Category::all();
 

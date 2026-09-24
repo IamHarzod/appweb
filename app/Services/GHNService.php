@@ -2,25 +2,41 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
 class GHNService
 {
+    protected string $baseUrl;
     protected string $token;
-    protected string $shopId;
-    protected string $endpoint;
+    protected int $shopId;
     protected int $fromDistrictId;
     protected string $fromWardCode;
 
     public function __construct()
     {
-        $this->token = config('ghn.token', '');
-        $this->shopId = (string) config('ghn.shop_id', '');
-        $this->endpoint = rtrim(config('ghn.endpoint', 'https://dev-online-gateway.ghn.vn/shiip/public-api/'), '/') . '/';
-        $this->fromDistrictId = (int) config('ghn.from_district_id', 1482);
-        $this->fromWardCode = (string) config('ghn.from_ward_code', '11007');
+        $this->baseUrl = rtrim(config('services.ghn.base_url', config('ghn.endpoint', 'https://dev-online-gateway.ghn.vn/shiip/public-api')), '/');
+        $this->token = (string) (config('services.ghn.token') ?? config('ghn.token', ''));
+        $this->shopId = (int) (config('services.ghn.shop_id') ?? config('ghn.shop_id', 0));
+        $this->fromDistrictId = (int) (config('services.ghn.from_district_id') ?? config('ghn.from_district_id', 1482));
+        $this->fromWardCode = (string) (config('services.ghn.from_ward_code') ?? config('ghn.from_ward_code', '11007'));
+    }
+
+    protected function client()
+    {
+        return Http::baseUrl($this->baseUrl)
+            ->withOptions([
+                'verify' => filter_var(config('services.ghn.verify_ssl', false), FILTER_VALIDATE_BOOLEAN),
+            ])
+            ->acceptJson()
+            ->timeout(15)
+            ->withHeaders([
+                'Token'        => $this->token,
+                'ShopId'       => $this->shopId,
+                'Content-Type' => 'application/json',
+            ]);
     }
 
     /**
@@ -29,24 +45,15 @@ class GHNService
     public function getProvinces(): array
     {
         return Cache::remember('ghn_provinces_list_v2', 86400, function () {
-            try {
-                $response = Http::withHeaders([
-                    'Token' => $this->token,
-                    'Content-Type' => 'application/json'
-                ])->post($this->endpoint . 'master-data/province');
-
-                $result = $response->json();
-                if (isset($result['code']) && $result['code'] == 200) {
-                    $provinces = $result['data'] ?? [];
-                    usort($provinces, function ($a, $b) {
-                        return strcmp($a['ProvinceName'], $b['ProvinceName']);
-                    });
-                    return $provinces;
-                }
-            } catch (\Exception $e) {
-                Log::error('GHN getProvinces Error: ' . $e->getMessage());
+            $res = $this->get('/master-data/province');
+            if (isset($res['code']) && $res['code'] == 200 && is_array($res['data'] ?? null)) {
+                $provinces = $res['data'];
+                usort($provinces, function ($a, $b) {
+                    return strcmp($a['ProvinceName'] ?? '', $b['ProvinceName'] ?? '');
+                });
+                return $provinces;
             }
-            return [];
+            return $res['data'] ?? [];
         });
     }
 
@@ -56,26 +63,17 @@ class GHNService
     public function getDistricts(int $provinceId): array
     {
         return Cache::remember("ghn_districts_{$provinceId}_v2", 86400, function () use ($provinceId) {
-            try {
-                $response = Http::withHeaders([
-                    'Token' => $this->token,
-                    'Content-Type' => 'application/json'
-                ])->post($this->endpoint . 'master-data/district', [
-                    'province_id' => $provinceId
-                ]);
-
-                $result = $response->json();
-                if (isset($result['code']) && $result['code'] == 200) {
-                    $districts = $result['data'] ?? [];
-                    usort($districts, function ($a, $b) {
-                        return strcmp($a['DistrictName'], $b['DistrictName']);
-                    });
-                    return $districts;
-                }
-            } catch (\Exception $e) {
-                Log::error('GHN getDistricts Error: ' . $e->getMessage());
+            $res = $this->post('/master-data/district', [
+                'province_id' => $provinceId
+            ]);
+            if (isset($res['code']) && $res['code'] == 200 && is_array($res['data'] ?? null)) {
+                $districts = $res['data'];
+                usort($districts, function ($a, $b) {
+                    return strcmp($a['DistrictName'] ?? '', $b['DistrictName'] ?? '');
+                });
+                return $districts;
             }
-            return [];
+            return $res['data'] ?? [];
         });
     }
 
@@ -85,40 +83,35 @@ class GHNService
     public function getWards(int $districtId): array
     {
         return Cache::remember("ghn_wards_{$districtId}_v2", 86400, function () use ($districtId) {
-            try {
-                $response = Http::withHeaders([
-                    'Token' => $this->token,
-                    'Content-Type' => 'application/json'
-                ])->post($this->endpoint . 'master-data/ward?district_id=' . $districtId, [
-                    'district_id' => $districtId
-                ]);
-
-                $result = $response->json();
-                if (isset($result['code']) && $result['code'] == 200) {
-                    $wards = $result['data'] ?? [];
-                    usort($wards, function ($a, $b) {
-                        return strcmp($a['WardName'], $b['WardName']);
-                    });
-                    return $wards;
-                }
-            } catch (\Exception $e) {
-                Log::error('GHN getWards Error: ' . $e->getMessage());
+            $res = $this->post('/master-data/ward?district_id=' . $districtId, [
+                'district_id' => $districtId
+            ]);
+            if (isset($res['code']) && $res['code'] == 200 && is_array($res['data'] ?? null)) {
+                $wards = $res['data'];
+                usort($wards, function ($a, $b) {
+                    return strcmp($a['WardName'] ?? '', $b['WardName'] ?? '');
+                });
+                return $wards;
             }
-            return [];
+            return $res['data'] ?? [];
         });
     }
 
     /**
      * Tính phí vận chuyển GHN
-     * 
-     * @param int $toDistrictId
-     * @param string $toWardCode
-     * @param int $weight Grams (mặc định 1000g = 1kg)
-     * @param int $insuranceValue Giá trị đơn hàng để khai giá (VNĐ)
-     * @return array ['success' => bool, 'fee' => float, 'message' => string]
      */
-    public function calculateFee(int $toDistrictId, string $toWardCode, int $weight = 1000, int $insuranceValue = 0): array
+    public function calculateFee($toDistrictId, $toWardCode = null, int $weight = 1000, int $insuranceValue = 0): array
     {
+        if (is_array($toDistrictId)) {
+            $params = $toDistrictId;
+            return $this->post('/v2/shipping-order/fee', array_merge([
+                'shop_id' => $this->shopId,
+            ], $params));
+        }
+
+        $districtId = (int) $toDistrictId;
+        $wardCode = (string) $toWardCode;
+
         if (empty($this->token) || empty($this->shopId)) {
             return [
                 'success' => false,
@@ -128,28 +121,20 @@ class GHNService
         }
 
         try {
-            // Thử service_type_id = 2 (Chuẩn thương mại điện tử)
             $payload = [
                 'service_type_id'  => 2,
                 'from_district_id' => $this->fromDistrictId,
                 'from_ward_code'   => $this->fromWardCode,
-                'to_district_id'   => $toDistrictId,
-                'to_ward_code'     => (string) $toWardCode,
+                'to_district_id'   => $districtId,
+                'to_ward_code'     => $wardCode,
                 'height'           => 10,
                 'length'           => 10,
                 'width'            => 10,
                 'weight'           => $weight > 0 ? $weight : 1000,
-                'insurance_value'  => min($insuranceValue, 5000000) // Tối đa 5tr nếu test
+                'insurance_value'  => min($insuranceValue, 5000000)
             ];
 
-            $response = Http::withHeaders([
-                'Token'        => $this->token,
-                'ShopId'       => $this->shopId,
-                'Content-Type' => 'application/json'
-            ])->post($this->endpoint . 'v2/shipping-order/fee', $payload);
-
-            $result = $response->json();
-            Log::info('GHN Fee API Response:', $result ?? []);
+            $result = $this->post('/v2/shipping-order/fee', $payload);
 
             if (isset($result['code']) && $result['code'] == 200 && isset($result['data']['total'])) {
                 return [
@@ -159,30 +144,19 @@ class GHNService
                 ];
             }
 
-            // Nếu service_type_id = 2 không được, tìm service_id khả dụng
-            $serviceResponse = Http::withHeaders([
-                'Token'        => $this->token,
-                'Content-Type' => 'application/json'
-            ])->post($this->endpoint . 'v2/shipping-order/available-services', [
-                'shop_id'       => (int) $this->shopId,
+            // Thử lấy available services nếu service_type_id = 2 không được
+            $serviceResult = $this->post('/v2/shipping-order/available-services', [
+                'shop_id'       => $this->shopId,
                 'from_district' => $this->fromDistrictId,
-                'to_district'   => $toDistrictId
+                'to_district'   => $districtId
             ]);
 
-            $serviceResult = $serviceResponse->json();
             $serviceId = $serviceResult['data'][0]['service_id'] ?? null;
-
             if ($serviceId) {
                 unset($payload['service_type_id']);
                 $payload['service_id'] = $serviceId;
 
-                $response2 = Http::withHeaders([
-                    'Token'        => $this->token,
-                    'ShopId'       => $this->shopId,
-                    'Content-Type' => 'application/json'
-                ])->post($this->endpoint . 'v2/shipping-order/fee', $payload);
-
-                $result2 = $response2->json();
+                $result2 = $this->post('/v2/shipping-order/fee', $payload);
                 if (isset($result2['code']) && $result2['code'] == 200 && isset($result2['data']['total'])) {
                     return [
                         'success' => true,
@@ -197,13 +171,78 @@ class GHNService
                 'fee'     => 30000,
                 'message' => $result['message'] ?? 'Không thể tính phí vận chuyển GHN'
             ];
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('GHN calculateFee Error: ' . $e->getMessage());
             return [
                 'success' => false,
                 'fee'     => 30000,
                 'message' => 'Lỗi kết nối GHN API: ' . $e->getMessage()
             ];
+        }
+    }
+
+    // Tạo đơn giao hàng
+    public function createOrder(array $orderData): array
+    {
+        return $this->post('/v2/shipping-order/create', array_merge([
+            'shop_id' => $this->shopId,
+        ], $orderData));
+    }
+
+    // Hủy đơn hàng
+    public function cancelOrder(array $orderCodes): array
+    {
+        return $this->post('/v2/switch-status/cancel', [
+            'order_codes' => $orderCodes,
+            'shop_id'     => $this->shopId,
+        ]);
+    }
+
+    protected function get(string $uri, array $query = []): array
+    {
+        try {
+            $response = $this->client()->get($uri, $query);
+
+            if (!$response->successful()) {
+                Log::warning('GHN GET request failed', [
+                    'uri'    => $uri,
+                    'status' => $response->status(),
+                    'body'   => $response->json(),
+                ]);
+                return ['code' => $response->status(), 'message' => 'GHN API request failed.', 'data' => null];
+            }
+
+            return $response->json() ?? ['code' => -1, 'message' => 'GHN returned an empty response.', 'data' => null];
+        } catch (ConnectionException $exception) {
+            Log::error('Unable to connect to GHN', ['uri' => $uri, 'error' => $exception->getMessage()]);
+            return ['code' => -1, 'message' => 'Unable to connect to GHN: ' . $exception->getMessage(), 'data' => null];
+        } catch (\Throwable $exception) {
+            Log::error('GHN GET general error', ['uri' => $uri, 'error' => $exception->getMessage()]);
+            return ['code' => -1, 'message' => $exception->getMessage(), 'data' => null];
+        }
+    }
+
+    protected function post(string $uri, array $payload): array
+    {
+        try {
+            $response = $this->client()->post($uri, $payload);
+
+            if (!$response->successful()) {
+                Log::warning('GHN POST request failed', [
+                    'uri'    => $uri,
+                    'status' => $response->status(),
+                    'body'   => $response->json(),
+                ]);
+                return $response->json() ?? ['code' => $response->status(), 'message' => 'GHN API request failed.'];
+            }
+
+            return $response->json() ?? ['code' => -1, 'message' => 'GHN returned an empty response.'];
+        } catch (ConnectionException $exception) {
+            Log::error('Unable to connect to GHN', ['uri' => $uri, 'error' => $exception->getMessage()]);
+            return ['code' => -1, 'message' => 'Unable to connect to GHN: ' . $exception->getMessage()];
+        } catch (\Throwable $exception) {
+            Log::error('GHN POST general error', ['uri' => $uri, 'error' => $exception->getMessage()]);
+            return ['code' => -1, 'message' => $exception->getMessage()];
         }
     }
 }

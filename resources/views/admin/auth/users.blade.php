@@ -4,7 +4,16 @@
         <div class="row">
             <div class="col-12">
                 @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <i class="fa fa-check-circle mr-2"></i>{{ session('success') }}
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <i class="fa fa-exclamation-triangle mr-2"></i>{{ session('error') }}
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
                 @endif
                 <div class="card">
                     <div class="card-header">
@@ -41,7 +50,14 @@
                                                 </form>
                                             </td>
                                             <td>
-                                                {{-- future actions here --}}
+                                                @if ($u->id === auth()->id())
+                                                    <span class="badge badge-info">Đang đăng nhập</span>
+                                                @else
+                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                        onclick="DeleteData('{{ route('admin.users.destroy', $u->id) }}')">
+                                                        <i class="fa fa-trash"></i> Xoá
+                                                    </button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

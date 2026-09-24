@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Đăng kí tài khoản </title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/admin/images/favicon.png') }}">
-    <link href="{{ asset('public/admin/css/style.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin/images/favicon.png') }}">
+    <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
 
 </head>
 
@@ -75,8 +75,8 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="{{ asset('public/admin/vendor/global/global.min.js') }}"></script>
-    <script src="{{ asset('public/admin/js/quixnav-init.js') }}"></script>
+    <script src="{{ asset('admin/vendor/global/global.min.js') }}"></script>
+    <script src="{{ asset('admin/js/quixnav-init.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

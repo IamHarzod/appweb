@@ -16,7 +16,7 @@ class ProductController extends Controller
 {
     public function show_product()
     {
-        $product = Product::get();
+        $product = Product::with(['category', 'brand'])->orderBy('id', 'desc')->get();
         return view("admin.product.show_product")->with("products", $product);
     }
 
@@ -41,6 +41,9 @@ class ProductController extends Controller
             'imageURL' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'id_brand' => 'required|integer',
             'category_id' => 'required|integer',
+            'weight' => 'nullable|numeric|min:0',
+            'variants' => 'nullable|string|max:500',
+            'colors' => 'nullable|string|max:500',
         ]);
 
         $filename = null;
@@ -76,6 +79,9 @@ class ProductController extends Controller
             'style' => $validated['style'] ?? null,
             'category_id' => $validated['category_id'],
             'id_brand' => $validated['id_brand'],
+            'weight' => $validated['weight'] ?? null,
+            'variants' => $validated['variants'] ?? null,
+            'colors' => $validated['colors'] ?? null,
         ]);
 
         return redirect("/show-product")->with('success', 'Thêm sản phẩm thành công!');
@@ -124,6 +130,9 @@ class ProductController extends Controller
             'imageURL' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'id_brand' => 'required|integer',
             'category_id' => 'required|integer',
+            'weight' => 'nullable|numeric|min:0',
+            'variants' => 'nullable|string|max:500',
+            'colors' => 'nullable|string|max:500',
         ]);
 
         if ($request->hasFile('imageURL') && $request->file('imageURL')->isValid()) {
@@ -158,6 +167,9 @@ class ProductController extends Controller
         $product->style = $validated['style'] ?? null;
         $product->category_id = $validated['category_id'];
         $product->id_brand = $validated['id_brand'];
+        $product->weight = $validated['weight'] ?? $product->weight;
+        $product->variants = $validated['variants'] ?? null;
+        $product->colors = $validated['colors'] ?? null;
 
         $product->save();
 
@@ -178,27 +190,27 @@ class ProductController extends Controller
     }
     public function autocomplete_ajax(Request $request)
     {
-        $data = $request->all();
-        if ($data['query']) {
-            $product = Product::where('name', 'LIKE', '%' . $data['query'] . '%')->get();
+        $query = $request->input('query');
+        if ($query) {
+            $product = Product::where('name', 'LIKE', '%' . $query . '%')
+                ->where('IsActive', 1)
+                ->limit(10)
+                ->get();
 
             $output = '<ul class="dropdown-menu" style="display:block; position:relative; width:100%;">';
 
             if ($product->count() > 0) {
                 foreach ($product as $key => $val) {
-                    // Đường dẫn ảnh (Bạn sửa lại theo đúng đường dẫn trong project của bạn)
-                    $image = asset('public/uploads/products/' . $val->imageURL);
-
-                    // Đường dẫn chi tiết sản phẩm (Giả sử route chi tiết của bạn là /product-details/{id})
-                    // Bạn hãy thay '/product-details/' bằng URL thực tế của bạn
+                    $image = asset('uploads/products/' . $val->imageURL);
                     $link = url('/product/' . $val->id);
+                    $safeName = htmlspecialchars($val->name, ENT_QUOTES, 'UTF-8');
 
                     $output .= '
                 <li class="search-item">
                     <a href="' . $link . '" style="display: flex; align-items: center; padding: 10px; text-decoration: none; color: black;">
-                        <img src="' . $image . '" alt="' . $val->name . '" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+                        <img src="' . $image . '" alt="' . $safeName . '" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
                         <div>
-                            <span style="font-weight: bold; font-size: 14px; display: block;">' . $val->name . '</span>
+                            <span style="font-weight: bold; font-size: 14px; display: block;">' . $safeName . '</span>
                             <span style="color: red; font-size: 13px;">' . number_format($val->price, 0, ',', '.') . ' VNĐ</span>
                         </div>
                     </a>
@@ -209,7 +221,8 @@ class ProductController extends Controller
             }
 
             $output .= '</ul>';
-            echo $output;
+            return response($output);
         }
+        return response('');
     }
 }

@@ -11,18 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('oder_items', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('product_id');
-            $table->integer('quantity');
-            $table->decimal('UnitPrice', 10, 2);
-            $table->decimal('totalPrice', 10, 2);
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');   
-
-        });
+        // Schema cũ đã được thay thế hoàn toàn bởi migration 2025_11_24_150927_create_order_items_table.php
     }
 
     /**

@@ -87,7 +87,7 @@
                                 <div class="form-group row">
                                     <div class="col-lg-8 ml-auto">
                                         <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                        <a href="{{ route('coupon.index') }}" class="btn btn-secondary">Hủy bỏ</a>
+                                        <button type="button" class="btn btn-secondary" onclick="CloseModal('ModalEdit')">Hủy bỏ</button>
                                     </div>
                                 </div>
                             </div>

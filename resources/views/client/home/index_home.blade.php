@@ -43,7 +43,7 @@
 
                     <div class="row g-0 header-carousel-item align-items-center">
                         <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                            <img src="{{ asset('public/client/img/macbook-banner.png') }}" class="img-fluid" alt="Image">
+                            <img src="{{ asset('client/img/macbook-banner.png') }}" class="img-fluid" alt="Image">
                         </div>
                         <div class="col-xl-6 carousel-content p-4">
                             <h4 class="text-uppercase fw-bold mb-3 wow fadeInRight" data-wow-delay="0.1s"
@@ -63,7 +63,7 @@
 
                     <div class="row g-0 header-carousel-item align-items-center">
                         <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                            <img src="{{ asset('public/client/img/Mac-studio-banner.png') }}" class="img-fluid"
+                            <img src="{{ asset('client/img/Mac-studio-banner.png') }}" class="img-fluid"
                                 alt="Image">
                         </div>
                         <div class="col-xl-6 carousel-content p-4">
@@ -89,7 +89,7 @@
                 <div class="carousel-header-banner position-relative"
                     style="height: var(--slide-height) !important; overflow: hidden; background: #000;">
 
-                    <img src="{{ asset('public/client/img/Vision-Pro-Banner.jpg') }}" class="img-fluid w-100 h-100"
+                    <img src="{{ asset('client/img/Vision-Pro-Banner.jpg') }}" class="img-fluid w-100 h-100"
                         style="object-fit: cover; object-position: center;" alt="Image">
 
                     <div class="carousel-banner-offer" style="position: absolute; top: 20px; right: 20px; z-index: 2;">
@@ -198,7 +198,7 @@
                             <h1 class="display-3 text-secondary mb-0">40% <span class="text-primary fw-normal">Off</span>
                             </h1>
                         </div>
-                        <img src="{{ asset('public/client/img/product-1.png') }}" class="img-fluid" alt="">
+                        <img src="{{ asset('client/img/product-1.png') }}" class="img-fluid" alt="">
                     </a>
                 </div>
                 <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.3s">
@@ -210,7 +210,7 @@
                             <h1 class="display-3 text-secondary mb-0">20% <span class="text-primary fw-normal">Off</span>
                             </h1>
                         </div>
-                        <img src="{{ asset('public/client/img/product-2.png') }}" class="img-fluid" alt="">
+                        <img src="{{ asset('client/img/product-2.png') }}" class="img-fluid" alt="">
                     </a>
                 </div>
             </div>
@@ -261,16 +261,16 @@
                                     <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="product-item-inner border rounded">
                                             <div class="product-item-inner-item">
-                                                <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                                <img src="{{ asset('uploads/products/' . $product->imageURL) }}"
                                                     class="img-fluid w-100 rounded-top" alt="">
                                                 <div class="product-new">Mới</div>
                                                 <div class="product-details">
-                                                    <a href="    }}"><i class="fa fa-eye fa-1x"></i></a>
+                                                    <a href="{{ route('product.detail', $product->id) }}"><i class="fa fa-eye fa-1x"></i></a>
                                                 </div>
                                             </div>
                                             <div class="text-center rounded-bottom p-4">
                                                 <a href="{{ route('product.detail', $product->id) }}"
-                                                    class="d-block mb-2">{{ $product->category->name }}</a>
+                                                    class="d-block mb-2">{{ $product->category?->name ?? 'Sản phẩm' }}</a>
                                                 <a href="{{ route('product.detail', $product->id) }}" class="d-block h4">
                                                     {{ $product->name }} <br> </a>
                                                 @php
@@ -278,7 +278,7 @@
                                                     $percent = (int) ($product->discountPercent ?? 0);
                                                     $percent = max(0, min(100, $percent)); // chặn ngoài 0–100
 
-                                                    // giá sau giảm (làm tròn đến đơn vị đồng; nếu muốn tới nghìn dùng round($..., -3))
+                                                    // giá sau giảm
                                                     $discounted = ($price * (100 - $percent)) / 100;
 
                                                     // format VND: 1.234.567đ
@@ -296,12 +296,26 @@
                                         </div>
                                         <div
                                             class="product-item-add border border-top-0 rounded-bottom text-center p-4 pt-0">
-                                            <button
-                                                class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4 add-to-cart-btn"
-                                                data-product-id="{{ $product->id }}"
-                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                                <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                            </button>
+                                            <div class="d-flex justify-content-center gap-2 mb-4 px-1">
+                                                <button type="button"
+                                                    class="btn btn-outline-primary border-secondary rounded-pill py-2 px-2 add-to-cart-btn flex-fill text-nowrap"
+                                                    style="font-size: 13px;"
+                                                    data-product-id="{{ $product->id }}"
+                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                    onclick="if(window.addToCartDirect){window.addToCartDirect({{ $product->id }}, this);}"
+                                                    title="Thêm vào giỏ hàng">
+                                                    <i class="fas fa-shopping-cart me-1"></i> Thêm giỏ
+                                                </button>
+                                                <button type="button"
+                                                    class="btn btn-primary border-secondary rounded-pill py-2 px-2 buy-now-btn flex-fill text-nowrap text-white"
+                                                    style="font-size: 13px;"
+                                                    data-product-id="{{ $product->id }}"
+                                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                    onclick="if(window.buyNowDirect){window.buyNowDirect({{ $product->id }}, this);}else{window.location.href='{{ route('checkout.index') }}';}"
+                                                    title="Mua ngay">
+                                                    <i class="fas fa-bolt me-1"></i> Mua ngay
+                                                </button>
+                                            </div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex">
                                                     <i class="fas fa-star text-primary"></i>
@@ -314,11 +328,11 @@
                                                     <a href="#"
                                                         class="text-primary d-flex align-items-center justify-content-center me-3"><span
                                                             class="rounded-circle btn-sm-square border"><i
-                                                                class="fas fa-random"></i></i></a>
+                                                                class="fas fa-random"></i></span></a>
                                                     <a href="#"
                                                         class="text-primary d-flex align-items-center justify-content-center me-0"><span
                                                             class="rounded-circle btn-sm-square border"><i
-                                                                class="fas fa-heart"></i></a>
+                                                                class="fas fa-heart"></i></span></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -349,7 +363,7 @@
                             <div class="row g-0">
                                 <div class="col-5">
                                     <div class="products-mini-img border-end h-100">
-                                        <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                        <img src="{{ asset('uploads/products/' . $product->imageURL) }}"
                                             class="img-fluid w-100 h-100" alt="Image">
                                         <div class="products-mini-icon rounded-circle bg-primary">
                                             <a href="{{ route('product.detail', $product->id) }}"><i
@@ -360,7 +374,7 @@
                                 <div class="col-7">
                                     <div class="products-mini-content p-3">
                                         <a href="{{ route('product.detail', $product->id) }}"
-                                            class="d-block mb-2">{{ $product->category->name }}</a>
+                                            class="d-block mb-2">{{ $product->category?->name ?? 'Sản phẩm' }}</a>
                                         <a href="{{ route('product.detail', $product->id) }}"
                                             class="d-block h4">{{ $product->name }} <br></a>
 
@@ -369,7 +383,7 @@
                                             $percent = (int) ($product->discountPercent ?? 0);
                                             $percent = max(0, min(100, $percent)); // chặn ngoài 0–100
 
-                                            // giá sau giảm (làm tròn đến đơn vị đồng; nếu muốn tới nghìn dùng round($..., -3))
+                                            // giá sau giảm
                                             $discounted = ($price * (100 - $percent)) / 100;
 
                                             // format VND: 1.234.567đ
@@ -387,20 +401,35 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="products-mini-add border p-3">
-                                <button class="btn btn-primary border-secondary rounded-pill py-2 px-4 add-to-cart-btn"
-                                    data-product-id="{{ $product->id }}"
-                                    data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                    <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                </button>
+                            <div class="products-mini-add border p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <div class="d-flex gap-2">
+                                    <button type="button"
+                                        class="btn btn-outline-primary border-secondary rounded-pill py-2 px-3 add-to-cart-btn text-nowrap"
+                                        style="font-size: 13px;"
+                                        data-product-id="{{ $product->id }}"
+                                        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                        onclick="if(window.addToCartDirect){window.addToCartDirect({{ $product->id }}, this);}"
+                                        title="Thêm vào giỏ hàng">
+                                        <i class="fas fa-shopping-cart me-1"></i> Thêm giỏ
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-primary border-secondary rounded-pill py-2 px-3 buy-now-btn text-nowrap text-white"
+                                        style="font-size: 13px;"
+                                        data-product-id="{{ $product->id }}"
+                                        data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                        onclick="if(window.buyNowDirect){window.buyNowDirect({{ $product->id }}, this);}else{window.location.href='{{ route('checkout.index') }}';}"
+                                        title="Mua ngay">
+                                        <i class="fas fa-bolt me-1"></i> Mua ngay
+                                    </button>
+                                </div>
                                 <div class="d-flex">
                                     <a href="#"
                                         class="text-primary d-flex align-items-center justify-content-center me-3"><span
                                             class="rounded-circle btn-sm-square border"><i
-                                                class="fas fa-random"></i></i></a>
+                                                class="fas fa-random"></i></span></a>
                                     <a href="#"
                                         class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                            class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></a>
+                                            class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></span></a>
                                 </div>
                             </div>
                         </div>
@@ -420,12 +449,19 @@
                     </div>
                     <div class="row g-4">
                         @foreach ($best_seller_product as $product)
+                            @php
+                                $price = (float) ($product->price ?? 0);
+                                $percent = (int) ($product->discountPercent ?? 0);
+                                $percent = max(0, min(100, $percent));
+                                $discounted = ($price * (100 - $percent)) / 100;
+                                $fmt = fn($n) => number_format($n, 0, ',', '.') . 'đ';
+                            @endphp
                             <div class="col-md-6 col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
                                 <div class="products-mini-item border">
                                     <div class="row g-0">
                                         <div class="col-5">
                                             <div class="products-mini-img border-end h-100">
-                                                <img src="{{ asset('public/uploads/products/' . $product->imageURL) }}"
+                                                <img src="{{ asset('uploads/products/' . $product->imageURL) }}"
                                                     class="img-fluid w-100 h-100" alt="Image">
                                                 <div class="products-mini-icon rounded-circle bg-primary">
                                                     <a href="{{ route('product.detail', $product->id) }}"><i
@@ -436,7 +472,7 @@
                                         <div class="col-7">
                                             <div class="products-mini-content p-3">
                                                 <a href="{{ route('product.detail', $product->id) }}"
-                                                    class="d-block mb-2">{{ $product->category->name }}</a>
+                                                    class="d-block mb-2">{{ $product->category?->name ?? 'Sản phẩm' }}</a>
                                                 <a href="{{ route('product.detail', $product->id) }}" class="d-block h4">
                                                     {{ $product->name }} <br></a>
                                                 @if ($percent > 0)
@@ -448,27 +484,45 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="products-mini-add border p-3">
-                                        <button
-                                            class="btn btn-primary border-secondx  ary rounded-pill py-2 px-4 add-to-cart-btn"
-                                            data-product-id="{{ $product->id ?? 1 }}"
-                                            data-authenticated="{{ Auth::check() ? 'true' : 'false' }}">
-                                            <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
-                                        </button>
+                                    <div class="products-mini-add border p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                        <div class="d-flex gap-2">
+                                            <button type="button"
+                                                class="btn btn-outline-primary border-secondary rounded-pill py-2 px-3 add-to-cart-btn text-nowrap"
+                                                style="font-size: 13px;"
+                                                data-product-id="{{ $product->id }}"
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                onclick="if(window.addToCartDirect){window.addToCartDirect({{ $product->id }}, this);}"
+                                                title="Thêm vào giỏ hàng">
+                                                <i class="fas fa-shopping-cart me-1"></i> Thêm giỏ
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary border-secondary rounded-pill py-2 px-3 buy-now-btn text-nowrap text-white"
+                                                style="font-size: 13px;"
+                                                data-product-id="{{ $product->id }}"
+                                                data-authenticated="{{ Auth::check() ? 'true' : 'false' }}"
+                                                onclick="if(window.buyNowDirect){window.buyNowDirect({{ $product->id }}, this);}else{window.location.href='{{ route('checkout.index') }}';}"
+                                                title="Mua ngay">
+                                                <i class="fas fa-bolt me-1"></i> Mua ngay
+                                            </button>
+                                        </div>
                                         <div class="d-flex">
                                             <a href="#"
                                                 class="text-primary d-flex align-items-center justify-content-center me-3"><span
                                                     class="rounded-circle btn-sm-square border"><i
-                                                        class="fas fa-random"></i></i></a>
+                                                        class="fas fa-random"></i></span></a>
                                             <a href="#"
                                                 class="text-primary d-flex align-items-center justify-content-center me-0"><span
                                                     class="rounded-circle btn-sm-square border"><i
-                                                        class="fas fa-heart"></i></a>
+                                                        class="fas fa-heart"></i></span></a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+                    </div>
+                </div>
+            </div>
+            <!-- Bestseller Products End -->
                     </div>
                 </div>
             </div>

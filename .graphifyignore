@@ -1,0 +1,23 @@
+# Dependencies & packages
+vendor/
+node_modules/
+
+# Storage & caches
+storage/
+bootstrap/cache/
+.phpunit.cache/
+.phpunit.result.cache
+
+# Build & public assets (static frontend vendors)
+public/build/
+public/hot/
+public/storage/
+public/admin/
+public/client/
+public/layout/
+public/uploads/
+
+# Version control & agent data
+.git/
+.agents/
+graphify-out/

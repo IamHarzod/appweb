@@ -14,6 +14,8 @@
     <meta name="route-cart-clear" content="{{ route('cart.clear') }}">
     <meta name="route-cart-summary" content="{{ route('cart.summary') }}">
     <meta name="route-cart-api" content="{{ route('cart.api') }}">
+    <meta name="route-checkout" content="{{ route('checkout.index') }}">
+    <meta name="route-login" content="{{ route('login') }}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,16 +29,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="{{ asset('public/client/lib/animate/animate.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/client/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/lib/animate/animate.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
 
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="{{ asset('public/client/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="{{ asset('public/client/css/style.css') }}" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/client/img/favicon.png') }}">
+    <link href="{{ asset('client/css/style.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('client/img/favicon.png') }}">
     <style>
         /* Hiệu ứng khi di chuột vào sản phẩm gợi ý */
         .search-item:hover {
@@ -87,8 +89,9 @@
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
                     <a href="#" class="text-muted me-2"> Help</a><small> / </small>
                     <a href="#" class="text-muted mx-2"> Hỗ trợ</a><small> / </small>
-                    <a href="#" class="text-muted ms-2"> Liên hệ</a>
-
+                    <a href="{{ route('orders.lookup') }}" class="text-primary fw-bold ms-2">
+                        <i class="fas fa-shipping-fast me-1"></i> Tra cứu đơn hàng
+                    </a>
                 </div>
             </div>
             <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
@@ -108,11 +111,12 @@
                                     <div class="dropdown-divider"></div>
                                 @endif
                                 <a href="{{ url('/show-profile') }}" class="dropdown-item"> Thông tin cá nhân</a>
-                                <a href="{{ url('/dat-hang-thanh-cong/{id}') }}" class="dropdown-item"> Thông tin đơn
-                                    hàng</a>
+                                <a href="{{ route('orders.my') }}" class="dropdown-item"> Đơn hàng của tôi</a>
+                                <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
                                 <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
                             @else
-                                <a href="{{ route('admin') }}" class="dropdown-item"> Đăng nhập</a>
+                                <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
+                                <a href="{{ route('login') }}" class="dropdown-item"> Đăng nhập</a>
                             @endauth
                         </div>
                     </div>
@@ -167,39 +171,76 @@
 
     <!-- Navbar & Hero Start -->
     <div class="container-fluid nav-bar p-0">
-        <div class="row gx-0 bg-primary px-5 align-items-center">
+        <div class="row gx-0 bg-primary px-3 px-lg-5 align-items-center">
             <div class="col-12 col-lg-12">
-                <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+                <nav class="navbar navbar-expand-lg navbar-light bg-primary py-3 py-lg-0">
                     <a href="{{ url('/') }}" class="navbar-brand d-block d-lg-none">
-                        <h1 class="display-5 text-secondary m-0">
-                            <i class="fas fa-shopping-bag text-white me-2"></i>36Shop
+                        <h1 class="display-6 text-white m-0">
+                            <i class="fas fa-shopping-bag text-warning me-2"></i>36Shop
                         </h1>
                     </a>
 
-                    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                    <!-- Mobile action icons (Cart & Account) -->
+                    <div class="d-flex align-items-center d-lg-none ms-auto me-2">
+                        <a href="{{ route('cart') }}" class="text-white position-relative me-3">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                            <span class="cart-counter position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none; font-size: 0.65rem;">0</span>
+                        </a>
+                        @auth
+                            <a href="{{ url('/show-profile') }}" class="text-white">
+                                <i class="fas fa-user-circle fa-lg"></i>
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="text-white text-decoration-none small">
+                                <i class="fas fa-sign-in-alt fa-lg"></i>
+                            </a>
+                        @endauth
+                    </div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars fa-1x"></span>
+                        <span class="fa fa-bars fa-1x text-white"></span>
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <div class="navbar-nav me-auto py-0"> <a href="{{ url(path: '/') }}"
-                                class="nav-item nav-link {{ request()->is('/') ? 'active text-white font-weight-bold' : '' }}">Trang
+                        <!-- Mobile Search -->
+                        <div class="d-block d-lg-none my-3">
+                            <form action="{{ route('search') }}" method="GET">
+                                <div class="input-group">
+                                    <input type="text" name="keyword" value="{{ request()->keyword }}" class="form-control" placeholder="Tìm kiếm sản phẩm...">
+                                    <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="navbar-nav me-auto py-0"> 
+                            <a href="{{ url('/') }}"
+                                class="nav-item nav-link {{ request()->is('/') ? 'active text-white font-weight-bold' : 'text-white' }}">Trang
                                 chủ</a>
 
                             @foreach ($categories as $cat)
                                 <a href="{{ url('/show-product-category-home/' . $cat->id) }}"
-                                    class="nav-item nav-link {{ request()->is('show-product-category-home/' . $cat->id) || request()->id == $cat->id ? 'active text-white font-weight-bold' : '' }}">
+                                    class="nav-item nav-link {{ request()->is('show-product-category-home/' . $cat->id) || request()->id == $cat->id ? 'active text-white font-weight-bold' : 'text-white' }}">
                                     {{ $cat->name }}
                                 </a>
                             @endforeach
-
-                            {{-- <a href="shop.html" class="nav-item nav-link">Shop</a> --}}
+                            <a href="{{ route('orders.lookup') }}"
+                                class="nav-item nav-link {{ request()->routeIs('orders.lookup*') ? 'active text-white font-weight-bold' : 'text-white' }}">
+                                <i class="fas fa-shipping-fast me-1"></i> Tra cứu đơn
+                            </a>
                         </div>
 
-                        <a href=""
-                            class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0">
-                            <i class="fa fa-mobile-alt me-2"></i> +0123 456 7890
-                        </a>
+                        <div class="d-flex align-items-center">
+                            @auth
+                                <a href="{{ url('/show-profile') }}" class="btn btn-secondary rounded-pill py-2 px-4 me-2 d-none d-lg-inline-block">
+                                    <i class="fa fa-user me-2"></i> {{ Auth::user()->name }}
+                                </a>
+                            @else
+                                <a href="{{ route('login') }}" class="btn btn-secondary rounded-pill py-2 px-4 me-2 d-none d-lg-inline-block">
+                                    <i class="fa fa-sign-in-alt me-2"></i> Đăng nhập
+                                </a>
+                            @endauth
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -221,13 +262,23 @@
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('public/client/lib/wow/wow.min.js') }}"></script>
-    <script src="{{ asset('public/client/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('client/lib/wow/wow.min.js') }}"></script>
+    <script src="{{ asset('client/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
 
     <!-- Template Javascript -->
-    <script src="{{ asset('public/client/js/main.js') }}"></script>
-    <script src="{{ asset('public/client/js/cart.js') }}"></script>
+    <script src="{{ asset('client/js/main.js') }}"></script>
+    <script src="{{ asset('client/js/cart.js') }}?v={{ time() }}"></script>
+    <script>
+        // Fallback global handler if user clicks Mua Ngay
+        document.addEventListener('click', function(e) {
+            var btn = e.target.closest('.buy-now-btn');
+            if (btn && (!window.cartManager || typeof window.cartManager.buyNow !== 'function')) {
+                e.preventDefault();
+                window.location.href = "{{ route('checkout.index') }}";
+            }
+        });
+    </script>
     <!-- Script giữ vị trí cuộn trang -->
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {

@@ -4,8 +4,10 @@
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalCreateCouponLabel">Thêm mới Mã giảm giá</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="CloseModal('ModalEdit')"
-                    aria-label="Close"></button>
+                <button type="button" class="close" onclick="CloseModal('ModalCreateCoupon')" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
 
             <div class="modal-body">
@@ -71,10 +73,9 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="CloseModal('ModalCreateCoupon')"
-                    data-bs-dismiss="modal">Đóng</button>
+                    data-dismiss="modal">Đóng</button>
                 <button type="submit" class="btn btn-primary">Lưu mã</button>
             </div>
         </form>
     </div>
-</div>
 </div>
