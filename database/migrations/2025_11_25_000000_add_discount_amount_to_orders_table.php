@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('discount_amount', 15, 2)->default(0)->after('total_amount');
-        });
+        if (!Schema::hasColumn('orders', 'discount_amount')) {
+            Schema::table('orders', function (Blueprint $table) {
+                $table->decimal('discount_amount', 15, 2)->default(0)->after('total_amount');
+            });
+        }
     }
 
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('discount_amount');
-        });
+        if (Schema::hasColumn('orders', 'discount_amount')) {
+            Schema::table('orders', function (Blueprint $table) {
+                $table->dropColumn('discount_amount');
+            });
+        }
     }
 };
