@@ -298,7 +298,6 @@ class OrderController extends Controller
                 'ghichu'           => $request->input('ghichu'),
                 'payment_method'   => $paymentMethod,
             ]);
-            ]);
 
             $order = $orderService->placeOrder($shippingData, $request);
 

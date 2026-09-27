@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\GHNController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 
 // GHN API Routes (Location & Fee)
 Route::get('/ghn/provinces', [GHNController::class, 'getProvinces'])->name('ghn.provinces');
@@ -125,6 +126,10 @@ Route::get('/login', [AdminController::class, 'login'])->name('login');
 Route::post('/submit-register-admin', [AdminController::class, 'submit_register']);
 Route::post('/submit-login-admin', [AdminController::class, 'submit_login']);
 Route::post('/login', [AdminController::class, 'submit_login']);
+
+// Google OAuth Routes
+Route::get('/auth/google', [GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 // Password Reset Routes
 Route::get('/password/reset', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
