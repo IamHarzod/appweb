@@ -296,4 +296,98 @@
       </root>
     </mxGraphModel>
   </diagram>
+
+  <!-- TRANG 3: PHÂN RÃ USE CASE ĐẶT HÀNG -->
+  <diagram id="uc-dat-hang" name="Phân rã - Đặt hàng">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="950" pageHeight="650" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- KHUNG HỆ THỐNG (SYSTEM BOUNDARY) -->
+        <mxCell id="dh_sys_boundary" value="UC" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=0;collapsible=0;width=50;height=26;strokeWidth=1.5;strokeColor=#000000;fillColor=none;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="140" y="30" width="760" height="520" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TÁC NHÂN (ACTOR) ==================== -->
+        <mxCell id="dh_actor_customer" value="Khách hàng" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontFamily=Helvetica;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="255" width="40" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== USE CASE CHÍNH ==================== -->
+        <mxCell id="dh_uc_dathang" value="Đặt hàng" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=13;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="230" y="270" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== USE CASE ĐĂNG NHẬP ==================== -->
+        <mxCell id="dh_uc_dangnhap" value="Đăng nhập" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=13;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="235" y="90" width="150" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== 5 USE CASE CON (PHÂN RÃ) ==================== -->
+        <!-- 1. Chọn món ăn để đặt hàng -->
+        <mxCell id="dh_uc_chon_mon" value="Chọn món ăn để đặt hàng" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="580" y="60" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 2. Nhập thông tin giao hàng -->
+        <mxCell id="dh_uc_nhap_tt" value="Nhập thông tin giao hàng" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="580" y="160" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 3. Chọn phương thức thanh toán -->
+        <mxCell id="dh_uc_chon_pttt" value="Chọn phương thức thanh toán" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="580" y="260" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 4. Áp dụng mã khuyến mãi -->
+        <mxCell id="dh_uc_apdung_km" value="Áp dụng mã khuyến mãi" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="580" y="360" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 5. Xác nhận đặt hàng -->
+        <mxCell id="dh_uc_xacnhan_dh" value="Xác nhận đặt hàng" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="580" y="460" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ĐƯỜNG NỐI TÁC NHÂN (ASSOCIATION) ==================== -->
+        <mxCell id="dh_assoc_cust_dh" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1" source="dh_actor_customer" target="dh_uc_dathang">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== QUAN HỆ <<INCLUDE>> ==================== -->
+        <!-- Đặt hàng -> Đăng nhập -->
+        <mxCell id="dh_edge_include_login" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="dh_uc_dathang" target="dh_uc_dangnhap">
+          <mxGeometry width="160" relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== QUAN HỆ <<EXTEND>> ==================== -->
+        <!-- Chọn món ăn -> Đặt hàng -->
+        <mxCell id="dh_edge_extend_1" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="dh_uc_chon_mon" target="dh_uc_dathang">
+          <mxGeometry width="160" relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Nhập thông tin giao hàng -> Đặt hàng -->
+        <mxCell id="dh_edge_extend_2" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="dh_uc_nhap_tt" target="dh_uc_dathang">
+          <mxGeometry width="160" relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Chọn phương thức thanh toán -> Đặt hàng -->
+        <mxCell id="dh_edge_extend_3" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="dh_uc_chon_pttt" target="dh_uc_dathang">
+          <mxGeometry width="160" relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Áp dụng mã khuyến mãi -> Đặt hàng -->
+        <mxCell id="dh_edge_extend_4" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="dh_uc_apdung_km" target="dh_uc_dathang">
+          <mxGeometry width="160" relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Xác nhận đặt hàng -> Đặt hàng -->
+        <mxCell id="dh_edge_extend_5" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="dh_uc_xacnhan_dh" target="dh_uc_dathang">
+          <mxGeometry width="160" relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>
