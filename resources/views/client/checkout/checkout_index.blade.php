@@ -563,6 +563,128 @@
             if (wardSelect) {
                 wardSelect.addEventListener('change', () => setTimeout(updateCompleteAddress, 100));
             }
+            // Hàm tự động nhận diện và điền thông tin địa chỉ từ tọa độ
+            let isGeocoding = false;
+            function autoFillAddressFromCoords(lat, lng) {
+                if (isGeocoding) return;
+                isGeocoding = true;
+
+                if (coordsText) {
+                    coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-warning text-dark ms-1"><i class="fa fa-spinner fa-spin"></i> Đang nhận diện địa chỉ...</span>`;
+                }
+
+                fetch("{{ route('locations.reverse_geocode') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        latitude: lat,
+                        longitude: lng
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    isGeocoding = false;
+
+                    if (data && data.success) {
+                        // 1. Tự động điền Số nhà, tên đường chi tiết
+                        if (data.street_address && addressDetailInput) {
+                            addressDetailInput.value = data.street_address;
+                        }
+
+                        // 2. Chọn Tỉnh / Thành phố
+                        if (data.province && provinceSelect) {
+                            for (let i = 0; i < provinceSelect.options.length; i++) {
+                                const opt = provinceSelect.options[i];
+                                if (opt.getAttribute('data-id') == data.province.id || opt.value === data.province.name) {
+                                    provinceSelect.selectedIndex = i;
+                                    break;
+                                }
+                            }
+                            if (tinhThanhName) tinhThanhName.value = data.province.name;
+
+                            // 3. Điền & chọn Quận / Huyện
+                            const districts = data.districts || [];
+                            if (districtSelect && districts.length > 0) {
+                                let dOptions = '<option value="">-- Chọn Quận/Huyện --</option>';
+                                districts.forEach(d => {
+                                    const isSel = data.district && (d.DistrictID == data.district.id);
+                                    dOptions += `<option value="${d.DistrictName}" data-id="${d.DistrictID}" data-name="${d.DistrictName}" ${isSel ? 'selected' : ''}>${d.DistrictName}</option>`;
+                                });
+                                districtSelect.innerHTML = dOptions;
+                                districtSelect.disabled = false;
+
+                                if (data.district) {
+                                    if (toDistrictInput) toDistrictInput.value = data.district.id;
+                                    if (quanHuyenName) quanHuyenName.value = data.district.name;
+                                }
+
+                                // 4. Điền & chọn Phường / Xã
+                                const wards = data.wards || [];
+                                if (wardSelect && wards.length > 0) {
+                                    let wOptions = '<option value="">-- Chọn Phường/Xã --</option>';
+                                    wards.forEach(w => {
+                                        const isSel = data.ward && (w.WardCode == data.ward.code);
+                                        wOptions += `<option value="${w.WardName}" data-code="${w.WardCode}" data-name="${w.WardName}" ${isSel ? 'selected' : ''}>${w.WardName}</option>`;
+                                    });
+                                    wardSelect.innerHTML = wOptions;
+                                    wardSelect.disabled = false;
+
+                                    if (data.ward) {
+                                        if (toWardInput) toWardInput.value = data.ward.code;
+                                        if (phuongXaName) phuongXaName.value = data.ward.name;
+
+                                        // 5. Tự động tính cước vận chuyển GHN
+                                        if (data.district && data.ward) {
+                                            calculateShippingFee(data.district.id, data.ward.code);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (coordsText) {
+                            coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-success ms-1"><i class="fa fa-check"></i> Đã tự điền địa chỉ</span>`;
+                        }
+
+                        updateCompleteAddress();
+                    } else {
+                        fallbackClientReverseGeocode(lat, lng);
+                    }
+                })
+                .catch(err => {
+                    isGeocoding = false;
+                    console.warn("Lỗi nhận diện backend, chuyển sang fallback:", err);
+                    fallbackClientReverseGeocode(lat, lng);
+                });
+            }
+
+            // Fallback trực tiếp phía client nếu server bận
+            function fallbackClientReverseGeocode(lat, lng) {
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=vi`)
+                    .then(res => res.json())
+                    .then(geo => {
+                        if (coordsText) {
+                            coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-success ms-1"><i class="fa fa-check"></i> Đã lấy vị trí</span>`;
+                        }
+                        if (geo && geo.address) {
+                            const road = geo.address.road || geo.address.street || geo.address.neighbourhood || '';
+                            const num = geo.address.house_number || '';
+                            const st = (num + ' ' + road).trim() || (geo.display_name ? geo.display_name.split(',')[0] : '');
+                            if (st && addressDetailInput) {
+                                addressDetailInput.value = st;
+                            }
+                        }
+                        updateCompleteAddress();
+                    })
+                    .catch(() => {
+                        if (coordsText) {
+                            coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-secondary ms-1">Đã ghim vị trí</span>`;
+                        }
+                    });
+            }
 
             if (mapElement && typeof L !== 'undefined') {
                 const map = L.map('delivery_map', {
@@ -590,33 +712,36 @@
                     icon: redIcon
                 }).addTo(map);
 
-                function setCoordinates(lat, lng) {
+                function setCoordinates(lat, lng, autoFill = false) {
                     if (latInput) latInput.value = parseFloat(lat).toFixed(6);
                     if (lngInput) lngInput.value = parseFloat(lng).toFixed(6);
                     if (coordsText) coordsText.innerText = parseFloat(lat).toFixed(5) + ', ' + parseFloat(lng).toFixed(5);
+                    if (autoFill) {
+                        autoFillAddressFromCoords(lat, lng);
+                    }
                 }
 
-                setCoordinates(defaultLat, defaultLng);
+                setCoordinates(defaultLat, defaultLng, false);
 
                 marker.on('dragend', function () {
                     const pos = marker.getLatLng();
-                    setCoordinates(pos.lat, pos.lng);
+                    setCoordinates(pos.lat, pos.lng, true);
                 });
 
                 map.on('click', function (e) {
                     marker.setLatLng(e.latlng);
-                    setCoordinates(e.latlng.lat, e.latlng.lng);
+                    setCoordinates(e.latlng.lat, e.latlng.lng, true);
                 });
 
                 if (btnGetGps) {
                     btnGetGps.addEventListener('click', function () {
                         if (!navigator.geolocation) {
-                            alert('Trình duyệt của bạn không hỗ trợ GPS.');
+                            alert('Trình duyệt của bạn không hỗ trợ định vị GPS.');
                             return;
                         }
 
                         btnGetGps.disabled = true;
-                        btnGetGps.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Đang định vị...';
+                        btnGetGps.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Đang lấy vị trí GPS...';
 
                         navigator.geolocation.getCurrentPosition(
                             function (position) {
@@ -624,43 +749,24 @@
                                 const userLng = position.coords.longitude;
                                 map.flyTo([userLat, userLng], 16, { animate: true });
                                 marker.setLatLng([userLat, userLng]);
-                                setCoordinates(userLat, userLng);
+                                setCoordinates(userLat, userLng, true);
                                 btnGetGps.disabled = false;
                                 btnGetGps.innerHTML = '<i class="fa fa-crosshairs mr-1"></i> Lấy vị trí GPS của tôi';
                             },
                             function (error) {
                                 btnGetGps.disabled = false;
                                 btnGetGps.innerHTML = '<i class="fa fa-crosshairs mr-1"></i> Lấy vị trí GPS của tôi';
-                                alert('Không thể lấy vị trí GPS từ thiết bị.');
+                                let msg = 'Không thể lấy vị trí GPS từ thiết bị.';
+                                if (error.code === 1) msg = 'Vui lòng cho phép quyền truy cập vị trí trên trình duyệt.';
+                                else if (error.code === 2) msg = 'Không thể xác định vị trí hiện tại.';
+                                else if (error.code === 3) msg = 'Hết thời gian chờ lấy vị trí GPS.';
+                                alert(msg);
                             },
-                            { enableHighAccuracy: true, timeout: 10000 }
+                            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
                         );
                     });
                 }
                 setTimeout(() => { map.invalidateSize(); }, 500);
-            }
-        });
-    </script>elect.options[districtSelect.selectedIndex].text : '');
-                if (districtText && !districtText.includes('--')) parts.push(districtText);
-
-                const provinceText = tinhThanhName?.value?.trim() || (provinceSelect && provinceSelect.selectedIndex > 0 ? provinceSelect.options[provinceSelect.selectedIndex].text : '');
-                if (provinceText && !provinceText.includes('--')) parts.push(provinceText);
-
-                completeAddressPreview.value = parts.length > 0 ? parts.join(', ') : '';
-            }
-
-            if (addressDetailInput) {
-                addressDetailInput.addEventListener('input', updateCompleteAddress);
-            }
-            if (provinceSelect) {
-                provinceSelect.addEventListener('change', () => setTimeout(updateCompleteAddress, 100));
-            }
-            if (districtSelect) {
-                districtSelect.addEventListener('change', () => setTimeout(updateCompleteAddress, 100));
-            }
-            if (wardSelect) {
-                wardSelect.addEventListener('change', () => setTimeout(updateCompleteAddress, 100));
->>>>>>> ab21131689b3ae97f2f43842b98d7019802230a8
             }
         });
     </script>

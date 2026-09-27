@@ -84,11 +84,15 @@ class LocationController extends Controller
         $bdc = $geo['bdc'] ?? [];
 
         // Trích xuất số nhà và tên đường
-        $road = $addr['road'] ?? $addr['street'] ?? '';
+        $road = $addr['road'] ?? $addr['street'] ?? $addr['pedestrian'] ?? $addr['footway'] ?? '';
         $houseNumber = $addr['house_number'] ?? '';
         $streetAddress = trim($houseNumber . ' ' . $road);
         if (empty($streetAddress)) {
-            $streetAddress = $road;
+            $streetAddress = $addr['amenity'] ?? $addr['building'] ?? $addr['neighbourhood'] ?? $addr['suburb'] ?? '';
+        }
+        if (empty($streetAddress) && !empty($displayName)) {
+            $parts = explode(',', $displayName);
+            $streetAddress = trim($parts[0] ?? '');
         }
 
         // Gom toàn bộ từ khóa địa danh từ cả Nominatim và BigDataCloud
@@ -120,12 +124,15 @@ class LocationController extends Controller
         $normWard = $this->normalizeName($targetWard);
 
         // 2. So khớp Tỉnh / Thành phố với danh mục GHN
-        $provinces = $ghn->getProvinces()['data'] ?? [];
+        $provincesData = $ghn->getProvinces();
+        $provinces = (isset($provincesData['data']) && is_array($provincesData['data'])) 
+            ? $provincesData['data'] 
+            : (is_array($provincesData) ? $provincesData : []);
         $matchedProv = null;
 
         // Ưu tiên 1: So khớp chính xác tuyệt đối
         foreach ($provinces as $p) {
-            if ($this->normalizeName($p['ProvinceName']) === $normProv) {
+            if ($this->normalizeName($p['ProvinceName'] ?? '') === $normProv) {
                 $matchedProv = $p;
                 break;
             }
@@ -133,7 +140,7 @@ class LocationController extends Controller
         // Ưu tiên 2: Tên bắt đầu / tiền tố
         if (!$matchedProv && !empty($normProv)) {
             foreach ($provinces as $p) {
-                $pNorm = $this->normalizeName($p['ProvinceName']);
+                $pNorm = $this->normalizeName($p['ProvinceName'] ?? '');
                 if (str_starts_with($pNorm, $normProv) || str_starts_with($normProv, $pNorm)) {
                     $matchedProv = $p;
                     break;
@@ -143,7 +150,7 @@ class LocationController extends Controller
         // Ưu tiên 3: Tên tỉnh có trong chuỗi địa chỉ
         if (!$matchedProv) {
             foreach ($provinces as $p) {
-                $pNorm = $this->normalizeName($p['ProvinceName']);
+                $pNorm = $this->normalizeName($p['ProvinceName'] ?? '');
                 if (!empty($pNorm) && str_contains($rawAddrStr, $pNorm)) {
                     $matchedProv = $p;
                     break;
@@ -157,13 +164,15 @@ class LocationController extends Controller
         $matchedWard = null;
 
         if ($matchedProv) {
-            $districtsRes = $ghn->getDistricts($matchedProv['ProvinceID']);
-            $districts = $districtsRes['data'] ?? [];
+            $districtsRes = $ghn->getDistricts((int) $matchedProv['ProvinceID']);
+            $districts = (isset($districtsRes['data']) && is_array($districtsRes['data'])) 
+                ? $districtsRes['data'] 
+                : (is_array($districtsRes) ? $districtsRes : []);
 
             // Ưu tiên 1: Khớp chính xác với targetDist
             if (!empty($normDist)) {
                 foreach ($districts as $d) {
-                    $dNorm = $this->normalizeName($d['DistrictName']);
+                    $dNorm = $this->normalizeName($d['DistrictName'] ?? '');
                     if ($dNorm === $normDist || 'quan ' . $dNorm === $normDist || 'huyen ' . $dNorm === $normDist) {
                         $matchedDist = $d;
                         break;
@@ -206,13 +215,15 @@ class LocationController extends Controller
             }
 
             if ($matchedDist) {
-                $wardsRes = $ghn->getWards($matchedDist['DistrictID']);
-                $wards = $wardsRes['data'] ?? [];
+                $wardsRes = $ghn->getWards((int) $matchedDist['DistrictID']);
+                $wards = (isset($wardsRes['data']) && is_array($wardsRes['data'])) 
+                    ? $wardsRes['data'] 
+                    : (is_array($wardsRes) ? $wardsRes : []);
 
                 // Ưu tiên 1: Khớp chính xác với targetWard
                 if (!empty($normWard)) {
                     foreach ($wards as $w) {
-                        $wNorm = $this->normalizeName($w['WardName']);
+                        $wNorm = $this->normalizeName($w['WardName'] ?? '');
                         if ($wNorm === $normWard || 'phuong ' . $wNorm === $normWard || 'xa ' . $wNorm === $normWard) {
                             $matchedWard = $w;
                             break;
@@ -223,7 +234,7 @@ class LocationController extends Controller
                 // Ưu tiên 2: Khớp regex trong chuỗi địa chỉ tổng hợp
                 if (!$matchedWard) {
                     foreach ($wards as $w) {
-                        $wNorm = $this->normalizeName($w['WardName']);
+                        $wNorm = $this->normalizeName($w['WardName'] ?? '');
                         if (empty($wNorm)) continue;
 
                         if (is_numeric($wNorm)) {
@@ -282,12 +293,15 @@ class LocationController extends Controller
         try {
             $responses = \Illuminate\Support\Facades\Http::pool(fn (\Illuminate\Http\Client\Pool $pool) => [
                 $pool->as('nom')
-                    ->withUserAgent('AppWebDelivery/1.0 (contact@appweb.vn)')
-                    ->withHeaders(['Referer' => 'https://appweb.vn'])
-                    ->timeout(4)
+                    ->withUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36')
+                    ->withHeaders([
+                        'Referer' => 'http://localhost/appweb',
+                        'Accept-Language' => 'vi,en;q=0.9',
+                    ])
+                    ->timeout(6)
                     ->get("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={$lat}&lon={$lng}&zoom=18&addressdetails=1&accept-language=vi"),
                 $pool->as('bdc')
-                    ->timeout(4)
+                    ->timeout(6)
                     ->get("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={$lat}&longitude={$lng}&localityLanguage=vi"),
             ]);
 
@@ -298,6 +312,7 @@ class LocationController extends Controller
                 ? ($responses['bdc']->json() ?? []) 
                 : [];
         } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Reverse geocode error: ' . $e->getMessage());
             $nom = [];
             $bdc = [];
         }
