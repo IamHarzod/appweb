@@ -7,6 +7,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -77,11 +78,16 @@ class OrderController extends Controller
             ->orderByRaw("CASE WHEN status IN ('paid', 'refund_pending', 'refunded') THEN 0 ELSE 1 END")
             ->orderByDesc('id')->limit(1);
 
+        $columns = array_map(fn ($col) => "orders.{$col}", array_values(array_diff(
+            Schema::getColumnListing('orders'),
+            ['payment_status']
+        )));
+
         $source = DB::table('orders')->leftJoin('payment_transactions as payment', function ($join) use ($paymentId) {
             $join->on('payment.order_id', '=', 'orders.id')->where('payment.id', '=', $paymentId);
-        })->select('orders.*')
+        })->select($columns)
         ->selectRaw("COALESCE(payment.gateway, CASE WHEN orders.status IN ('cod_ordered', 'cod_paid') THEN 'cod' WHEN orders.status IN ('paid', 'paid_momo') THEN 'momo' ELSE 'unknown' END) as gateway")
-        ->selectRaw("COALESCE(payment.status, CASE WHEN orders.status = 'cod_ordered' THEN 'pending' WHEN orders.status IN ('cod_paid', 'paid_momo') THEN 'paid' ELSE orders.status END) as payment_status");
+        ->selectRaw("COALESCE(payment.status, orders.payment_status, CASE WHEN orders.status = 'cod_ordered' THEN 'pending' WHEN orders.status IN ('cod_paid', 'paid_momo') THEN 'paid' ELSE orders.status END) as payment_status");
 
         $query = Order::query()->fromSub($source, 'orders');
 

@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    # Redirect /admin/ folder access to login page
+    RewriteRule ^admin/?$ /appweb/login [R=302,L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

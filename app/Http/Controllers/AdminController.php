@@ -149,9 +149,11 @@ class AdminController extends Controller
         return redirect()->intended(route('admin'))->with('success', 'Đăng ký tài khoản thành công!');
     }
 
-    public function logout_admin()
+    public function logout_admin(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('admin');
     }
 }
