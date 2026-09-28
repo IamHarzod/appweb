@@ -1,0 +1,179 @@
+<mxfile host="Electron" modified="2026-09-27T15:05:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="seq-quan-ly-tai-khoan" name="Sơ đồ tuần tự - Quản lý tài khoản">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="950" pageHeight="750" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- KHUNG BAO NGOÀI (FRAME) -->
+        <mxCell id="frame" value="Biểu đồ tuần tự chức năng quản lý tài khoản" style="shape=umlFrame;whiteSpace=wrap;html=1;width=280;height=35;strokeColor=#000000;strokeWidth=1.5;fillColor=none;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="820" height="660" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CÁC ĐỐI TƯỢNG BCE & ACTOR ==================== -->
+        <!-- 1. Admin Actor -->
+        <mxCell id="actor_admin" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;strokeColor=#000000;fillColor=#ffffff;strokeWidth=1.2;fontFamily=Helvetica;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="155" y="100" width="30" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 2. Boundary: Giao diện quản lý tài khoản -->
+        <mxCell id="bce_boundary" value="Giao diện&#xa;quản lý tài khoản" style="shape=umlBoundary;whiteSpace=wrap;html=1;verticalAlign=bottom;verticalLabelPosition=top;align=center;strokeColor=#000000;fillColor=#ffffff;strokeWidth=1.2;fontFamily=Helvetica;fontSize=12;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="115" width="45" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 3. Control: Hệ thống xử lý -->
+        <mxCell id="bce_control" value="Hệ thống xử lý" style="shape=umlControl;whiteSpace=wrap;html=1;verticalAlign=bottom;verticalLabelPosition=top;align=center;strokeColor=#000000;fillColor=#ffffff;strokeWidth=1.2;fontFamily=Helvetica;fontSize=12;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="550" y="115" width="40" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 4. Entity: CSDL users -->
+        <mxCell id="bce_entity" value="CSDL&#xa;users" style="shape=umlEntity;whiteSpace=wrap;html=1;verticalAlign=bottom;verticalLabelPosition=top;align=center;strokeColor=#000000;fillColor=#ffffff;strokeWidth=1.2;fontFamily=Helvetica;fontSize=12;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="725" y="115" width="40" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ĐƯỜNG ĐỜI (DASHED LIFELINES) ==================== -->
+        <!-- Lifeline Admin -->
+        <mxCell id="ll_admin" value="" style="endArrow=none;dashed=1;html=1;dashPattern=4 4;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="185" as="sourcePoint" />
+            <mxPoint x="170" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Lifeline Boundary -->
+        <mxCell id="ll_boundary" value="" style="endArrow=none;dashed=1;html=1;dashPattern=4 4;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="382" y="165" as="sourcePoint" />
+            <mxPoint x="382" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Lifeline Control -->
+        <mxCell id="ll_control" value="" style="endArrow=none;dashed=1;html=1;dashPattern=4 4;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="165" as="sourcePoint" />
+            <mxPoint x="570" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Lifeline Entity -->
+        <mxCell id="ll_entity" value="" style="endArrow=none;dashed=1;html=1;dashPattern=4 4;strokeColor=#000000;strokeWidth=1.2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="745" y="165" as="sourcePoint" />
+            <mxPoint x="745" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ==================== THANH KÍCH HOẠT (ACTIVATION BARS) ==================== -->
+        <!-- Admin Activation Bar -->
+        <mxCell id="act_admin" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="165" y="215" width="10" height="425" as="geometry" />
+        </mxCell>
+
+        <!-- Boundary Activation Bar 1 (Xem danh sách) -->
+        <mxCell id="act_bound_1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="377" y="220" width="10" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Boundary Activation Bar 2 (Thực hiện yêu cầu) -->
+        <mxCell id="act_bound_2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="377" y="375" width="10" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Boundary Activation Bar 3 (Nhận kết quả) -->
+        <mxCell id="act_bound_3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="377" y="550" width="10" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Control Activation Bar -->
+        <mxCell id="act_control" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="565" y="420" width="10" height="190" as="geometry" />
+        </mxCell>
+
+        <!-- Entity Activation Bar -->
+        <mxCell id="act_entity" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;" vertex="1" parent="1">
+          <mxGeometry x="740" y="510" width="10" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CÁC THÔNG ĐIỆP (MESSAGES) ==================== -->
+        <!-- 1. Chọn chức năng quản lý tài khoản -->
+        <mxCell id="msg_1" value="1. Chọn chức năng quản lý&#xa;tài khoản" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="175" y="245" as="sourcePoint" />
+            <mxPoint x="377" y="245" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 2. Hiển thị danh sách tài khoản -->
+        <mxCell id="msg_2" value="2. Hiển thị danh sách&#xa;tài khoản" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="377" y="305" as="sourcePoint" />
+            <mxPoint x="175" y="305" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 3. Chọn thêm/sửa/xóa tài khoản -->
+        <mxCell id="msg_3" value="3. Chọn thêm/sửa/xóa&#xa;tài khoản" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="175" y="390" as="sourcePoint" />
+            <mxPoint x="377" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 4. Gửi yêu cầu tương ứng -->
+        <mxCell id="msg_4" value="4. Gửi yêu cầu tương ứng" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="387" y="440" as="sourcePoint" />
+            <mxPoint x="565" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 5. Kiểm tra thông tin (Self-call) -->
+        <mxCell id="msg_5" value="5. Kiểm tra thông&#xa;tin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;align=left;" edge="1" parent="1">
+          <mxGeometry x="0.1" y="20" relative="1" as="geometry">
+            <mxPoint x="575" y="450" as="sourcePoint" />
+            <mxPoint x="575" y="485" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="615" y="450" />
+              <mxPoint x="615" y="485" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 6. Truy vấn và cập nhật CSDL -->
+        <mxCell id="msg_6" value="6. Truy vấn và cập nhật&#xa;CSDL" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="575" y="525" as="sourcePoint" />
+            <mxPoint x="740" y="525" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 7. Trả kết quả về -->
+        <mxCell id="msg_7" value="7. Trả kết quả về" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="560" as="sourcePoint" />
+            <mxPoint x="575" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 8. Hệ thống xác nhận thành công -->
+        <mxCell id="msg_8" value="8. Hệ thống xác nhận&#xa;thành công" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="565" y="585" as="sourcePoint" />
+            <mxPoint x="387" y="585" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 9. Giao diện hiển thị thông báo -->
+        <mxCell id="msg_9" value="9. Giao diện hiển thị thông báo" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="377" y="625" as="sourcePoint" />
+            <mxPoint x="175" y="625" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

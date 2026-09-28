@@ -77,30 +77,71 @@ class LocationController extends Controller
         $lat = (float) $request->latitude;
         $lng = (float) $request->longitude;
 
-        // 1. Phân giải tọa độ từ Nominatim + BigDataCloud (chạy song song)
+        // 1. Phân giải tọa độ từ Nominatim + Photon OSM + BigDataCloud (chạy song song)
         $geo = $this->fetchReverseGeocode($lat, $lng);
         $addr = $geo['nom_address'] ?? [];
         $displayName = $geo['display_name'] ?? '';
+        $photon = $geo['photon_props'] ?? [];
         $bdc = $geo['bdc'] ?? [];
 
-        // Trích xuất số nhà và tên đường
-        $road = $addr['road'] ?? $addr['street'] ?? $addr['pedestrian'] ?? $addr['footway'] ?? '';
-        $houseNumber = $addr['house_number'] ?? '';
-        $streetAddress = trim($houseNumber . ' ' . $road);
-        if (empty($streetAddress)) {
-            $streetAddress = $addr['amenity'] ?? $addr['building'] ?? $addr['neighbourhood'] ?? $addr['suburb'] ?? '';
-        }
-        if (empty($streetAddress) && !empty($displayName)) {
-            $parts = explode(',', $displayName);
-            $streetAddress = trim($parts[0] ?? '');
+        // Trích xuất số nhà, tên đường chi tiết và địa điểm
+        $houseNumber = $addr['house_number'] ?? $photon['housenumber'] ?? '';
+        $road = $addr['road'] ?? $addr['street'] ?? $addr['pedestrian'] ?? $addr['footway'] ?? $addr['path'] ?? ($photon['street'] ?? '');
+        $poi = $addr['amenity'] ?? $addr['building'] ?? $addr['shop'] ?? $addr['office'] ?? '';
+        $photonName = $photon['name'] ?? '';
+        if (empty($poi) && !empty($photonName) && $photonName !== $road && ($photon['type'] ?? '') !== 'street') {
+            $poi = $photonName;
         }
 
-        // Gom toàn bộ từ khóa địa danh từ cả Nominatim và BigDataCloud
+        $streetParts = [];
+        if (!empty($houseNumber) && !empty($road)) {
+            $numStr = (preg_match('/^(số|so|no\.?)\s+/iu', $houseNumber)) ? $houseNumber : ('Số ' . $houseNumber);
+            $streetParts[] = $numStr . ', ' . $road;
+        } elseif (!empty($houseNumber)) {
+            $numStr = (preg_match('/^(số|so|no\.?)\s+/iu', $houseNumber)) ? $houseNumber : ('Số ' . $houseNumber);
+            $streetParts[] = $numStr;
+        } elseif (!empty($road)) {
+            $streetParts[] = $road;
+        }
+
+        if (!empty($poi) && !in_array($poi, $streetParts)) {
+            if (mb_strlen($poi) <= 2) {
+                $poi = 'Tòa ' . $poi;
+            }
+            $streetParts[] = $poi;
+        }
+
+        $streetAddress = implode(', ', array_filter(array_unique($streetParts)));
+
+        if (empty($streetAddress)) {
+            $fallback = $addr['neighbourhood'] ?? $addr['quarter'] ?? $photon['locality'] ?? '';
+            if (!empty($fallback)) {
+                $streetAddress = $fallback;
+            } elseif (!empty($displayName)) {
+                $parts = explode(',', $displayName);
+                $streetAddress = trim($parts[0] ?? '');
+            } elseif (!empty($bdc['localityInfo']['informative'])) {
+                foreach ($bdc['localityInfo']['informative'] as $inf) {
+                    $infName = $inf['name'] ?? '';
+                    if (preg_match('/\b(đường|duong|phố|pho|ngõ|ngo|ngách|ngach|hẻm|hem)\b/iu', $infName)) {
+                        $streetAddress = $infName;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Gom toàn bộ từ khóa địa danh từ Nominatim, Photon và BigDataCloud
         $allParts = [];
         if (!empty($displayName)) $allParts[] = $displayName;
         foreach ($addr as $v) {
             if (is_string($v)) $allParts[] = $v;
         }
+        if (!empty($photon['name'])) $allParts[] = $photon['name'];
+        if (!empty($photon['street'])) $allParts[] = $photon['street'];
+        if (!empty($photon['district'])) $allParts[] = $photon['district'];
+        if (!empty($photon['city'])) $allParts[] = $photon['city'];
+        if (!empty($photon['locality'])) $allParts[] = $photon['locality'];
         if (!empty($bdc['city'])) $allParts[] = $bdc['city'];
         if (!empty($bdc['locality'])) $allParts[] = $bdc['locality'];
         if (!empty($bdc['principalSubdivision'])) $allParts[] = $bdc['principalSubdivision'];
@@ -115,9 +156,9 @@ class LocationController extends Controller
         $rawAddrStr = $this->normalizeName(implode(' ', array_unique($allParts)));
 
         // Xác định tên cấp hành chính mục tiêu
-        $targetProv = $addr['city'] ?? $addr['province'] ?? $addr['state'] ?? ($bdc['principalSubdivision'] ?? '');
-        $targetDist = $addr['city_district'] ?? $addr['county'] ?? $addr['district'] ?? $addr['town'] ?? '';
-        $targetWard = $addr['suburb'] ?? $addr['quarter'] ?? $addr['neighbourhood'] ?? $addr['village'] ?? $addr['ward'] ?? ($bdc['locality'] ?? '');
+        $targetProv = $addr['city'] ?? $addr['province'] ?? $addr['state'] ?? ($photon['city'] ?? ($photon['state'] ?? ($bdc['principalSubdivision'] ?? '')));
+        $targetDist = $addr['city_district'] ?? $addr['county'] ?? $addr['district'] ?? $addr['town'] ?? ($photon['district'] ?? '');
+        $targetWard = $addr['suburb'] ?? $addr['quarter'] ?? $addr['neighbourhood'] ?? $addr['village'] ?? $addr['ward'] ?? ($photon['locality'] ?? ($bdc['locality'] ?? ''));
 
         $normProv = $this->normalizeName($targetProv);
         $normDist = $this->normalizeName($targetDist);
@@ -293,20 +334,27 @@ class LocationController extends Controller
         try {
             $responses = \Illuminate\Support\Facades\Http::pool(fn (\Illuminate\Http\Client\Pool $pool) => [
                 $pool->as('nom')
-                    ->withUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36')
                     ->withHeaders([
-                        'Referer' => 'http://localhost/appweb',
+                        'User-Agent' => 'AppWeb-ShopEcommerce/1.0 (https://localhost/appweb; support@appweb.vn)',
                         'Accept-Language' => 'vi,en;q=0.9',
                     ])
-                    ->timeout(6)
+                    ->timeout(4)
                     ->get("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={$lat}&lon={$lng}&zoom=18&addressdetails=1&accept-language=vi"),
+                $pool->as('photon')
+                    ->withUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
+                    ->timeout(4)
+                    ->get("https://photon.komoot.io/reverse?lat={$lat}&lon={$lng}"),
                 $pool->as('bdc')
-                    ->timeout(6)
+                    ->withUserAgent('Mozilla/5.0')
+                    ->timeout(4)
                     ->get("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={$lat}&longitude={$lng}&localityLanguage=vi"),
             ]);
 
             $nom = (isset($responses['nom']) && $responses['nom'] instanceof \Illuminate\Http\Client\Response && $responses['nom']->successful()) 
                 ? ($responses['nom']->json() ?? []) 
+                : [];
+            $photon = (isset($responses['photon']) && $responses['photon'] instanceof \Illuminate\Http\Client\Response && $responses['photon']->successful()) 
+                ? ($responses['photon']->json() ?? []) 
                 : [];
             $bdc = (isset($responses['bdc']) && $responses['bdc'] instanceof \Illuminate\Http\Client\Response && $responses['bdc']->successful()) 
                 ? ($responses['bdc']->json() ?? []) 
@@ -314,12 +362,14 @@ class LocationController extends Controller
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('Reverse geocode error: ' . $e->getMessage());
             $nom = [];
+            $photon = [];
             $bdc = [];
         }
 
         return [
             'nom_address'  => $nom['address'] ?? [],
             'display_name' => $nom['display_name'] ?? '',
+            'photon_props' => $photon['features'][0]['properties'] ?? [],
             'bdc'          => $bdc,
         ];
     }

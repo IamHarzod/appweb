@@ -592,6 +592,7 @@
                         // 1. Tự động điền Số nhà, tên đường chi tiết
                         if (data.street_address && addressDetailInput) {
                             addressDetailInput.value = data.street_address;
+                            addressDetailInput.dispatchEvent(new Event('input', { bubbles: true }));
                         }
 
                         // 2. Chọn Tỉnh / Thành phố
@@ -663,26 +664,55 @@
 
             // Fallback trực tiếp phía client nếu server bận
             function fallbackClientReverseGeocode(lat, lng) {
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=vi`)
+                fetch(`https://photon.komoot.io/reverse?lat=${lat}&lon=${lng}`)
                     .then(res => res.json())
-                    .then(geo => {
+                    .then(data => {
+                        const props = data?.features?.[0]?.properties || {};
+                        const num = props.housenumber ? `Số ${props.housenumber}, ` : '';
+                        let st = '';
+                        if (props.street) {
+                            st = num + props.street;
+                            if (props.name && props.name !== props.street && (props.type !== 'street')) {
+                                st += `, ${props.name}`;
+                            }
+                        } else if (props.name) {
+                            st = props.name;
+                        }
+                        if (st && addressDetailInput) {
+                            addressDetailInput.value = st;
+                            addressDetailInput.dispatchEvent(new Event('input', { bubbles: true }));
+                        }
                         if (coordsText) {
                             coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-success ms-1"><i class="fa fa-check"></i> Đã lấy vị trí</span>`;
-                        }
-                        if (geo && geo.address) {
-                            const road = geo.address.road || geo.address.street || geo.address.neighbourhood || '';
-                            const num = geo.address.house_number || '';
-                            const st = (num + ' ' + road).trim() || (geo.display_name ? geo.display_name.split(',')[0] : '');
-                            if (st && addressDetailInput) {
-                                addressDetailInput.value = st;
-                            }
                         }
                         updateCompleteAddress();
                     })
                     .catch(() => {
-                        if (coordsText) {
-                            coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-secondary ms-1">Đã ghim vị trí</span>`;
-                        }
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=vi`)
+                            .then(res => res.json())
+                            .then(geo => {
+                                if (coordsText) {
+                                    coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-success ms-1"><i class="fa fa-check"></i> Đã lấy vị trí</span>`;
+                                }
+                                if (geo && geo.address) {
+                                    const road = geo.address.road || geo.address.street || geo.address.neighbourhood || '';
+                                    const num = geo.address.house_number ? `Số ${geo.address.house_number}, ` : '';
+                                    const poi = geo.address.amenity || geo.address.building || '';
+                                    let st = (num + road).trim();
+                                    if (poi && poi !== road) st = st ? `${st}, ${poi}` : poi;
+                                    if (!st && geo.display_name) st = geo.display_name.split(',')[0].trim();
+                                    if (st && addressDetailInput) {
+                                        addressDetailInput.value = st;
+                                        addressDetailInput.dispatchEvent(new Event('input', { bubbles: true }));
+                                    }
+                                }
+                                updateCompleteAddress();
+                            })
+                            .catch(() => {
+                                if (coordsText) {
+                                    coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-secondary ms-1">Đã ghim vị trí</span>`;
+                                }
+                            });
                     });
             }
 

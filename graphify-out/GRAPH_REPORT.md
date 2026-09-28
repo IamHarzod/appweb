@@ -1,33 +1,33 @@
-# Graph Report - appweb  (2026-09-21)
+# Graph Report - appweb  (2026-09-28)
 
 ## Corpus Check
-- 157 files · ~80,898 words
+- 176 files · ~87,378 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 12 file(s) not represented in the graph (top: (none) 7, .ico 2, .example 1)
+- Unclassified: 20 file(s) not represented in the graph (top: .drawio 8, (none) 7, .ico 2)
 
 ## Summary
-- 1001 nodes · 1608 edges · 144 communities (61 shown, 83 thin omitted)
-- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 105 edges (avg confidence: 0.92)
+- 1096 nodes · 1836 edges · 148 communities (56 shown, 92 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 114 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f0ebd39a`
+- Built from commit: `0290334c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Order
-- web.php
+- Category
 - TestCase
 - composer.json
-- Controllers/OrderController.php
+- Illuminate\Database\Eloquent\Model
 - Cart
-- OderItemController
+- OderItem
 - package.json
 - GHNService
 - SampleDataSeeder
-- UserFactory.php
-- 3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues)
+- Illuminate\Support\Str
+- Illuminate\Http\Request
 - 3.2. Nhóm 2: Lỗi Giao diện & Hiển thị (UI/UX Issues)
 - Illuminate\Database\Schema\Blueprint
 - Illuminate\Database\Migrations\Migration
@@ -35,8 +35,10 @@
 - logging.php
 - artisan
 - HƯỚNG DẪN KIỂM THỬ HỆ THỐNG - TESTER GUIDE
-- 3.4. Nhóm 4: Đề xuất Tối ưu Hệ thống (Improvements)
+- .view
 - Illuminate\Support\Facades\Schema
+- AdminCatalogManagementTest
+- BÁO CÁO KIỂM THỬ CHỨC NĂNG CRUD HỆ THỐNG QUẢN LÝ BÁN HÀNG
 - Module Quản Lý Đơn Hàng (Order Management)
 - User
 - console.php
@@ -47,62 +49,56 @@
 - Hướng dẫn sử dụng JavaScript cho chức năng giỏ hàng
 - API DOCUMENTATION
 - CartServiceTest
-- Category
-- 3.3. Nhóm 3: Lỗi Luồng Nghiệp vụ & Xử lý Dữ liệu (Functional Issues)
+- Brand
+- 3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues)
 - CartController.php
-- AppServiceProvider.php
-- Illuminate\Http\Request
-- FullFlowTest
-- OderItem
-- Controller
-- BÁO CÁO RÀ SOÁT, KIỂM TOÁN HỆ THỐNG VÀ KHUYẾN NGHỊ KHẮC PHỤC TOÀN DIỆN
+- 1.1. Kiến trúc hệ thống và Ngăn xếp công nghệ
+- Product
+- MoMoService
+- VNPayService
+- 1.2 Chức năng CRUD
+- 2.2 Chức năng CRUD
 - HỆ THỐNG QUẢN LÝ BÁN HÀNG - E-COMMERCE MANAGEMENT SYSTEM
-- AdminOrderManagementTest
-- AdminController
+- 3.2 Chức năng CRUD
+- ReportsAndReviewsTest
 - .orders
 - Coupon
-- 5. HƯỚNG DẪN KIỂM CHỨNG & THẨM TRA ĐỘC LẬP (VERIFICATION GUIDE)
+- .placeOrder
 - Tổng Kết
-- 🚀 TÍNH NĂNG CHÍNH
+- Luồng Đặt Hàng
 - CẤU HÌNH MÔI TRƯỜNG
 - Cấu trúc Module
-- Cách sử dụng
+- Hướng dẫn sử dụng chức năng đăng nhập và quên mật khẩu
 - MODULE DOCUMENTATION
 - Manual Testing Checklist
-- Hướng dẫn sử dụng chức năng đăng nhập và quên mật khẩu
+- Các chức năng đã được cải thiện
 - DOCUMENTATION - HỆ THỐNG QUẢN LÝ BÁN HÀNG
 - Cấu trúc file đã tạo/cập nhật
-- bootstrap/app.php
+- 6. ĐÁNH GIÁ TỔNG QUAN
 - DATABASE SCHEMA
 - ERROR HANDLING
 - FILE UPLOAD SYSTEM
 - Tính Năng Chưa Thực Hiện (Future)
 - Các Vấn Đề Đã Khắc Phục
-- 🛠️ CÀI ĐẶT VÀ CHẠY DỰ ÁN
 - SampleDataSeeder.php
 - AUTHENTICATION & AUTHORIZATION
-- 🔧 CẤU HÌNH QUAN TRỌNG
 - DEPLOYMENT GUIDE
 - MAINTENANCE
 - graphify (Mode: Always Use the Graph)
 - Tính Năng Đã Thực Hiện
 - Troubleshooting
-- Database Schema
-- 📊 BÁO CÁO KIỂM THỬ
-- 📞 HỖ TRỢ
-- 📈 ROADMAP
 
 ## God Nodes (most connected - your core abstractions)
-1. `User` - 59 edges
-2. `Order` - 47 edges
-3. `Product` - 45 edges
+1. `User` - 73 edges
+2. `Order` - 60 edges
+3. `Product` - 53 edges
 4. `Category` - 43 edges
-5. `Controller` - 30 edges
+5. `Controller` - 37 edges
 6. `Cart` - 28 edges
 7. `Coupon` - 28 edges
-8. `Brand` - 23 edges
-9. `CartItem` - 22 edges
-10. `AdminCatalogManagementTest` - 21 edges
+8. `GHNService` - 24 edges
+9. `Brand` - 23 edges
+10. `CartItem` - 22 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `5.1 Cart Management` --references--> `CartController`  [INFERRED]
@@ -111,59 +107,63 @@
   BUG_FIXES.md → app/Http/Controllers/CouponController.php
 - `[CRIT-08] Lỗ hổng Mass Assignment leo thang đặc quyền qua cột `role` trong Model `User`` --references--> `User`  [INFERRED]
   BAO_CAO_RA_SOAT_HE_THONG.md → app/Models/User.php
-- `5.2 Authentication` --references--> `PasswordResetController`  [INFERRED]
-  BAO_CAO_KIEM_THU_CRUD.md → app/Http/Controllers/Auth/PasswordResetController.php
-- `1.1. Kiến trúc hệ thống và Ngăn xếp công nghệ` --references--> `PasswordResetController`  [INFERRED]
-  BAO_CAO_RA_SOAT_HE_THONG.md → app/Http/Controllers/Auth/PasswordResetController.php
+- `4.1 Thông tin module` --references--> `AdminController`  [INFERRED]
+  BAO_CAO_KIEM_THU_CRUD.md → app/Http/Controllers/AdminController.php
+- `1.1. Kiến trúc hệ thống và Ngăn xếp công nghệ` --references--> `AdminController`  [INFERRED]
+  BAO_CAO_RA_SOAT_HE_THONG.md → app/Http/Controllers/AdminController.php
 
 ## Import Cycles
 - None detected.
 
-## Communities (144 total, 83 thin omitted)
+## Communities (148 total, 92 thin omitted)
 
 ### Community 0 - "Order"
-Cohesion: 0.10
-Nodes (4): OrderController, OrderController, Order, GHNOrderService
+Cohesion: 0.12
+Nodes (3): OrderController, Order, GHNOrderService
 
-### Community 1 - "web.php"
-Cohesion: 0.18
-Nodes (3): PasswordResetController, HomeController, Illuminate\Support\Facades\Route
+### Community 1 - "Category"
+Cohesion: 0.15
+Nodes (7): CategoryController, HomeController, ProfilesController, Category, 2.1 Thông tin module, 4. Controllers và Routes, Illuminate\Support\Facades\Route
 
 ### Community 2 - "TestCase"
-Cohesion: 0.18
-Nodes (7): Illuminate\Foundation\Testing\RefreshDatabase, Illuminate\Foundation\Testing\TestCase, Illuminate\Http\UploadedFile, Illuminate\Support\Facades\Storage, ExampleTest, OptimizationTest, TestCase
+Cohesion: 0.21
+Nodes (7): Illuminate\Foundation\Testing\RefreshDatabase, Illuminate\Foundation\Testing\TestCase, Illuminate\Http\UploadedFile, Illuminate\Support\Facades\Storage, ExampleTest, ReportsDemoSeederTest, TestCase
 
 ### Community 3 - "composer.json"
 Cohesion: 0.04
-Nodes (45): pestphp/pest-plugin, php-http/discovery, autoload, autoload-dev, psr-4, psr-4, config, allow-plugins (+37 more)
+Nodes (48): pestphp/pest-plugin, php-http/discovery, autoload, autoload-dev, psr-4, psr-4, config, allow-plugins (+40 more)
 
-### Community 4 - "Controllers/OrderController.php"
-Cohesion: 0.24
-Nodes (4): OrderItem, OrderService, Illuminate\Http\Client\ConnectionException, Illuminate\Support\Facades\Log
+### Community 4 - "Illuminate\Database\Eloquent\Model"
+Cohesion: 0.15
+Nodes (8): HistorySearch, OrderItem, PaymentTransaction, ProductReview, ReportsDemoSeeder, Illuminate\Database\Eloquent\Factories\HasFactory, Illuminate\Database\Eloquent\Model, Illuminate\Support\Facades\Hash
 
 ### Community 5 - "Cart"
-Cohesion: 0.06
-Nodes (17): CartController, CheckoutController, Cart, CartItem, HistorySearch, PaymentTransaction, ProductReview, CartService (+9 more)
+Cohesion: 0.10
+Nodes (6): CartController, Cart, CartItem, CartService, OrderService, Lỗi: "Call to undefined method updateTotal()"
 
-### Community 6 - "OderItemController"
-Cohesion: 0.11
-Nodes (5): OderItemController, PlaceOrderRequest, StoreOderItemRequest, UpdateOderItemRequest, Illuminate\Foundation\Http\FormRequest
+### Community 6 - "OderItem"
+Cohesion: 0.07
+Nodes (8): OderItemController, StoreOderItemRequest, UpdateOderItemRequest, OderItem, OderItemPolicy, Illuminate\Auth\Access\Response, Illuminate\Foundation\Http\FormRequest, AdminOrderManagementTest
 
 ### Community 7 - "package.json"
 Cohesion: 0.09
 Nodes (19): devDependencies, axios, concurrently, laravel-vite-plugin, tailwindcss, @tailwindcss/vite, vite, private (+11 more)
 
+### Community 8 - "GHNService"
+Cohesion: 0.13
+Nodes (3): GHNController, LocationController, GHNService
+
 ### Community 9 - "SampleDataSeeder"
 Cohesion: 0.19
 Nodes (5): DatabaseSeeder, OderItemSeeder, SampleDataSeeder, Illuminate\Database\Console\Seeds\WithoutModelEvents, Illuminate\Database\Seeder
 
-### Community 10 - "UserFactory.php"
-Cohesion: 0.27
-Nodes (5): OderItemFactory, UserFactory, Illuminate\Database\Eloquent\Factories\Factory, Illuminate\Support\Facades\Hash, static
+### Community 10 - "Illuminate\Support\Str"
+Cohesion: 0.19
+Nodes (5): OderItemFactory, UserFactory, Illuminate\Database\Eloquent\Factories\Factory, Illuminate\Support\Str, static
 
-### Community 11 - "3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues)"
-Cohesion: 0.11
-Nodes (17): AdminMiddleware, Authenticate, 3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues), [CRIT-01] Tất cả thao tác Xóa (Delete) trong Admin dùng phương thức HTTP GET và không có bảo vệ CSRF, [CRIT-03] View gọi named route `route('register')` chưa từng được định nghĩa, [CRIT-04] Truy vấn cột `status` không tồn tại trong bảng `_category`, [CRIT-06] `CartController@checkCoupon` truy cập trực tiếp key mảng không qua validation, [CRIT-07] Truy cập `$item->category->name` thiếu null-safe operator gây Crash Fatal (+9 more)
+### Community 11 - "Illuminate\Http\Request"
+Cohesion: 0.06
+Nodes (27): ReportController, ReviewController, AdminController, GoogleAuthController, PasswordResetController, Controller, AdminMiddleware, Authenticate (+19 more)
 
 ### Community 12 - "3.2. Nhóm 2: Lỗi Giao diện & Hiển thị (UI/UX Issues)"
 Cohesion: 0.12
@@ -181,93 +181,93 @@ Nodes (4): Monolog\Handler\NullHandler, Monolog\Handler\StreamHandler, Monolog\H
 Cohesion: 0.05
 Nodes (41): 1.1 Đăng nhập Admin, 1.2 Quên mật khẩu, 1.3 Đăng xuất, 2.1 Xem danh sách sản phẩm, 2.2 Tạo sản phẩm mới, 2.3 Chỉnh sửa sản phẩm, 2.4 Xóa sản phẩm, 3.1 Xem danh sách danh mục (+33 more)
 
-### Community 21 - "3.4. Nhóm 4: Đề xuất Tối ưu Hệ thống (Improvements)"
+### Community 21 - ".view"
+Cohesion: 0.17
+Nodes (4): OrderController, [CRIT-05] `OrderController@storeFromCart` ghi sai cấu trúc bảng `orders` và thiếu các trường NOT NULL, [CRIT-13] Lỗ hổng IDOR trên `OrderController@showSuccess` làm lộ lọt toàn bộ thông tin định danh cá nhân (PII) của khách hàng, 2. Controllers
+
+### Community 34 - "BÁO CÁO KIỂM THỬ CHỨC NĂNG CRUD HỆ THỐNG QUẢN LÝ BÁN HÀNG"
 Cohesion: 0.25
-Nodes (8): 3.4. Nhóm 4: Đề xuất Tối ưu Hệ thống (Improvements), [IMP-01] Chuẩn hóa đường dẫn tài nguyên `asset()` và gỡ bỏ liên kết Windows Junction `public/public`, [IMP-02] Tối ưu tải Assets trong `admin_layout.blade.php`, [IMP-03] Bổ sung gói ngôn ngữ tiếng Việt (i18n) cho thư viện DataTables, [IMP-04] Tối ưu hóa truy vấn View Composer tránh duplicate query Category, [IMP-05] Xóa bỏ Route Test nhạy cảm `/test-password-reset/{email}`, [IMP-06] Bổ sung phân trang Server-side cho Product, Category, Brand, User, [IMP-07] Tách biệt giao diện Đăng nhập/Đăng ký Client và Xây dựng trang báo lỗi 404/500
+Nodes (8): 7.1 Ưu tiên cao, 7.2 Ưu tiên trung bình, 7.3 Ưu tiên thấp, 7. KHUYẾN NGHỊ, 8. KẾT LUẬN, BÁO CÁO KIỂM THỬ CHỨC NĂNG CRUD HỆ THỐNG QUẢN LÝ BÁN HÀNG, THÔNG TIN CHUNG, TỔNG QUAN CÁC MODULE CRUD
 
 ### Community 36 - "Module Quản Lý Đơn Hàng (Order Management)"
 Cohesion: 0.22
 Nodes (8): API Endpoints Summary, Credits, Manual Test Flow, Module Quản Lý Đơn Hàng (Order Management), Notes, Testing, Tinker Test, Tổng quan
 
 ### Community 38 - "User"
-Cohesion: 0.12
-Nodes (5): User, Illuminate\Contracts\Auth\CanResetPassword, Illuminate\Foundation\Auth\User, Illuminate\Notifications\Notifiable, AuthWorkflowTest
+Cohesion: 0.06
+Nodes (8): User, Illuminate\Contracts\Auth\CanResetPassword, Illuminate\Foundation\Auth\User, Illuminate\Notifications\Notifiable, AuthWorkflowTest, FullFlowTest, GoogleAuthTest, OptimizationTest
 
 ### Community 90 - "Hướng dẫn sử dụng JavaScript cho chức năng giỏ hàng"
 Cohesion: 0.08
-Nodes (24): 1. Layout chính (`resources/views/layout/home_layout.blade.php`), 1. Tự động (Đã được thiết lập sẵn), 2. Sử dụng thủ công, 2. Trang sản phẩm (`resources/views/client/home/index_home.blade.php`), 3. Trang chi tiết sản phẩm (`resources/views/client/product/detail.blade.php`), 3. Với form số lượng, 4. Controllers và Routes, ✅ Bộ đếm giỏ hàng (+16 more)
+Nodes (23): 1. Layout chính (`resources/views/layout/home_layout.blade.php`), 1. Tự động (Đã được thiết lập sẵn), 2. Sử dụng thủ công, 2. Trang sản phẩm (`resources/views/client/home/index_home.blade.php`), 3. Trang chi tiết sản phẩm (`resources/views/client/product/detail.blade.php`), 3. Với form số lượng, ✅ Bộ đếm giỏ hàng, CSRF token lỗi: (+15 more)
 
 ### Community 91 - "API DOCUMENTATION"
 Cohesion: 0.10
 Nodes (21): API DOCUMENTATION, Authentication Endpoints, Brand Management Endpoints, Category Management Endpoints, Create Brand, Create Category, Create Product, Delete Brand (+13 more)
 
-### Community 93 - "Category"
-Cohesion: 0.05
-Nodes (22): BrandController, CategoryController, Brand, Category, 2.1 Thông tin module, 2.2 Chức năng CRUD, 2.3 Đánh giá tổng thể, 2. MODULE QUẢN LÝ DANH MỤC (CATEGORY) (+14 more)
+### Community 93 - "Brand"
+Cohesion: 0.13
+Nodes (6): BrandController, Brand, 3.1 Thông tin module, ✅ READ (Đọc/Xem), Exception, Illuminate\Support\Facades\File
 
-### Community 94 - "3.3. Nhóm 3: Lỗi Luồng Nghiệp vụ & Xử lý Dữ liệu (Functional Issues)"
-Cohesion: 0.17
-Nodes (12): 3.3. Nhóm 3: Lỗi Luồng Nghiệp vụ & Xử lý Dữ liệu (Functional Issues), [FUNC-01] Admin hoàn toàn không có tính năng cập nhật trạng thái đơn hàng (Order Status), [FUNC-02] Toàn bộ Form CRUD Thêm & Sửa thiếu hiển thị lỗi Validation và thiếu giữ lại dữ liệu cũ, [FUNC-03] Toàn bộ Flash Messages đặt ngoài `@section('view-content')` bị Blade nuốt mất, [FUNC-04] Xung đột DataTables Client-side và Phân trang Server-side của Laravel trên trang Đơn hàng, [FUNC-05] Nút "Đóng" modal Coupon gọi sai ID modal không đóng được, [FUNC-06] Nút "Hủy bỏ" trong modal sửa coupon là thẻ `<a>` gây reload toàn trang, [FUNC-07] Modal Chi tiết Đơn hàng và Script bị đặt sau `@endsection` (+4 more)
+### Community 94 - "3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues)"
+Cohesion: 0.04
+Nodes (44): CheckoutController, 2. BẢNG MA TRẬN PHÂN LOẠI LỖI TOÀN DIỆN (AUDIT MATRIX), 3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues), 3.3. Nhóm 3: Lỗi Luồng Nghiệp vụ & Xử lý Dữ liệu (Functional Issues), 3.4. Nhóm 4: Đề xuất Tối ưu Hệ thống (Improvements), 3. DANH MỤC LỖI CHI TIẾT VÀ GIẢI PHÁP KHẮC PHỤC HOÀN CHỈNH, 4. LỘ TRÌNH VÀ KẾ HOẠCH TRIỂN KHAI KHẮC PHỤC (ROADMAP & ACTION PLAN), 5.1. Kiểm tra tĩnh qua dòng lệnh CLI (+36 more)
 
 ### Community 95 - "CartController.php"
-Cohesion: 0.23
-Nodes (6): Carbon\Carbon, Illuminate\Support\Collection, Illuminate\Support\Facades\Auth, Illuminate\Support\Facades\Session, Illuminate\Validation\Rule, now
+Cohesion: 0.16
+Nodes (11): Carbon\Carbon, Illuminate\Support\Collection, Illuminate\Support\Facades\Auth, Illuminate\Support\Facades\DB, Illuminate\Support\Facades\Log, Illuminate\Support\Facades\Mail, Illuminate\Support\Facades\Session, Laravel\Socialite\Facades\Socialite (+3 more)
 
-### Community 96 - "AppServiceProvider.php"
-Cohesion: 0.33
-Nodes (5): AppServiceProvider, Illuminate\Pagination\Paginator, Illuminate\Support\Facades\Cache, Illuminate\Support\Facades\View, Illuminate\Support\ServiceProvider
+### Community 96 - "1.1. Kiến trúc hệ thống và Ngăn xếp công nghệ"
+Cohesion: 0.22
+Nodes (8): AppServiceProvider, 1.1. Kiến trúc hệ thống và Ngăn xếp công nghệ, 1.2. Thống kê phạm vi kiểm toán, 1.3. Tóm tắt kết quả kiểm toán theo cấp độ rủi ro, 1. TỔNG QUAN HỆ THỐNG VÀ PHẠM VI RÀ SOÁT, Illuminate\Pagination\Paginator, Illuminate\Support\Facades\View, Illuminate\Support\ServiceProvider
 
-### Community 97 - "Illuminate\Http\Request"
-Cohesion: 0.19
-Nodes (4): ProductController, Product, 1.1 Thông tin module, Illuminate\Http\Request
+### Community 97 - "Product"
+Cohesion: 0.22
+Nodes (3): ProductController, Product, 1.1 Thông tin module
 
-### Community 99 - "OderItem"
-Cohesion: 0.23
-Nodes (3): OderItem, OderItemPolicy, Illuminate\Auth\Access\Response
-
-### Community 100 - "Controller"
-Cohesion: 0.39
-Nodes (6): Controller, ProfilesController, Illuminate\Foundation\Auth\Access\AuthorizesRequests, Illuminate\Foundation\Bus\DispatchesJobs, Illuminate\Foundation\Validation\ValidatesRequests, Illuminate\Routing\Controller
-
-### Community 101 - "BÁO CÁO RÀ SOÁT, KIỂM TOÁN HỆ THỐNG VÀ KHUYẾN NGHỊ KHẮC PHỤC TOÀN DIỆN"
+### Community 100 - "1.2 Chức năng CRUD"
 Cohesion: 0.29
-Nodes (6): 3. DANH MỤC LỖI CHI TIẾT VÀ GIẢI PHÁP KHẮC PHỤC HOÀN CHỈNH, 4. LỘ TRÌNH VÀ KẾ HOẠCH TRIỂN KHAI KHẮC PHỤC (ROADMAP & ACTION PLAN), BÁO CÁO RÀ SOÁT, KIỂM TOÁN HỆ THỐNG VÀ KHUYẾN NGHỊ KHẮC PHỤC TOÀN DIỆN, Bảng phân bổ nguồn lực và Tiêu chí nghiệm thu (KPI Acceptance Criteria), (COMPREHENSIVE AUDIT & RECOMMENDATIONS REPORT), MỤC LỤC
+Nodes (7): 1.2 Chức năng CRUD, 1.3 Đánh giá tổng thể, 1. MODULE QUẢN LÝ SẢN PHẨM (PRODUCT), ✅ CREATE (Tạo mới), ✅ DELETE (Xóa), ✅ READ (Đọc/Xem), ✅ UPDATE (Cập nhật)
+
+### Community 101 - "2.2 Chức năng CRUD"
+Cohesion: 0.29
+Nodes (7): 2.2 Chức năng CRUD, 2.3 Đánh giá tổng thể, 2. MODULE QUẢN LÝ DANH MỤC (CATEGORY), ✅ CREATE (Tạo mới), ✅ DELETE (Xóa), ✅ READ (Đọc/Xem), ✅ UPDATE (Cập nhật)
 
 ### Community 102 - "HỆ THỐNG QUẢN LÝ BÁN HÀNG - E-COMMERCE MANAGEMENT SYSTEM"
-Cohesion: 0.20
-Nodes (10): 📄 Báo cáo chi tiết, Bảo mật, 📁 CẤU TRÚC DỰ ÁN, Cần cải thiện, HỆ THỐNG QUẢN LÝ BÁN HÀNG - E-COMMERCE MANAGEMENT SYSTEM, 📝 LICENSE, 🔗 Links quan trọng, 🚨 LƯU Ý QUAN TRỌNG (+2 more)
+Cohesion: 0.06
+Nodes (32): 📄 Báo cáo chi tiết, 📊 BÁO CÁO KIỂM THỬ, Bảo mật, Cài đặt, 🛠️ CÀI ĐẶT VÀ CHẠY DỰ ÁN, 🔧 CẤU HÌNH QUAN TRỌNG, 📁 CẤU TRÚC DỰ ÁN, Cần cải thiện (+24 more)
 
-### Community 104 - "AdminController"
-Cohesion: 0.05
-Nodes (35): AdminController, 1.2 Chức năng CRUD, 1.3 Đánh giá tổng thể, 1. MODULE QUẢN LÝ SẢN PHẨM (PRODUCT), 4.1 Thông tin module, 4.2 Chức năng CRUD, 4.3 Đánh giá tổng thể, 4. MODULE QUẢN LÝ NGƯỜI DÙNG (USER) (+27 more)
+### Community 103 - "3.2 Chức năng CRUD"
+Cohesion: 0.33
+Nodes (6): 3.2 Chức năng CRUD, 3.3 Đánh giá tổng thể, 3. MODULE QUẢN LÝ THƯƠNG HIỆU (BRAND), ✅ CREATE (Tạo mới), ✅ DELETE (Xóa), ✅ UPDATE (Cập nhật)
+
+### Community 104 - "ReportsAndReviewsTest"
+Cohesion: 0.09
+Nodes (20): 4.1 Thông tin module, 4.2 Chức năng CRUD, 4.3 Đánh giá tổng thể, 4. MODULE QUẢN LÝ NGƯỜI DÙNG (USER), ✅ CREATE (Tạo mới), ❌ DELETE (Xóa), ✅ READ (Đọc/Xem), ✅ UPDATE (Cập nhật) (+12 more)
 
 ### Community 105 - ".orders"
-Cohesion: 0.38
-Nodes (6): [CRIT-05] `OrderController@storeFromCart` ghi sai cấu trúc bảng `orders` và thiếu các trường NOT NULL, 1. Lỗi Migration - Bảng `orders` Đã Tồn Tại, 2. Lỗi Import Controller Trong Routes, 3. Lỗi Giá Trị Giảm Giá Không Được Lưu Vào Database, 4. Lỗi Miễn Phí Vận Chuyển Không Hiển Thị, Ngày 24-25/11/2025
-
-### Community 107 - "5. HƯỚNG DẪN KIỂM CHỨNG & THẨM TRA ĐỘC LẬP (VERIFICATION GUIDE)"
-Cohesion: 0.33
-Nodes (5): 5.1. Kiểm tra tĩnh qua dòng lệnh CLI, 5.2. Kịch bản kiểm chứng tự động qua PHP CLI script, 5.3. Kịch bản kiểm thử tương tác trên trình duyệt (Browser Test Cases), 5.4. Bảng kiểm tra nghiệm thu (Sign-off Checklist), 5. HƯỚNG DẪN KIỂM CHỨNG & THẨM TRA ĐỘC LẬP (VERIFICATION GUIDE)
+Cohesion: 0.28
+Nodes (8): 1. Lỗi Migration - Bảng `orders` Đã Tồn Tại, 2. Lỗi Import Controller Trong Routes, 3. Lỗi Giá Trị Giảm Giá Không Được Lưu Vào Database, 4. Lỗi Miễn Phí Vận Chuyển Không Hiển Thị, Ngày 24-25/11/2025, Database Schema, Table: `oder_items`, Table: `orders`
 
 ### Community 108 - "Tổng Kết"
 Cohesion: 0.25
 Nodes (7): Commands Đã Chạy:, Cách Kiểm Tra Log:, Files Đã Sửa:, Migrations Đã Tạo:, Nhật Ký Sửa Lỗi (Bug Fixes Log), Tổng Kết, Vấn Đề Còn Tồn Tại (Cần Test):
 
-### Community 109 - "🚀 TÍNH NĂNG CHÍNH"
+### Community 109 - "Luồng Đặt Hàng"
 Cohesion: 0.40
-Nodes (5): ✅ Giỏ Hàng & Đơn Hàng, ✅ Hệ Thống Xác Thực, ✅ Module CRUD Hoàn Chỉnh, ✅ Quản Lý File Upload, 🚀 TÍNH NĂNG CHÍNH
+Nodes (5): Bước 1: User thêm sản phẩm vào giỏ, Bước 2: User xem giỏ hàng, Bước 3: User bấm "Đặt hàng", Bước 4: Admin xem đơn, Luồng Đặt Hàng
 
 ### Community 110 - "CẤU HÌNH MÔI TRƯỜNG"
 Cohesion: 0.50
 Nodes (4): Cài đặt, Cấu hình .env, CẤU HÌNH MÔI TRƯỜNG, Yêu cầu hệ thống
 
 ### Community 111 - "Cấu trúc Module"
-Cohesion: 0.25
-Nodes (8): 1. Models, 2. Controllers, 3. Routes (`routes/web.php`), 4. Views, 5. Menu Admin, Admin Views, Client Views, Cấu trúc Module
+Cohesion: 0.29
+Nodes (7): 1. Models, 3. Routes (`routes/web.php`), 4. Views, 5. Menu Admin, Admin Views, Client Views, Cấu trúc Module
 
-### Community 112 - "Cách sử dụng"
-Cohesion: 0.50
-Nodes (4): Cách sử dụng, Quên mật khẩu, Test chức năng, Đăng nhập
+### Community 112 - "Hướng dẫn sử dụng chức năng đăng nhập và quên mật khẩu"
+Cohesion: 0.29
+Nodes (7): Cách sử dụng, Cần cấu hình thêm, Hướng dẫn sử dụng chức năng đăng nhập và quên mật khẩu, Lưu ý quan trọng, Quên mật khẩu, Test chức năng, Đăng nhập
 
 ### Community 114 - "MODULE DOCUMENTATION"
 Cohesion: 0.29
@@ -277,9 +277,9 @@ Nodes (7): 1. ProductController, 2. CategoryController, 3. BrandController, Meth
 Cohesion: 0.29
 Nodes (7): Authentication, Automated Testing (Recommended), Brand Module, Category Module, Manual Testing Checklist, Product Module, TESTING GUIDE
 
-### Community 116 - "Hướng dẫn sử dụng chức năng đăng nhập và quên mật khẩu"
-Cohesion: 0.29
-Nodes (7): 1. Validation đăng nhập, 2. Xử lý lỗi đăng nhập, 3. Chức năng quên mật khẩu, Các chức năng đã được cải thiện, Cần cấu hình thêm, Hướng dẫn sử dụng chức năng đăng nhập và quên mật khẩu, Lưu ý quan trọng
+### Community 116 - "Các chức năng đã được cải thiện"
+Cohesion: 0.50
+Nodes (4): 1. Validation đăng nhập, 2. Xử lý lỗi đăng nhập, 3. Chức năng quên mật khẩu, Các chức năng đã được cải thiện
 
 ### Community 117 - "DOCUMENTATION - HỆ THỐNG QUẢN LÝ BÁN HÀNG"
 Cohesion: 0.33
@@ -289,9 +289,9 @@ Nodes (6): Chức năng chính, CẤU TRÚC DỰ ÁN, DOCUMENTATION - HỆ THỐ
 Cohesion: 0.33
 Nodes (6): Controllers, Cấu trúc file đã tạo/cập nhật, Database, Models, Routes, Views
 
-### Community 119 - "bootstrap/app.php"
-Cohesion: 0.33
-Nodes (3): Illuminate\Foundation\Application, Illuminate\Foundation\Configuration\Exceptions, Illuminate\Foundation\Configuration\Middleware
+### Community 119 - "6. ĐÁNH GIÁ TỔNG QUAN"
+Cohesion: 0.50
+Nodes (4): 6.1 Điểm mạnh, 6.2 Điểm cần cải thiện, 6.3 Bảo mật, 6. ĐÁNH GIÁ TỔNG QUAN
 
 ### Community 120 - "DATABASE SCHEMA"
 Cohesion: 0.40
@@ -313,21 +313,13 @@ Nodes (6): 🔲 Advanced Features, 🔲 Order Status, 🔲 Payment Integration, 
 Cohesion: 0.40
 Nodes (4): 1. Giỏ hàng dùng chung giữa users, 2. Đơn hàng không hiển thị admin dashboard, 3. Data không lưu vào DB, Các Vấn Đề Đã Khắc Phục
 
-### Community 126 - "🛠️ CÀI ĐẶT VÀ CHẠY DỰ ÁN"
-Cohesion: 0.50
-Nodes (4): Cài đặt, 🛠️ CÀI ĐẶT VÀ CHẠY DỰ ÁN, Truy cập hệ thống, Yêu cầu hệ thống
-
 ### Community 127 - "SampleDataSeeder.php"
-Cohesion: 0.19
-Nodes (6): Exception, Illuminate\Support\Facades\DB, Illuminate\Support\Facades\File, Illuminate\Support\Facades\Http, Illuminate\Support\Facades\Mail, Illuminate\Support\Str
+Cohesion: 0.50
+Nodes (3): Illuminate\Http\Client\ConnectionException, Illuminate\Support\Facades\Cache, Illuminate\Support\Facades\Http
 
 ### Community 128 - "AUTHENTICATION & AUTHORIZATION"
 Cohesion: 0.50
 Nodes (4): AUTHENTICATION & AUTHORIZATION, Middleware, Password Reset Flow, User Roles
-
-### Community 129 - "🔧 CẤU HÌNH QUAN TRỌNG"
-Cohesion: 0.50
-Nodes (4): 🔧 CẤU HÌNH QUAN TRỌNG, Database, File Upload, Security
 
 ### Community 130 - "DEPLOYMENT GUIDE"
 Cohesion: 0.50
@@ -349,41 +341,25 @@ Nodes (5): ✅ Bug Fixes, ✅ Core Features, ✅ Security, Tính Năng Đã Th�
 Cohesion: 0.50
 Nodes (4): Lỗi: "No data available in table", Lỗi: "SQLSTATE[23000]: Integrity constraint violation", Lỗi: "Undefined variable $cart", Troubleshooting
 
-### Community 140 - "Database Schema"
-Cohesion: 0.67
-Nodes (3): Database Schema, Table: `oder_items`, Table: `orders`
-
-### Community 141 - "📊 BÁO CÁO KIỂM THỬ"
-Cohesion: 0.67
-Nodes (3): 📊 BÁO CÁO KIỂM THỬ, Kết quả kiểm thử CRUD, Điểm tổng thể: **8.5/10**
-
-### Community 142 - "📞 HỖ TRỢ"
-Cohesion: 0.67
-Nodes (3): Development, 📞 HỖ TRỢ, Troubleshooting
-
-### Community 143 - "📈 ROADMAP"
-Cohesion: 0.67
-Nodes (3): 📈 ROADMAP, Version 2.0 (Planned), Version 3.0 (Future)
-
 ## Knowledge Gaps
-- **287 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+282 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 494 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **83 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **295 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+290 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 528 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **92 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `BÁO CÁO KIỂM THỬ CHỨC NĂNG CRUD HỆ THỐNG QUẢN LÝ BÁN HÀNG` connect `AdminController` to `README.md`, `Category`?**
-  _High betweenness centrality (0.201) - this node is a cross-community bridge._
-- **Why does `DOCUMENTATION - HỆ THỐNG QUẢN LÝ BÁN HÀNG` connect `DOCUMENTATION - HỆ THỐNG QUẢN LÝ BÁN HÀNG` to `AUTHENTICATION & AUTHORIZATION`, `DEPLOYMENT GUIDE`, `MAINTENANCE`, `CẤU HÌNH MÔI TRƯỜNG`, `MODULE DOCUMENTATION`, `Manual Testing Checklist`, `DATABASE SCHEMA`, `ERROR HANDLING`, `FILE UPLOAD SYSTEM`, `API DOCUMENTATION`, `README.md`?**
-  _High betweenness centrality (0.127) - this node is a cross-community bridge._
-- **Why does `User` connect `User` to `Order`, `web.php`, `TestCase`, `OderItem`, `FullFlowTest`, `Cart`, `AdminController`, `.orders`, `SampleDataSeeder`, `3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues)`, `3.2. Nhóm 2: Lỗi Giao diện & Hiển thị (UI/UX Issues)`, `Category`, `CartController.php`, `SampleDataSeeder.php`?**
-  _High betweenness centrality (0.118) - this node is a cross-community bridge._
+- **Why does `BÁO CÁO KIỂM THỬ CHỨC NĂNG CRUD HỆ THỐNG QUẢN LÝ BÁN HÀNG` connect `BÁO CÁO KIỂM THỬ CHỨC NĂNG CRUD HỆ THỐNG QUẢN LÝ BÁN HÀNG` to `1.2 Chức năng CRUD`, `2.2 Chức năng CRUD`, `3.2 Chức năng CRUD`, `ReportsAndReviewsTest`, `Illuminate\Http\Request`, `6. ĐÁNH GIÁ TỔNG QUAN`, `README.md`?**
+  _High betweenness centrality (0.150) - this node is a cross-community bridge._
+- **Why does `User` connect `User` to `TestCase`, `Illuminate\Database\Eloquent\Model`, `Cart`, `OderItem`, `ReportsAndReviewsTest`, `.orders`, `SampleDataSeeder`, `Illuminate\Http\Request`, `3.2. Nhóm 2: Lỗi Giao diện & Hiển thị (UI/UX Issues)`, `.view`, `SampleDataSeeder.php`, `AdminCatalogManagementTest`, `3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues)`, `CartController.php`?**
+  _High betweenness centrality (0.146) - this node is a cross-community bridge._
+- **Why does `Category` connect `Category` to `1.1. Kiến trúc hệ thống và Ngăn xếp công nghệ`, `Product`, `TestCase`, `Illuminate\Database\Eloquent\Model`, `Cart`, `OderItem`, `User`, `SampleDataSeeder`, `CartServiceTest`, `AdminCatalogManagementTest`, `SampleDataSeeder.php`, `Brand`, `3.1. Nhóm 1: Lỗi Nghiêm trọng (Critical Issues)`, `CartController.php`?**
+  _High betweenness centrality (0.101) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `User` (e.g. with `4.1 Thông tin module` and `[CRIT-08] Lỗ hổng Mass Assignment leo thang đặc quyền qua cột `role` trong Model `User``) actually correct?**
   _`User` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 3 inferred relationships involving `Order` (e.g. with `3. Lỗi Giá Trị Giảm Giá Không Được Lưu Vào Database` and `4. Lỗi Miễn Phí Vận Chuyển Không Hiển Thị`) actually correct?**
   _`Order` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
-  _287 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _295 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Order` be split into smaller, more focused modules?**
-  _Cohesion score 0.10338680926916222 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1225296442687747 - nodes in this community are weakly interconnected._

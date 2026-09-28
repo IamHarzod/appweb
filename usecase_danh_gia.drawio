@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2026-09-27T14:53:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+<mxfile host="Electron" modified="2026-09-27T14:55:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
   <diagram id="uc-danh-gia" name="UC Chi tiết - Đánh giá">
     <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="950" pageHeight="600" background="#ffffff" math="0" shadow="0">
       <root>
@@ -7,43 +7,43 @@
 
         <!-- KHUNG HỆ THỐNG (SYSTEM BOUNDARY) -->
         <mxCell id="sys_boundary" value="UC" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=0;collapsible=0;width=50;height=26;strokeWidth=1.5;strokeColor=#000000;fillColor=none;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
-          <mxGeometry x="140" y="30" width="760" height="480" as="geometry" />
+          <mxGeometry x="140" y="30" width="760" height="490" as="geometry" />
         </mxCell>
 
         <!-- ==================== TÁC NHÂN (ACTOR) ==================== -->
         <mxCell id="actor_customer" value="Khách hàng" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontFamily=Helvetica;fontSize=13;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="40" y="225" width="40" height="80" as="geometry" />
+          <mxGeometry x="40" y="240" width="40" height="80" as="geometry" />
         </mxCell>
 
         <!-- ==================== USE CASE CHÍNH ==================== -->
         <mxCell id="uc_danhgia" value="Đánh giá" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontStyle=1;fontSize=13;fontFamily=Helvetica;" vertex="1" parent="1">
-          <mxGeometry x="240" y="240" width="160" height="55" as="geometry" />
+          <mxGeometry x="230" y="255" width="160" height="60" as="geometry" />
         </mxCell>
 
         <!-- ==================== USE CASE ĐĂNG NHẬP ==================== -->
         <mxCell id="uc_dangnhap" value="Đăng nhập" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=13;fontFamily=Helvetica;" vertex="1" parent="1">
-          <mxGeometry x="245" y="70" width="150" height="55" as="geometry" />
+          <mxGeometry x="235" y="75" width="150" height="55" as="geometry" />
         </mxCell>
 
         <!-- ==================== 4 USE CASE CON (PHÂN RÃ) ==================== -->
         <!-- 1. Viết đánh giá cho món ăn đã mua -->
-        <mxCell id="uc_viet_danhgia" value="Viết đánh giá cho món ăn đã mua" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
-          <mxGeometry x="580" y="65" width="230" height="50" as="geometry" />
+        <mxCell id="uc_viet_dg" value="Viết đánh giá cho món ăn đã mua" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="580" y="55" width="240" height="50" as="geometry" />
         </mxCell>
 
         <!-- 2. Chọn số sao đánh giá -->
         <mxCell id="uc_chon_sao" value="Chọn số sao đánh giá" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
-          <mxGeometry x="580" y="170" width="230" height="50" as="geometry" />
+          <mxGeometry x="580" y="170" width="240" height="50" as="geometry" />
         </mxCell>
 
         <!-- 3. Chỉnh sửa đánh giá -->
-        <mxCell id="uc_sua_danhgia" value="Chỉnh sửa đánh giá" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
-          <mxGeometry x="580" y="275" width="230" height="50" as="geometry" />
+        <mxCell id="uc_sua_dg" value="Chỉnh sửa đánh giá" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="580" y="285" width="240" height="50" as="geometry" />
         </mxCell>
 
         <!-- 4. Xóa đánh giá -->
-        <mxCell id="uc_xoa_danhgia" value="Xóa đánh giá" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
-          <mxGeometry x="580" y="380" width="230" height="50" as="geometry" />
+        <mxCell id="uc_xoa_dg" value="Xóa đánh giá" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.2;fontSize=12;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="580" y="400" width="240" height="50" as="geometry" />
         </mxCell>
 
         <!-- ==================== ĐƯỜNG NỐI TÁC NHÂN (ASSOCIATION) ==================== -->
@@ -59,7 +59,7 @@
 
         <!-- ==================== QUAN HỆ <<EXTEND>> ==================== -->
         <!-- Viết đánh giá -> Đánh giá -->
-        <mxCell id="edge_extend_1" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="uc_viet_danhgia" target="uc_danhgia">
+        <mxCell id="edge_extend_1" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="uc_viet_dg" target="uc_danhgia">
           <mxGeometry width="160" relative="1" as="geometry" />
         </mxCell>
 
@@ -69,12 +69,12 @@
         </mxCell>
 
         <!-- Chỉnh sửa đánh giá -> Đánh giá -->
-        <mxCell id="edge_extend_3" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="uc_sua_danhgia" target="uc_danhgia">
+        <mxCell id="edge_extend_3" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="uc_sua_dg" target="uc_danhgia">
           <mxGeometry width="160" relative="1" as="geometry" />
         </mxCell>
 
         <!-- Xóa đánh giá -> Đánh giá -->
-        <mxCell id="edge_extend_4" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="uc_xoa_danhgia" target="uc_danhgia">
+        <mxCell id="edge_extend_4" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=#ffffff;endArrow=open;endFill=0;dashed=1;rounded=0;strokeColor=#000000;strokeWidth=1.2;fontSize=11;fontFamily=Helvetica;" edge="1" parent="1" source="uc_xoa_dg" target="uc_danhgia">
           <mxGeometry width="160" relative="1" as="geometry" />
         </mxCell>
 

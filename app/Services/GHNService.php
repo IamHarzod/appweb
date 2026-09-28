@@ -44,7 +44,7 @@ class GHNService
      */
     public function getProvinces(): array
     {
-        return Cache::remember('ghn_provinces_list_v2', 86400, function () {
+        $fetch = function () {
             $res = $this->get('/master-data/province');
             if (isset($res['code']) && $res['code'] == 200 && is_array($res['data'] ?? null)) {
                 $provinces = $res['data'];
@@ -54,7 +54,13 @@ class GHNService
                 return $provinces;
             }
             return $res['data'] ?? [];
-        });
+        };
+
+        try {
+            return Cache::remember('ghn_provinces_list_v2', 86400, $fetch);
+        } catch (\Throwable $e) {
+            return $fetch();
+        }
     }
 
     /**
@@ -62,7 +68,7 @@ class GHNService
      */
     public function getDistricts(int $provinceId): array
     {
-        return Cache::remember("ghn_districts_{$provinceId}_v2", 86400, function () use ($provinceId) {
+        $fetch = function () use ($provinceId) {
             $res = $this->post('/master-data/district', [
                 'province_id' => $provinceId
             ]);
@@ -74,7 +80,13 @@ class GHNService
                 return $districts;
             }
             return $res['data'] ?? [];
-        });
+        };
+
+        try {
+            return Cache::remember("ghn_districts_{$provinceId}_v2", 86400, $fetch);
+        } catch (\Throwable $e) {
+            return $fetch();
+        }
     }
 
     /**
@@ -82,7 +94,7 @@ class GHNService
      */
     public function getWards(int $districtId): array
     {
-        return Cache::remember("ghn_wards_{$districtId}_v2", 86400, function () use ($districtId) {
+        $fetch = function () use ($districtId) {
             $res = $this->post('/master-data/ward?district_id=' . $districtId, [
                 'district_id' => $districtId
             ]);
@@ -94,7 +106,13 @@ class GHNService
                 return $wards;
             }
             return $res['data'] ?? [];
-        });
+        };
+
+        try {
+            return Cache::remember("ghn_wards_{$districtId}_v2", 86400, $fetch);
+        } catch (\Throwable $e) {
+            return $fetch();
+        }
     }
 
     /**
