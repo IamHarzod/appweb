@@ -66,6 +66,7 @@ Route::get('/show-checkout', [CheckoutController::class, 'show_checkout'])->name
 Route::post('/thanh-toan', [OrderController::class, 'placeOrder'])->name('checkout.process');
 Route::post('/dat-hang', [OrderController::class, 'placeOrder'])->name('dathang');
 Route::get('/dat-hang-thanh-cong/{id}', [OrderController::class, 'showSuccess'])->name('order.success');
+Route::get('/orders/{id}/repay', [OrderController::class, 'repay'])->name('order.repay');
 
 // MoMo Payment Callback Routes
 Route::get('/momo-return', [OrderController::class, 'momoReturn'])->name('momo.return');

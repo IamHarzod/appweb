@@ -365,8 +365,13 @@ class OrderController extends Controller
                 'payment_status' => 'failed',
             ]);
 
+            $reasonDetail = $this->getMoMoErrorMessage((string)$resultCode, $message);
+            $reason = $reasonDetail . ($resultCode !== null ? ' (Mã lỗi: ' . $resultCode . ')' : '');
+            session(['order_failure_reason_' . $order->id => $reason]);
+
             return redirect()->route('order.success', ['id' => $order->id])
-                ->with('error', 'Thanh toán MoMo không thành công hoặc đã bị hủy: ' . ($message ?? ''));
+                ->with('error', $reason)
+                ->with('payment_failed', true);
         }
     }
 
@@ -446,8 +451,17 @@ class OrderController extends Controller
                 'payment_status' => 'failed',
             ]);
 
+            $reasonDetail = $this->getVNPayErrorMessage($vnp_ResponseCode);
+            if (!$isValidSignature) {
+                $reasonDetail = 'Chữ ký bảo mật không hợp lệ (Dữ liệu giao dịch có thể đã bị can thiệp).';
+            }
+
+            $reason = $reasonDetail . ($vnp_ResponseCode ? ' (Mã lỗi: ' . $vnp_ResponseCode . ')' : '');
+            session(['order_failure_reason_' . $order->id => $reason]);
+
             return redirect()->route('order.success', ['id' => $order->id])
-                ->with('error', 'Thanh toán VNPAY không thành công hoặc đã bị hủy (Mã lỗi: ' . $vnp_ResponseCode . ').');
+                ->with('error', $reason)
+                ->with('payment_failed', true);
         }
     }
 
@@ -532,5 +546,104 @@ class OrderController extends Controller
         $categories = \App\Models\Category::all();
 
         return view('client.checkout.momo_mock', compact('order', 'categories'));
+    }
+
+    /**
+     * Cho phép khách hàng thực hiện thanh toán lại nếu trước đó bị hủy hoặc thất bại
+     */
+    public function repay($id)
+    {
+        $order = Order::findOrFail($id);
+
+        // Kiểm tra quyền chống IDOR
+        if (Auth::check()) {
+            if ($order->user_id && $order->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+                abort(403, 'Bạn không có quyền thực hiện thanh toán đơn hàng này.');
+            }
+        } else {
+            if (session('last_placed_order_id') != $id) {
+                abort(403, 'Bạn không có quyền thực hiện thanh toán đơn hàng này.');
+            }
+        }
+
+        if ($order->payment_status === 'paid') {
+            return redirect()->route('order.success', ['id' => $order->id])
+                ->with('warning', 'Đơn hàng này đã được thanh toán thành công trước đó.');
+        }
+
+        $method = strtoupper($order->payment_method ?? '');
+
+        if ($method === 'VNPAY') {
+            $vnpayService = new VNPayService();
+            $vnpayUrl = $vnpayService->createPaymentUrl($order);
+            return redirect()->away($vnpayUrl);
+        }
+
+        if ($method === 'MOMO') {
+            $momoService = new MoMoService();
+            $momoRes = $momoService->createPayment($order);
+
+            if ($momoRes['success'] && !empty($momoRes['payUrl'])) {
+                return redirect()->away($momoRes['payUrl']);
+            }
+
+            return redirect()->route('momo.mock_pay', ['order_id' => $order->id]);
+        }
+
+        return redirect()->route('order.success', ['id' => $order->id])
+            ->with('error', 'Phương thức thanh toán hiện tại không hỗ trợ thanh toán lại trực tuyến.');
+    }
+
+    /**
+     * Lấy mô tả chi tiết lý do lỗi từ mã phản hồi VNPAY
+     */
+    protected function getVNPayErrorMessage(?string $code): string
+    {
+        $errors = [
+            '00' => 'Giao dịch thành công.',
+            '07' => 'Trừ tiền thành công nhưng giao dịch bị nghi ngờ bất thường.',
+            '09' => 'Thẻ/Tài khoản của quý khách chưa đăng ký dịch vụ InternetBanking tại ngân hàng.',
+            '10' => 'Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần.',
+            '11' => 'Đã hết hạn chờ thanh toán. Vui lòng thực hiện lại giao dịch.',
+            '12' => 'Thẻ/Tài khoản của quý khách đang bị khóa.',
+            '13' => 'Quý khách nhập sai mật khẩu xác thực OTP.',
+            '24' => 'Khách hàng đã hủy giao dịch thanh toán.',
+            '51' => 'Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.',
+            '65' => 'Tài khoản của quý khách đã vượt quá hạn mức giao dịch trong ngày.',
+            '75' => 'Ngân hàng thanh toán đang bảo trì.',
+            '79' => 'Khách hàng nhập sai mật khẩu thanh toán quá số lần quy định.',
+            '97' => 'Chữ ký bảo mật không hợp lệ (Dữ liệu có thể đã bị can thiệp).',
+            '99' => 'Lỗi kết nối hoặc hệ thống ngân hàng đang bận.',
+        ];
+
+        if (!$code) {
+            return 'Giao dịch thanh toán VNPAY không hoàn tất.';
+        }
+
+        return $errors[$code] ?? ('Lỗi giao dịch VNPAY không xác định (Mã lỗi: ' . $code . ').');
+    }
+
+    /**
+     * Lấy mô tả chi tiết lý do lỗi từ mã phản hồi MoMo
+     */
+    protected function getMoMoErrorMessage(?string $resultCode, ?string $defaultMessage = null): string
+    {
+        $errors = [
+            '0'    => 'Giao dịch thành công.',
+            '1006' => 'Khách hàng đã hủy giao dịch thanh toán.',
+            '1001' => 'Tài khoản không đủ số dư để thực hiện giao dịch.',
+            '1002' => 'Giao dịch bị từ chối do nhà phát hành tài khoản.',
+            '1003' => 'Giao dịch đã hết hạn chờ thanh toán.',
+            '1004' => 'Số tiền giao dịch vượt quá hạn mức thanh toán trong ngày.',
+            '1005' => 'Mã thanh toán hoặc QR code đã hết hạn.',
+            '1007' => 'Tài khoản người dùng đang bị tạm khóa.',
+            '49'   => 'Khách hàng đã hủy giao dịch trước khi thanh toán.',
+        ];
+
+        if ($resultCode && isset($errors[(string)$resultCode])) {
+            return $errors[(string)$resultCode];
+        }
+
+        return $defaultMessage ?: 'Giao dịch qua Ví MoMo không thành công hoặc đã bị hủy.';
     }
 }

@@ -1,41 +1,73 @@
 @extends('layout.home_layout')
 @section('home-content')
-    <!-- Order Success Start -->
+@php
+    $isFailed = ($order->payment_status === 'failed') 
+        || session()->has('payment_failed')
+        || session()->has('error') 
+        || ($order->status === 'cancelled');
+
+    $reason = session('error') 
+        ?? session('order_failure_reason_' . $order->id) 
+        ?? ($order->payment_status === 'failed' ? ('Giao dịch thanh toán ' . (strtoupper($order->payment_method ?? '') === 'VNPAY' ? 'qua VNPAY' : (strtoupper($order->payment_method ?? '') === 'MOMO' ? 'qua Ví MoMo' : '')) . ' không thành công hoặc đã bị hủy.') : null);
+@endphp
+    <!-- Order Success / Failure Start -->
     <div class="container-fluid py-5">
         <div class="container py-5 text-center">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="card border-0 shadow-sm rounded">
                         <div class="card-body p-5">
-                            <!-- Icon Thành công -->
-                            <div class="mb-4">
-                                <i class="fa fa-check-circle text-success display-1"></i>
-                            </div>
-
-                            <h1 class="mb-3 text-success">Đặt hàng thành công!</h1>
-                            <p class="lead text-muted mb-4">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được tiếp nhận và
-                                đang trong quá trình xử lý.</p>
-
-                            <!-- Thông tin Mã đơn hàng -->
-                            <div class="alert alert-light border mb-4">
-                                <p class="mb-0">Mã đơn hàng của bạn: <strong
-                                        class="text-primary">#{{ $order->id ?? 'DH0000' }}</strong></p>
-                            </div>
-
-                            @if (session('warning'))
-                                <div class="alert alert-warning mb-4">
-                                    {{ session('warning') }}
+                            @if ($isFailed)
+                                <!-- Icon Thất bại -->
+                                <div class="mb-4">
+                                    <i class="fa fa-times-circle text-danger display-1"></i>
                                 </div>
-                            @endif
-                            @if (session('error'))
-                                <div class="alert alert-danger mb-4">
-                                    {{ session('error') }}
+
+                                <h1 class="mb-3 text-danger">Đặt hàng không thành công!</h1>
+                                <p class="lead text-muted mb-4">Giao dịch thanh toán chưa hoàn tất. Đơn hàng của bạn chưa thể tiếp nhận xử lý.</p>
+
+                                <!-- Thông tin Mã đơn hàng -->
+                                <div class="alert alert-light border mb-4">
+                                    <p class="mb-0">Mã đơn hàng của bạn: <strong
+                                            class="text-danger">#{{ $order->id ?? 'DH0000' }}</strong></p>
                                 </div>
-                            @endif
-                            @if (session('success'))
-                                <div class="alert alert-success mb-4">
-                                    {{ session('success') }}
+
+                                <!-- Lý do không thành công -->
+                                <div class="alert alert-danger mb-4 text-start">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa fa-exclamation-triangle fs-4 me-3 text-danger flex-shrink-0"></i>
+                                        <div>
+                                            <strong class="d-block mb-1">Lý do không thành công:</strong>
+                                            <span>{{ $reason ?? 'Thanh toán không thành công hoặc giao dịch đã bị hủy.' }}</span>
+                                        </div>
+                                    </div>
                                 </div>
+                            @else
+                                <!-- Icon Thành công -->
+                                <div class="mb-4">
+                                    <i class="fa fa-check-circle text-success display-1"></i>
+                                </div>
+
+                                <h1 class="mb-3 text-success">Đặt hàng thành công!</h1>
+                                <p class="lead text-muted mb-4">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được tiếp nhận và
+                                    đang trong quá trình xử lý.</p>
+
+                                <!-- Thông tin Mã đơn hàng -->
+                                <div class="alert alert-light border mb-4">
+                                    <p class="mb-0">Mã đơn hàng của bạn: <strong
+                                            class="text-primary">#{{ $order->id ?? 'DH0000' }}</strong></p>
+                                </div>
+
+                                @if (session('warning'))
+                                    <div class="alert alert-warning mb-4">
+                                        {{ session('warning') }}
+                                    </div>
+                                @endif
+                                @if (session('success'))
+                                    <div class="alert alert-success mb-4">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
                             @endif
 
                             <!-- Chi tiết đơn hàng -->
@@ -133,9 +165,17 @@
                             </div>
 
                             <!-- Nút điều hướng -->
-                            <div class="mt-5 d-flex justify-content-center gap-3">
+                            <div class="mt-5 d-flex justify-content-center flex-wrap gap-3">
+                                @if ($isFailed && in_array(strtoupper($order->payment_method ?? ''), ['VNPAY', 'MOMO']))
+                                    <a href="{{ route('order.repay', ['id' => $order->id]) }}" class="btn btn-danger rounded-pill px-4 py-2 shadow-sm">
+                                        <i class="fa fa-credit-card me-2"></i>Thử thanh toán lại
+                                    </a>
+                                @endif
                                 <a href="{{ route('home') }}" class="btn btn-outline-secondary rounded-pill px-4 py-2">
                                     <i class="fa fa-home me-2"></i>Về trang chủ
+                                </a>
+                                <a href="{{ route('orders.lookup') }}" class="btn btn-outline-primary rounded-pill px-4 py-2">
+                                    <i class="fa fa-search me-2"></i>Tra cứu đơn hàng
                                 </a>
                                 <a href="{{ url('/') }}" class="btn btn-primary rounded-pill px-4 py-2">
                                     <i class="fa fa-shopping-bag me-2"></i>Tiếp tục mua sắm
