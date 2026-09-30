@@ -180,13 +180,18 @@ class ProductController extends Controller
     {
         $keyword = $request->input('keyword');
         if ($keyword) {
-            $product = Product::where('name', 'like', '%' . $keyword . '%')->get();
+            $product = Product::with(['category', 'brand', 'reviews'])
+                ->where('name', 'like', '%' . $keyword . '%')
+                ->where('IsActive', 1)
+                ->get();
         } else {
             $product = collect();
         }
-        $categories = Category::all();
+        $categories = Category::orderBy('id', 'asc')->get();
+        $brands = Brand::where('TrangThai', 1)->get();
+        $currentCategory = null;
 
-        return view('client.home.product_category', compact('product', 'keyword', 'categories'));
+        return view('client.home.product_category', compact('product', 'keyword', 'categories', 'brands', 'currentCategory'));
     }
     public function autocomplete_ajax(Request $request)
     {
