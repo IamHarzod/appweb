@@ -272,7 +272,7 @@
                                                 <a href="{{ route('product.detail', $product->id) }}"
                                                     class="d-block mb-2">{{ $product->category?->name ?? 'Sản phẩm' }}</a>
                                                 <a href="{{ route('product.detail', $product->id) }}" class="d-block h4">
-                                                    {{ $product->name }} <br> </a>
+                                                    {{ $product->name }}</a>
                                                 @php
                                                     $price = (float) ($product->price ?? 0);
                                                     $percent = (int) ($product->discountPercent ?? 0);
@@ -376,7 +376,7 @@
                                         <a href="{{ route('product.detail', $product->id) }}"
                                             class="d-block mb-2">{{ $product->category?->name ?? 'Sản phẩm' }}</a>
                                         <a href="{{ route('product.detail', $product->id) }}"
-                                            class="d-block h4">{{ $product->name }} <br></a>
+                                            class="d-block h4">{{ $product->name }}</a>
 
                                         @php
                                             $price = (float) ($product->price ?? 0);
@@ -474,7 +474,7 @@
                                                 <a href="{{ route('product.detail', $product->id) }}"
                                                     class="d-block mb-2">{{ $product->category?->name ?? 'Sản phẩm' }}</a>
                                                 <a href="{{ route('product.detail', $product->id) }}" class="d-block h4">
-                                                    {{ $product->name }} <br></a>
+                                                    {{ $product->name }}</a>
                                                 @if ($percent > 0)
                                                     <del class="me-2 fs-5">{{ $fmt($price) }}</del>
                                                     <span class="text-primary fs-5">{{ $fmt($discounted) }}</span>

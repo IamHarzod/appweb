@@ -37,7 +37,7 @@
     <link href="{{ asset('client/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="{{ asset('client/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/css/style.css') }}?v=1.1" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('client/img/favicon.png') }}">
     <style>
         /* Hiệu ứng khi di chuột vào sản phẩm gợi ý */
@@ -55,16 +55,31 @@
             margin: 0;
         }
 
-        .navbar-nav .nav-link.active {
-            color: #ffffff !important;
-            /* Bắt buộc màu trắng */
-            font-weight: bold;
-            /* In đậm cho rõ */
-            text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-            /* Thêm chút bóng nhẹ cho đẹp */
+        .active-nav-pill {
+            background-color: #ffffff !important;
+            color: #f37021 !important;
+            border-radius: 20px !important;
+            font-weight: 700 !important;
+            padding: 5px 14px !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
         }
 
-        .navbar-nav .nav-link:hover {
+        .active-nav-pill i {
+            color: #f37021 !important;
+        }
+
+        .navbar-nav .nav-link {
+            transition: all 0.2s ease-in-out;
+            border-radius: 20px;
+        }
+
+        .nav-bar .bg-primary,
+        .nav-bar .navbar.bg-primary {
+            background-color: #f37021 !important;
+        }
+
+        .navbar-nav .nav-link:hover:not(.active-nav-pill) {
+            background-color: rgba(255, 255, 255, 0.15);
             color: #ffffff !important;
         }
     </style>
@@ -213,20 +228,62 @@
                             </form>
                         </div>
 
-                        <div class="navbar-nav me-auto py-0"> 
+                        @php
+                            $getCatIcon = function($name) {
+                                $n = mb_strtolower($name);
+                                if (str_contains($n, 'máy ảnh') || str_contains($n, 'quay phim') || str_contains($n, 'camera')) return 'fas fa-camera';
+                                if (str_contains($n, 'đồng hồ') || str_contains($n, 'watch')) return 'fas fa-clock';
+                                if (str_contains($n, 'tai nghe') || str_contains($n, 'âm thanh') || str_contains($n, 'audio')) return 'fas fa-headphones';
+                                if (str_contains($n, 'máy tính bảng') || str_contains($n, 'tablet') || str_contains($n, 'ipad')) return 'fas fa-tablet-alt';
+                                if (str_contains($n, 'laptop') || str_contains($n, 'pc') || str_contains($n, 'máy tính')) return 'fas fa-laptop';
+                                if (str_contains($n, 'điện thoại') || str_contains($n, 'phone')) return 'fas fa-mobile-alt';
+                                if (str_contains($n, 'phụ kiện')) return 'fas fa-plug';
+                                return 'fas fa-tag';
+                            };
+                        @endphp
+
+                        <!-- Danh mục sản phẩm Button -->
+                        <div class="dropdown me-2 d-none d-lg-block">
+                            <button class="btn text-white fw-bold d-flex align-items-center gap-2 border-0" type="button" data-bs-toggle="dropdown" style="background: rgba(0, 0, 0, 0.18); border-radius: 8px; padding: 7px 14px; font-size: 14px;">
+                                <i class="fa fa-bars"></i>
+                                <span>Danh mục sản phẩm</span>
+                            </button>
+                            <ul class="dropdown-menu shadow-lg border-0 py-2 mt-2" style="min-width: 220px; border-radius: 12px; z-index: 1050;">
+                                @foreach ($categories as $cat)
+                                    <li>
+                                        <a class="dropdown-item py-2 px-3 d-flex align-items-center gap-2" href="{{ url('/show-product-category-home/' . $cat->id) }}">
+                                            <i class="{{ $getCatIcon($cat->name) }} text-primary" style="width: 18px;"></i>
+                                            <span>{{ $cat->name }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        <div class="navbar-nav me-auto py-0 d-flex flex-wrap align-items-center gap-1"> 
                             <a href="{{ url('/') }}"
-                                class="nav-item nav-link {{ request()->is('/') ? 'active text-white font-weight-bold' : 'text-white' }}">Trang
-                                chủ</a>
+                                class="nav-item nav-link d-inline-flex align-items-center gap-1 {{ request()->is('/') ? 'active-nav-pill' : 'text-white' }}"
+                                style="font-size: 13.5px; padding: 6px 12px;">
+                                <i class="fas fa-home"></i>
+                                <span>Trang chủ</span>
+                            </a>
 
                             @foreach ($categories as $cat)
+                                @php
+                                    $isActive = request()->is('show-product-category-home/' . $cat->id) || request()->id == $cat->id;
+                                @endphp
                                 <a href="{{ url('/show-product-category-home/' . $cat->id) }}"
-                                    class="nav-item nav-link {{ request()->is('show-product-category-home/' . $cat->id) || request()->id == $cat->id ? 'active text-white font-weight-bold' : 'text-white' }}">
-                                    {{ $cat->name }}
+                                    class="nav-item nav-link d-inline-flex align-items-center gap-1 {{ $isActive ? 'active-nav-pill' : 'text-white' }}"
+                                    style="font-size: 13.5px; padding: 6px 12px; white-space: nowrap;">
+                                    <i class="{{ $getCatIcon($cat->name) }}"></i>
+                                    <span>{{ $cat->name }}</span>
                                 </a>
                             @endforeach
                             <a href="{{ route('orders.lookup') }}"
-                                class="nav-item nav-link {{ request()->routeIs('orders.lookup*') ? 'active text-white font-weight-bold' : 'text-white' }}">
-                                <i class="fas fa-shipping-fast me-1"></i> Tra cứu đơn
+                                class="nav-item nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('orders.lookup*') ? 'active-nav-pill' : 'text-white' }}"
+                                style="font-size: 13.5px; padding: 6px 12px; white-space: nowrap;">
+                                <i class="fas fa-shipping-fast"></i>
+                                <span>Tra cứu đơn</span>
                             </a>
                         </div>
 

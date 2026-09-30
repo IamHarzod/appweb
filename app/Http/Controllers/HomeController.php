@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductReview;
+use App\Models\Brand;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,9 +37,15 @@ class HomeController extends Controller
 
     public function show_product_category_home($id)
     {
-        $categories = Category::orderBy("id", "desc")->get();
-        $product = Product::where('category_id', $id)->orderBy('id', 'desc')->get();
-        return view('client.home.product_category', compact('product', 'categories'));
+        $categories = Category::orderBy("id", "asc")->get();
+        $currentCategory = Category::find($id);
+        $product = Product::with(['category', 'brand', 'reviews'])
+            ->where('category_id', $id)
+            ->where('IsActive', 1)
+            ->orderBy('id', 'desc')
+            ->get();
+        $brands = Brand::where('TrangThai', 1)->get();
+        return view('client.home.product_category', compact('product', 'categories', 'currentCategory', 'brands'));
     }
 
     public function show_product_detail($id)
