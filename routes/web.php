@@ -99,7 +99,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
     Route::post('/orders/{id}/cancel', [AdminOrderController::class, 'cancel'])->name('orders.cancel');
     Route::post('/orders/{id}/push-ghn', [AdminOrderController::class, 'pushGhn'])->name('orders.push_ghn');
-    Route::match(['get', 'delete'], '/orders/delete/{id}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+    Route::match(['get', 'delete'], '/orders/delete/{id}', [AdminOrderController::class, 'destroy'])->name('orders.delete');
 });
 
 //Profile
