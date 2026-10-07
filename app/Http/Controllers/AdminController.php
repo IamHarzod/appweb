@@ -58,8 +58,10 @@ class AdminController extends Controller
             $user = Auth::user();
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
+            } elseif (!$user->hasVerifiedEmail()) {
+                return redirect()->route('verification.notice');
             } else {
-                return redirect()->route('home');
+                return redirect()->intended(route('home'));
             }
         }
 
@@ -141,12 +143,15 @@ class AdminController extends Controller
             'phoneNumber' => $request->phoneNumber,
             'password'    => bcrypt($request->password),
             'IsActive'    => 1,
+            'role'        => 'user',
         ]);
-        
-        $user->role = 'user';
-        $user->save();
 
-        return redirect()->intended(route('admin'))->with('success', 'Đăng ký tài khoản thành công!');
+        // Kích hoạt gửi email xác thực tài khoản
+        event(new \Illuminate\Auth\Events\Registered($user));
+
+        Auth::login($user);
+
+        return redirect()->route('verification.notice')->with('success', 'Đăng ký tài khoản thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.');
     }
 
     public function logout_admin(Request $request)

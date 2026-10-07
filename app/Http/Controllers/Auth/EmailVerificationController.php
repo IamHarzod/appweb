@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class EmailVerificationController extends Controller
+{
+    /**
+     * Hiển thị giao diện thông báo yêu cầu xác thực email.
+     */
+    public function notice(Request $request)
+    {
+        if ($request->user() && $request->user()->hasVerifiedEmail()) {
+            return redirect()->route('home');
+        }
+
+        return view('auth.verify_email');
+    }
+
+    /**
+     * Xử lý liên kết xác thực email người dùng bấm từ hòm thư.
+     */
+    public function verify(Request $request, $id, $hash)
+    {
+        $user = User::findOrFail($id);
+
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            throw new AuthorizationException('Liên kết xác thực email không hợp lệ hoặc đã hết hạn.');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('home')->with('success', 'Email của bạn đã được xác thực trước đó.');
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
+
+        // Tự động đăng nhập nếu người dùng mở link trên trình duyệt mới
+        if (!Auth::check()) {
+            Auth::login($user);
+        }
+
+        return redirect()->route('home')->with('success', 'Xác thực email thành công! Chào mừng bạn đến với 36Shop.');
+    }
+
+    /**
+     * Gửi lại email xác thực cho người dùng.
+     */
+    public function resend(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để gửi lại email xác thực.');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('home');
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return back()->with('status', 'verification-link-sent');
+    }
+}

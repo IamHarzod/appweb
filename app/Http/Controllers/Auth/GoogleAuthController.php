@@ -86,6 +86,9 @@ class GoogleAuthController extends Controller
                 if (empty($user->avatar) && $googleUser->getAvatar()) {
                     $user->avatar = $googleUser->getAvatar();
                 }
+                if (empty($user->email_verified_at)) {
+                    $user->email_verified_at = now();
+                }
                 $user->save();
             } else {
                 // 3. Nếu hoàn toàn mới -> Tạo tài khoản người dùng mới

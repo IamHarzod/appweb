@@ -18,6 +18,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\GHNController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 
 // GHN API Routes (Location & Fee)
 Route::get('/ghn/provinces', [GHNController::class, 'getProvinces'])->name('ghn.provinces');
@@ -131,6 +132,15 @@ Route::post('/login', [AdminController::class, 'submit_login']);
 // Google OAuth Routes
 Route::get('/auth/google', [GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+// Email Verification Routes
+Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware(['signed'])
+    ->name('verification.verify');
+Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
+    ->middleware(['throttle:6,1'])
+    ->name('verification.send');
 
 // Password Reset Routes
 Route::get('/password/reset', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
