@@ -14,12 +14,12 @@
     // Initiate the wowjs
     new WOW().init();
 
-    // Sticky Navbar
+    // Sticky Header
     $(window).scroll(function () {
-        if ($(this).scrollTop() > 45) {
-            $(".nav-bar").addClass("sticky-top shadow-sm");
+        if ($(this).scrollTop() > 20) {
+            $("#site-header").addClass("is-sticky");
         } else {
-            $(".nav-bar").removeClass("sticky-top shadow-sm");
+            $("#site-header").removeClass("is-sticky");
         }
     });
 

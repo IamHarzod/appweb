@@ -82,6 +82,38 @@
             background-color: rgba(255, 255, 255, 0.15);
             color: #ffffff !important;
         }
+
+        /* Sticky Header */
+        .site-header {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            background-color: #ffffff;
+            transition: box-shadow 0.25s ease, padding 0.2s ease;
+        }
+
+        .site-header.is-sticky {
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .site-header .middle-header-row {
+            padding-top: 14px;
+            padding-bottom: 14px;
+            transition: padding 0.2s ease-in-out;
+        }
+
+        .site-header.is-sticky .middle-header-row {
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        @media (max-width: 991.98px) {
+            #navbarCollapse {
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+        }
     </style>
 </head>
 
@@ -97,49 +129,51 @@
     <!-- Spinner End -->
 
 
-    <!-- Topbar Start -->
-    <div class="container-fluid px-5 d-none border-bottom d-lg-block">
-        <div class="row gx-0 align-items-center">
-            <div class="col-lg-4 text-center text-lg-start mb-lg-0">
-                <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <a href="#" class="text-muted me-2"> Help</a><small> / </small>
-                    <a href="#" class="text-muted mx-2"> Hỗ trợ</a><small> / </small>
-                    <a href="{{ route('orders.lookup') }}" class="text-primary fw-bold ms-2">
-                        <i class="fas fa-shipping-fast me-1"></i> Tra cứu đơn hàng
-                    </a>
+    <!-- Header Start (Sticky) -->
+    <header id="site-header" class="site-header sticky-top bg-white">
+        <!-- Topbar Start -->
+        <div class="container-fluid px-5 d-none border-bottom d-lg-block top-bar-row">
+            <div class="row gx-0 align-items-center">
+                <div class="col-lg-4 text-center text-lg-start mb-lg-0">
+                    <div class="d-inline-flex align-items-center" style="height: 45px;">
+                        <a href="#" class="text-muted me-2"> Help</a><small> / </small>
+                        <a href="#" class="text-muted mx-2"> Hỗ trợ</a><small> / </small>
+                        <a href="{{ route('orders.lookup') }}" class="text-primary fw-bold ms-2">
+                            <i class="fas fa-shipping-fast me-1"></i> Tra cứu đơn hàng
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
-                <small class="text-dark">Liên hệ chúng tôi:</small>
-                <a href="#" class="text-muted">(+84)373033510</a>
-            </div>
+                <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
+                    <small class="text-dark">Liên hệ chúng tôi:</small>
+                    <a href="#" class="text-muted">(+84)373033510</a>
+                </div>
 
-            <div class="col-lg-4 text-center text-lg-end">
-                <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
-                                    class="fa fa-home me-2"></i> My Dashboard</small></a>
-                        <div class="dropdown-menu rounded">
-                            @auth
-                                @if (auth()->user()->role === 'admin')
-                                    <a href="{{ route('admin.dashboard') }}" class="dropdown-item"> Admin Dashboard</a>
-                                    <div class="dropdown-divider"></div>
-                                @endif
-                                <a href="{{ url('/show-profile') }}" class="dropdown-item"> Thông tin cá nhân</a>
-                                <a href="{{ route('orders.my') }}" class="dropdown-item"> Đơn hàng của tôi</a>
-                                <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
-                                <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
-                            @else
-                                <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
-                                <a href="{{ route('login') }}" class="dropdown-item"> Đăng nhập</a>
-                            @endauth
+                <div class="col-lg-4 text-center text-lg-end">
+                    <div class="d-inline-flex align-items-center" style="height: 45px;">
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
+                                        class="fa fa-home me-2"></i> My Dashboard</small></a>
+                            <div class="dropdown-menu rounded">
+                                @auth
+                                    @if (auth()->user()->role === 'admin')
+                                        <a href="{{ route('admin.dashboard') }}" class="dropdown-item"> Admin Dashboard</a>
+                                        <div class="dropdown-divider"></div>
+                                    @endif
+                                    <a href="{{ url('/show-profile') }}" class="dropdown-item"> Thông tin cá nhân</a>
+                                    <a href="{{ route('orders.my') }}" class="dropdown-item"> Đơn hàng của tôi</a>
+                                    <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
+                                    <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
+                                @else
+                                    <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
+                                    <a href="{{ route('login') }}" class="dropdown-item"> Đăng nhập</a>
+                                @endauth
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container-fluid px-5 py-4 d-none d-lg-block">
+        <div class="container-fluid px-5 middle-header-row d-none d-lg-block">
         <div class="row gx-0 align-items-center text-center">
             <div class="col-md-4 col-lg-3 text-center text-lg-start">
                 <div class="d-inline-flex align-items-center">
@@ -304,6 +338,8 @@
         </div>
     </div>
     <!-- Navbar & Hero End -->
+    </header>
+    <!-- Header End -->
     <main class="flex-grow-1">
         @yield('home-content')
     </main>
