@@ -163,6 +163,6 @@ class AdminController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('admin');
+        return redirect()->route('login')->with('success', 'Đã đăng xuất thành công.');
     }
 }
