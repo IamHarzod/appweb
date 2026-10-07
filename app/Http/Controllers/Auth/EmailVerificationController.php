@@ -65,8 +65,12 @@ class EmailVerificationController extends Controller
             return redirect()->route('home');
         }
 
-        $user->sendEmailVerificationNotification();
-
-        return back()->with('status', 'verification-link-sent');
+        try {
+            $user->sendEmailVerificationNotification();
+            return back()->with('status', 'verification-link-sent');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Lỗi khi gửi lại email xác thực: ' . $e->getMessage());
+            return back()->with('error', 'Không thể gửi email lúc này: ' . $e->getMessage());
+        }
     }
 }

@@ -147,7 +147,11 @@ class AdminController extends Controller
         ]);
 
         // Kích hoạt gửi email xác thực tài khoản
-        event(new \Illuminate\Auth\Events\Registered($user));
+        try {
+            event(new \Illuminate\Auth\Events\Registered($user));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Lỗi khi gửi email xác thực đăng ký: ' . $e->getMessage());
+        }
 
         Auth::login($user);
 

@@ -31,7 +31,16 @@
                         <div class="alert alert-success d-flex align-items-center mb-4 text-start" role="alert" style="border-radius: 10px;">
                             <i class="fas fa-check-circle fa-lg me-2 flex-shrink-0"></i>
                             <div>
-                                <strong>Đã gửi thành công!</strong> Một liên kết xác thực mới đã được gửi tới hộp thư của bạn. Vui lòng kiểm tra lại (cả trong thư mục <em>Spam / Thư rác</em>).
+                                <strong>Đã gửi thành công!</strong> Một liên kết xác thực mới đã được gửi tới hộp thư của bạn. Vui lòng kiểm tra lại (cả trong mục <em>Spam / Thư rác / Quảng cáo</em>).
+                            </div>
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger d-flex align-items-center mb-4 text-start" role="alert" style="border-radius: 10px;">
+                            <i class="fas fa-exclamation-triangle fa-lg me-2 flex-shrink-0"></i>
+                            <div>
+                                <strong>Gặp sự cố khi gửi mail:</strong> {{ session('error') }}
                             </div>
                         </div>
                     @endif

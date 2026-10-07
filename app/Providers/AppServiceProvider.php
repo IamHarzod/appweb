@@ -31,6 +31,12 @@ class AppServiceProvider extends ServiceProvider
         // Use Bootstrap pagination to prevent SVG oversized buttons
         Paginator::useBootstrapFive();
 
+        // Đăng ký Event Listener gửi email xác thực khi đăng ký trong Laravel 11
+        \Illuminate\Support\Facades\Event::listen(
+            \Illuminate\Auth\Events\Registered::class,
+            \Illuminate\Auth\Listeners\SendEmailVerificationNotification::class,
+        );
+
         // Tùy biến nội dung Email Xác thực tài khoản sang Tiếng Việt
         \Illuminate\Auth\Notifications\VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
             return (new \Illuminate\Notifications\Messages\MailMessage)
