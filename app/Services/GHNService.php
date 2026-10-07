@@ -116,6 +116,79 @@ class GHNService
     }
 
     /**
+     * Lấy danh sách Phường / Xã cho danh sách nhiều Quận / Huyện song song (Có Cache 24h)
+     */
+    public function getMultipleDistrictsWards(array $districtIds): array
+    {
+        $result = [];
+        $missingIds = [];
+
+        foreach ($districtIds as $id) {
+            $id = (int) $id;
+            if ($id <= 0) continue;
+            if (Cache::has("ghn_wards_{$id}_v2")) {
+                $result[$id] = Cache::get("ghn_wards_{$id}_v2");
+            } else {
+                $missingIds[] = $id;
+            }
+        }
+
+        if (!empty($missingIds)) {
+            try {
+                $responses = Http::pool(function ($pool) use ($missingIds) {
+                    $requests = [];
+                    foreach ($missingIds as $id) {
+                        $requests[$id] = $pool->as((string) $id)
+                            ->baseUrl($this->baseUrl)
+                            ->withOptions([
+                                'verify' => filter_var(config('services.ghn.verify_ssl', false), FILTER_VALIDATE_BOOLEAN),
+                            ])
+                            ->acceptJson()
+                            ->timeout(10)
+                            ->withHeaders([
+                                'Token'        => $this->token,
+                                'ShopId'       => $this->shopId,
+                                'Content-Type' => 'application/json',
+                            ])
+                            ->post('/master-data/ward?district_id=' . $id, [
+                                'district_id' => $id,
+                            ]);
+                    }
+                    return $requests;
+                });
+
+                foreach ($missingIds as $id) {
+                    $res = $responses[(string) $id] ?? null;
+                    if ($res instanceof \Illuminate\Http\Client\Response && $res->successful()) {
+                        $json = $res->json() ?? [];
+                        $wards = (isset($json['code']) && $json['code'] == 200 && is_array($json['data'] ?? null))
+                            ? $json['data']
+                            : ($json['data'] ?? []);
+                        if (is_array($wards)) {
+                            usort($wards, function ($a, $b) {
+                                return strcmp($a['WardName'] ?? '', $b['WardName'] ?? '');
+                            });
+                            Cache::put("ghn_wards_{$id}_v2", $wards, 86400);
+                            $result[$id] = $wards;
+                            continue;
+                        }
+                    }
+                    $result[$id] = $this->getWards($id);
+                }
+            } catch (\Throwable $e) {
+                Log::warning('GHN pool wards fallback to sequential: ' . $e->getMessage());
+                foreach ($missingIds as $id) {
+                    if (!isset($result[$id])) {
+                        $result[$id] = $this->getWards($id);
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Tính phí vận chuyển GHN
      */
     public function calculateFee($toDistrictId, $toWardCode = null, int $weight = 1000, int $insuranceValue = 0): array

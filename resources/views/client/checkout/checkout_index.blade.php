@@ -565,12 +565,28 @@
             }
             // Hàm tự động nhận diện và điền thông tin địa chỉ từ tọa độ
             let isGeocoding = false;
-            function autoFillAddressFromCoords(lat, lng) {
+            async function autoFillAddressFromCoords(lat, lng) {
                 if (isGeocoding) return;
                 isGeocoding = true;
 
                 if (coordsText) {
-                    coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-warning text-dark ms-1"><i class="fa fa-spinner fa-spin"></i> Đang nhận diện địa chỉ...</span>`;
+                    coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-warning text-dark ms-1"><i class="fa fa-spinner fa-spin"></i> Đang nhận diện địa chỉ GPS...</span>`;
+                }
+
+                // Gửi kèm gợi ý từ trình duyệt (nếu mạng client lấy được từ OpenStreetMap nhanh trong 1.5s)
+                let clientHint = null;
+                try {
+                    const ctrl = new AbortController();
+                    const timeoutId = setTimeout(() => ctrl.abort(), 1500);
+                    const cRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1&accept-language=vi`, {
+                        signal: ctrl.signal
+                    });
+                    clearTimeout(timeoutId);
+                    if (cRes.ok) {
+                        clientHint = await cRes.json();
+                    }
+                } catch (e) {
+                    // Bỏ qua lỗi phía client, backend sẽ tự xử lý với đa nguồn Nominatim/Photon/BigDataCloud
                 }
 
                 fetch("{{ route('locations.reverse_geocode') }}", {
@@ -581,7 +597,8 @@
                     },
                     body: JSON.stringify({
                         latitude: lat,
-                        longitude: lng
+                        longitude: lng,
+                        client_hint: clientHint
                     })
                 })
                 .then(res => res.json())
@@ -647,7 +664,15 @@
                         }
 
                         if (coordsText) {
-                            coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-success ms-1"><i class="fa fa-check"></i> Đã tự điền địa chỉ</span>`;
+                            if (data.district && data.ward) {
+                                coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-success ms-1"><i class="fa fa-check"></i> Đã tự điền đầy đủ vị trí & tính phí GHN</span>`;
+                            } else if (data.district) {
+                                coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-info text-dark ms-1"><i class="fa fa-check"></i> Đã điền Quận/Huyện</span>`;
+                            } else if (data.province) {
+                                coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-info text-dark ms-1"><i class="fa fa-check"></i> Đã nhận diện Tỉnh/Thành</span>`;
+                            } else {
+                                coordsText.innerHTML = `${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)} <span class="badge bg-secondary ms-1">Đã ghim vị trí</span>`;
+                            }
                         }
 
                         updateCompleteAddress();

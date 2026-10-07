@@ -70,12 +70,14 @@ class LocationController extends Controller
     public function reverseGeocode(Request $request, GHNService $ghn)
     {
         $request->validate([
-            'latitude'  => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'latitude'    => 'required|numeric',
+            'longitude'   => 'required|numeric',
+            'client_hint' => 'nullable|array',
         ]);
 
         $lat = (float) $request->latitude;
         $lng = (float) $request->longitude;
+        $clientHint = $request->input('client_hint') ?? [];
 
         // 1. Phân giải tọa độ từ Nominatim + Photon OSM + BigDataCloud (chạy song song)
         $geo = $this->fetchReverseGeocode($lat, $lng);
@@ -83,6 +85,14 @@ class LocationController extends Controller
         $displayName = $geo['display_name'] ?? '';
         $photon = $geo['photon_props'] ?? [];
         $bdc = $geo['bdc'] ?? [];
+
+        // Kết hợp dữ liệu từ client hint (nếu có từ trình duyệt người dùng)
+        if (!empty($clientHint['address']) && is_array($clientHint['address'])) {
+            $addr = array_merge($clientHint['address'], $addr);
+        }
+        if (empty($displayName) && !empty($clientHint['display_name'])) {
+            $displayName = $clientHint['display_name'];
+        }
 
         // Trích xuất số nhà, tên đường chi tiết và địa điểm
         $houseNumber = $addr['house_number'] ?? $photon['housenumber'] ?? '';
@@ -131,7 +141,7 @@ class LocationController extends Controller
             }
         }
 
-        // Gom toàn bộ từ khóa địa danh từ Nominatim, Photon và BigDataCloud
+        // Gom toàn bộ từ khóa địa danh từ Nominatim, Photon, BigDataCloud và client hint
         $allParts = [];
         if (!empty($displayName)) $allParts[] = $displayName;
         foreach ($addr as $v) {
@@ -210,7 +220,19 @@ class LocationController extends Controller
                 ? $districtsRes['data'] 
                 : (is_array($districtsRes) ? $districtsRes : []);
 
-            // Ưu tiên 1: Khớp chính xác với targetDist
+            // Thu thập các ứng viên Phường / Xã (để dùng khi suy luận Quận từ Phường)
+            $wardCandidates = array_values(array_filter(array_unique([
+                $normWard,
+                $normDist, // Photon hoặc OSM đôi khi gán nhầm tên Phường vào trường district
+                $this->normalizeName($addr['suburb'] ?? ''),
+                $this->normalizeName($addr['quarter'] ?? ''),
+                $this->normalizeName($addr['neighbourhood'] ?? ''),
+                $this->normalizeName($addr['village'] ?? ''),
+                $this->normalizeName($photon['locality'] ?? ''),
+                $this->normalizeName($bdc['locality'] ?? ''),
+            ])));
+
+            // Ưu tiên 1: Khớp Quận / Huyện chính xác với targetDist
             if (!empty($normDist)) {
                 foreach ($districts as $d) {
                     $dNorm = $this->normalizeName($d['DistrictName'] ?? '');
@@ -221,10 +243,10 @@ class LocationController extends Controller
                 }
             }
 
-            // Ưu tiên 2: Khớp regex theo từ nguyên trong chuỗi địa chỉ tổng hợp
+            // Ưu tiên 2: Khớp Quận / Huyện regex theo từ nguyên trong chuỗi địa chỉ tổng hợp
             if (!$matchedDist) {
                 foreach ($districts as $d) {
-                    $dNorm = $this->normalizeName($d['DistrictName']);
+                    $dNorm = $this->normalizeName($d['DistrictName'] ?? '');
                     if (empty($dNorm)) continue;
 
                     if (is_numeric($dNorm)) {
@@ -241,7 +263,7 @@ class LocationController extends Controller
                 }
             }
 
-            // Ưu tiên 3: So khớp qua NameExtension của GHN
+            // Ưu tiên 3: So khớp Quận / Huyện qua NameExtension của GHN
             if (!$matchedDist) {
                 foreach ($districts as $d) {
                     foreach ($d['NameExtension'] ?? [] as $ext) {
@@ -255,20 +277,80 @@ class LocationController extends Controller
                 }
             }
 
-            if ($matchedDist) {
+            // Ưu tiên 4: NẾU CHƯA TÌM THẤY QUẬN -> SUY LUẬN QUẬN DỰA VÀO PHƯỜNG / XÃ TRONG TỈNH
+            // (Đặc biệt quan trọng với OpenStreetMap tại Việt Nam khi Nominatim chỉ trả về Phường mà bỏ qua Quận)
+            if (!$matchedDist && (!empty($wardCandidates) || !empty($rawAddrStr))) {
+                $districtIds = array_column($districts, 'DistrictID');
+                $allDistrictWards = $ghn->getMultipleDistrictsWards($districtIds);
+
+                // Lượt 1: So khớp chính xác tên Phường / Xã với wardCandidates
+                foreach ($districts as $d) {
+                    $did = (int) $d['DistrictID'];
+                    $dWards = $allDistrictWards[$did] ?? [];
+
+                    foreach ($dWards as $w) {
+                        $wNorm = $this->normalizeName($w['WardName'] ?? '');
+                        if (empty($wNorm)) continue;
+
+                        if (in_array($wNorm, $wardCandidates, true) 
+                            || in_array('phuong ' . $wNorm, $wardCandidates, true) 
+                            || in_array('xa ' . $wNorm, $wardCandidates, true)
+                            || in_array('thi tran ' . $wNorm, $wardCandidates, true)) {
+                            $matchedDist = $d;
+                            $matchedWard = $w;
+                            $wards = $dWards;
+                            break 2;
+                        }
+                    }
+                }
+
+                // Lượt 2: So khớp tên Phường / Xã nằm trong chuỗi địa chỉ tổng hợp
+                if (!$matchedDist) {
+                    foreach ($districts as $d) {
+                        $did = (int) $d['DistrictID'];
+                        $dWards = $allDistrictWards[$did] ?? [];
+
+                        foreach ($dWards as $w) {
+                            $wNorm = $this->normalizeName($w['WardName'] ?? '');
+                            if (empty($wNorm) || mb_strlen($wNorm) < 3) continue;
+
+                            if (preg_match('/\b' . preg_quote($wNorm, '/') . '\b/iu', $rawAddrStr)) {
+                                $matchedDist = $d;
+                                $matchedWard = $w;
+                                $wards = $dWards;
+                                break 2;
+                            }
+
+                            foreach ($w['NameExtension'] ?? [] as $ext) {
+                                $extNorm = $this->normalizeName($ext);
+                                if (empty($extNorm) || mb_strlen($extNorm) < 3) continue;
+                                if (preg_match('/\b' . preg_quote($extNorm, '/') . '\b/iu', $rawAddrStr)) {
+                                    $matchedDist = $d;
+                                    $matchedWard = $w;
+                                    $wards = $dWards;
+                                    break 3;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Nếu Quận đã khớp nhưng Phường chưa xác định -> Tải Phường của Quận đó để so khớp
+            if ($matchedDist && empty($matchedWard)) {
                 $wardsRes = $ghn->getWards((int) $matchedDist['DistrictID']);
                 $wards = (isset($wardsRes['data']) && is_array($wardsRes['data'])) 
                     ? $wardsRes['data'] 
                     : (is_array($wardsRes) ? $wardsRes : []);
 
-                // Ưu tiên 1: Khớp chính xác với targetWard
-                if (!empty($normWard)) {
-                    foreach ($wards as $w) {
-                        $wNorm = $this->normalizeName($w['WardName'] ?? '');
-                        if ($wNorm === $normWard || 'phuong ' . $wNorm === $normWard || 'xa ' . $wNorm === $normWard) {
-                            $matchedWard = $w;
-                            break;
-                        }
+                // Ưu tiên 1: Khớp chính xác với targetWard hoặc wardCandidates
+                foreach ($wards as $w) {
+                    $wNorm = $this->normalizeName($w['WardName'] ?? '');
+                    if (in_array($wNorm, $wardCandidates, true) 
+                        || in_array('phuong ' . $wNorm, $wardCandidates, true) 
+                        || in_array('xa ' . $wNorm, $wardCandidates, true)) {
+                        $matchedWard = $w;
+                        break;
                     }
                 }
 
@@ -338,15 +420,15 @@ class LocationController extends Controller
                         'User-Agent' => 'AppWeb-ShopEcommerce/1.0 (https://localhost/appweb; support@appweb.vn)',
                         'Accept-Language' => 'vi,en;q=0.9',
                     ])
-                    ->timeout(4)
+                    ->timeout(6)
                     ->get("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={$lat}&lon={$lng}&zoom=18&addressdetails=1&accept-language=vi"),
                 $pool->as('photon')
                     ->withUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
-                    ->timeout(4)
+                    ->timeout(6)
                     ->get("https://photon.komoot.io/reverse?lat={$lat}&lon={$lng}"),
                 $pool->as('bdc')
                     ->withUserAgent('Mozilla/5.0')
-                    ->timeout(4)
+                    ->timeout(6)
                     ->get("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={$lat}&longitude={$lng}&localityLanguage=vi"),
             ]);
 
