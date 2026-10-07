@@ -70,7 +70,15 @@ class EmailVerificationController extends Controller
             return back()->with('status', 'verification-link-sent');
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::error('Lỗi khi gửi lại email xác thực: ' . $e->getMessage());
-            return back()->with('error', 'Không thể gửi email lúc này: ' . $e->getMessage());
+
+            $fallbackUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'verification.verify',
+                now()->addMinutes(60),
+                ['id' => $user->getKey(), 'hash' => sha1($user->getEmailForVerification())]
+            );
+
+            return back()->with('error', 'Không thể kết nối tới máy chủ SMTP (Do Render gói Free chặn cổng gửi mail 587/465). Bạn có thể kích hoạt trực tiếp bằng nút bên dưới.')
+                ->with('fallback_verify_url', $fallbackUrl);
         }
     }
 }

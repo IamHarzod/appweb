@@ -63,6 +63,23 @@
                         </div>
                     @endif
 
+                    @if (session('fallback_verify_url'))
+                        <div class="alert alert-info text-start mb-4 shadow-sm" style="border-radius: 12px; border-left: 5px solid #0dcaf0;">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-key text-info fa-lg me-2"></i>
+                                <strong class="text-dark">Liên kết kích hoạt tài khoản trực tiếp:</strong>
+                            </div>
+                            <p class="mb-3 small text-muted">
+                                Do máy chủ Render (gói Free) chặn cổng gửi mail SMTP (587/465) ra Internet, bạn có thể nhấn ngay nút bên dưới để xác thực và kích hoạt tài khoản thành công ngay lập tức:
+                            </p>
+                            <div class="text-center">
+                                <a href="{{ session('fallback_verify_url') }}" class="btn btn-success fw-bold rounded-pill px-4 py-2 shadow-sm">
+                                    <i class="fas fa-check-circle me-1"></i> Kích hoạt tài khoản ngay
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+
                     <p class="text-muted small mb-4">
                         Không nhận được thư? Nhấn nút bên dưới để hệ thống gửi lại mã kích hoạt mới.
                     </p>

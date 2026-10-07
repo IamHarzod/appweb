@@ -147,13 +147,27 @@ class AdminController extends Controller
         ]);
 
         // Kích hoạt gửi email xác thực tài khoản
+        $mailSent = true;
         try {
             event(new \Illuminate\Auth\Events\Registered($user));
         } catch (\Throwable $e) {
+            $mailSent = false;
             \Illuminate\Support\Facades\Log::error('Lỗi khi gửi email xác thực đăng ký: ' . $e->getMessage());
         }
 
         Auth::login($user);
+
+        if (!$mailSent) {
+            $fallbackUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'verification.verify',
+                now()->addMinutes(60),
+                ['id' => $user->getKey(), 'hash' => sha1($user->getEmailForVerification())]
+            );
+
+            return redirect()->route('verification.notice')
+                ->with('warning', 'Đăng ký thành công! Do Render gói Free chặn cổng gửi mail 587 nên thư chưa tới hộp thư, bạn có thể bấm nút kích hoạt trực tiếp bên dưới.')
+                ->with('fallback_verify_url', $fallbackUrl);
+        }
 
         return redirect()->route('verification.notice')->with('success', 'Đăng ký tài khoản thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.');
     }
