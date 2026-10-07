@@ -27,11 +27,29 @@
                         </span>
                     </div>
 
-                    @if (session('status') == 'verification-link-sent')
+                    @if (session('success'))
                         <div class="alert alert-success d-flex align-items-center mb-4 text-start" role="alert" style="border-radius: 10px;">
                             <i class="fas fa-check-circle fa-lg me-2 flex-shrink-0"></i>
                             <div>
-                                <strong>Đã gửi thành công!</strong> Một liên kết xác thực mới đã được gửi tới hộp thư của bạn. Vui lòng kiểm tra lại (cả trong mục <em>Spam / Thư rác / Quảng cáo</em>).
+                                <strong>Thành công!</strong> {{ session('success') }}
+                            </div>
+                        </div>
+                    @endif
+
+                    @if (session('warning'))
+                        <div class="alert alert-warning d-flex align-items-center mb-4 text-start" role="alert" style="border-radius: 10px;">
+                            <i class="fas fa-exclamation-circle fa-lg me-2 flex-shrink-0"></i>
+                            <div>
+                                <strong>Yêu cầu xác thực:</strong> {{ session('warning') }}
+                            </div>
+                        </div>
+                    @endif
+
+                    @if (session('status') == 'verification-link-sent')
+                        <div class="alert alert-success d-flex align-items-center mb-4 text-start" role="alert" style="border-radius: 10px;">
+                            <i class="fas fa-paper-plane fa-lg me-2 flex-shrink-0"></i>
+                            <div>
+                                <strong>Đã gửi lại thành công!</strong> Một liên kết xác thực mới đã được gửi tới hộp thư của bạn. Vui lòng kiểm tra lại (cả trong mục <em>Spam / Thư rác / Quảng cáo</em>).
                             </div>
                         </div>
                     @endif
@@ -57,17 +75,14 @@
                             </button>
                         </form>
 
-                        <a href="{{ url('/') }}" class="btn btn-outline-secondary rounded-pill px-4 py-2">
-                            <i class="fas fa-home me-1"></i> Về trang chủ
+                        <a href="{{ route('logout') }}" class="btn btn-outline-danger rounded-pill px-4 py-2">
+                            <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
                         </a>
                     </div>
 
-                    <div class="border-top pt-3 mt-4 text-center">
-                        <small class="text-muted">Đăng nhập tài khoản khác? 
-                            <a href="{{ route('logout') }}" class="text-danger text-decoration-none fw-bold">
-                                <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
-                            </a>
-                        </small>
+                    <div class="alert alert-light border small text-muted text-start mt-4 mb-0" style="border-radius: 10px;">
+                        <i class="fas fa-shield-alt text-warning me-1"></i>
+                        <strong>Lưu ý bảo mật:</strong> Để đảm bảo an toàn giao dịch và bảo vệ quyền lợi khách hàng, bạn cần mở email và nhấn vào liên kết xác nhận để mở khóa toàn bộ quyền mua sắm, đặt hàng và sử dụng dịch vụ trên 36Shop.
                     </div>
 
                 </div>

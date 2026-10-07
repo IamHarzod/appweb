@@ -59,7 +59,7 @@ class AdminController extends Controller
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } elseif (!$user->hasVerifiedEmail()) {
-                return redirect()->route('verification.notice');
+                return redirect()->route('verification.notice')->with('warning', 'Tài khoản của bạn chưa được xác thực email. Vui lòng kiểm tra email để kích hoạt tài khoản.');
             } else {
                 return redirect()->intended(route('home'));
             }
@@ -130,7 +130,7 @@ class AdminController extends Controller
         ], [
             'name.required'        => 'Vui lòng nhập họ tên.',
             'email.required'       => 'Vui lòng nhập email.',
-            'email.unique'         => 'Email này đã được sử dụng.',
+            'email.unique'         => 'Địa chỉ email này đã được đăng ký trong hệ thống. Vui lòng đăng nhập để tiếp tục hoặc xác thực tài khoản.',
             'phoneNumber.required' => 'Vui lòng nhập số điện thoại.',
             'phoneNumber.regex'    => 'Số điện thoại không đúng định dạng.',
             'password.required'    => 'Vui lòng nhập mật khẩu.',

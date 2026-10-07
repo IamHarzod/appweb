@@ -22,28 +22,69 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
                                     <h4 class="text-center mb-4">Đăng kí tài khoản</h4>
+
+                                    @if (session('status'))
+                                        <div class="alert alert-success">
+                                            {{ session('status') }}
+                                        </div>
+                                    @endif
+
+                                    @if (session('success'))
+                                        <div class="alert alert-success">
+                                            {{ session('success') }}
+                                        </div>
+                                    @endif
+
+                                    @if (session('error'))
+                                        <div class="alert alert-danger">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
+
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul class="mb-0 pl-3">
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
                                     <form id="register-form" action="{{ url('/submit-register-admin') }}"
                                         method="POST">
                                         @csrf
                                         <div class="form-group">
                                             <label><strong>Họ và tên</strong></label>
-                                            <input type="text" name="name" class="form-control"
-                                                placeholder="Họ và tên" required>
+                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                                value="{{ old('name') }}" placeholder="Họ và tên" required>
+                                            @error('name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Email</strong></label>
-                                            <input type="email" name="email" class="form-control"
-                                                placeholder="Email" required>
+                                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                                value="{{ old('email') }}" placeholder="Email" required>
+                                            @error('email')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Số điện thoại</strong></label>
-                                            <input type="text" name="phoneNumber" class="form-control"
-                                                placeholder="Số điện thoại" required>
+                                            <input type="text" name="phoneNumber" class="form-control @error('phoneNumber') is-invalid @enderror"
+                                                value="{{ old('phoneNumber') }}" placeholder="Số điện thoại" required>
+                                            @error('phoneNumber')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Mật khẩu</strong></label>
-                                            <input type="password" name="password" class="form-control"
+                                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
                                                 placeholder="Mật khẩu" minlength="6" required>
+                                            @error('password')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
