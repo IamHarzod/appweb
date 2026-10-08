@@ -13,10 +13,10 @@ class VNPayService
 
     public function __construct()
     {
-        $this->vnp_TmnCode = config('vnpay.vnp_tmn_code');
-        $this->vnp_HashSecret = config('vnpay.vnp_hash_secret');
-        $this->vnp_Url = config('vnpay.vnp_url');
-        $this->vnp_ReturnUrl = route('vnpay.return');
+        $this->vnp_TmnCode = config('vnpay.vnp_tmn_code') ?: 'MZ2NYKV9';
+        $this->vnp_HashSecret = config('vnpay.vnp_hash_secret') ?: 'OWUXFEZYYLLVWFEPAUAQFVAGNATTUTWY';
+        $this->vnp_Url = config('vnpay.vnp_url') ?: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
+        $this->vnp_ReturnUrl = config('vnpay.vnp_return_url') ?: route('vnpay.return');
     }
 
     /**
@@ -30,7 +30,7 @@ class VNPayService
         $vnp_TxnRef = $order->id . '_' . time();
         $vnp_OrderInfo = "Thanh toan don hang #" . $order->id . " tai AppWeb";
         $vnp_OrderType = 'other';
-        $vnp_Amount = round($order->total_amount) * 100; // VNPay amount in VND x 100
+        $vnp_Amount = (int) round((float) $order->total_amount) * 100; // VNPay amount in VND x 100
         $vnp_Locale = 'vn';
         $vnp_IpAddr = request()->ip();
         if (!$vnp_IpAddr || $vnp_IpAddr === '::1') {
