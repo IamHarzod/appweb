@@ -19,12 +19,14 @@ class EnsureEmailIsVerified
     {
         $user = $request->user();
 
-        if ($user && ! $user->hasVerifiedEmail()) {
+        if ($user && ! $user->hasVerifiedEmail() && $user->role !== 'admin') {
             // Danh sách các route được phép truy cập khi chưa xác thực email
             $allowedRoutes = [
                 'verification.notice',
                 'verification.send',
                 'verification.verify',
+                'verification.verify_otp',
+                'verification.resend_otp',
                 'logout',
             ];
 

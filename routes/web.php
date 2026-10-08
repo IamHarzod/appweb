@@ -133,12 +133,14 @@ Route::post('/login', [AdminController::class, 'submit_login']);
 Route::get('/auth/google', [GoogleAuthController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
-// Email Verification Routes
+// Email & OTP Verification Routes
 Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->name('verification.notice');
+Route::post('/email/verify-otp', [EmailVerificationController::class, 'verifyOtp'])->name('verification.verify_otp');
+Route::post('/email/resend-otp', [EmailVerificationController::class, 'resendOtp'])->name('verification.resend_otp');
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
     ->middleware(['signed'])
     ->name('verification.verify');
-Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
+Route::post('/email/verification-notification', [EmailVerificationController::class, 'resendOtp'])
     ->middleware(['throttle:6,1'])
     ->name('verification.send');
 

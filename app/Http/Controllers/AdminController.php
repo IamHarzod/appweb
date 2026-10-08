@@ -146,30 +146,27 @@ class AdminController extends Controller
             'role'        => 'user',
         ]);
 
-        // Kích hoạt gửi email xác thực tài khoản
-        $mailSent = true;
-        try {
-            event(new \Illuminate\Auth\Events\Registered($user));
-        } catch (\Throwable $e) {
-            $mailSent = false;
-            \Illuminate\Support\Facades\Log::error('Lỗi khi gửi email xác thực đăng ký: ' . $e->getMessage());
-        }
-
         Auth::login($user);
 
-        if (!$mailSent) {
-            $fallbackUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
-                'verification.verify',
-                now()->addMinutes(60),
-                ['id' => $user->getKey(), 'hash' => sha1($user->getEmailForVerification())]
-            );
+        // Sinh mã OTP 6 số và lưu vào Cache 10 phút
+        $code = (string) random_int(100000, 999999);
+        \Illuminate\Support\Facades\Cache::put("otp_user_{$user->id}", [
+            'code'       => $code,
+            'expires_at' => now()->addMinutes(10)->timestamp,
+            'attempts'   => 0,
+        ], now()->addMinutes(10));
 
+        // Gửi qua Email API (Port 443 HTTPS - không bao giờ bị chặn bởi tường lửa)
+        $emailService = app(\App\Services\EmailApiService::class);
+        $result = $emailService->sendOtpEmail($user->email, $user->name, $code);
+
+        if ($result['success']) {
             return redirect()->route('verification.notice')
-                ->with('warning', 'Đăng ký thành công! Do Render gói Free chặn cổng gửi mail 587 nên thư chưa tới hộp thư, bạn có thể bấm nút kích hoạt trực tiếp bên dưới.')
-                ->with('fallback_verify_url', $fallbackUrl);
+                ->with('success', 'Đăng ký tài khoản thành công! Mã OTP xác thực đã được gửi tới email của bạn qua kết nối bảo mật HTTPS.');
         }
 
-        return redirect()->route('verification.notice')->with('success', 'Đăng ký tài khoản thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.');
+        return redirect()->route('verification.notice')
+            ->with('warning', 'Đăng ký tài khoản thành công! Vui lòng nhập mã xác thực OTP để hoàn tất kích hoạt tài khoản.');
     }
 
     public function logout_admin(Request $request)

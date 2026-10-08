@@ -76,8 +76,8 @@ class AuthWorkflowTest extends TestCase
 
         $response = $this->post('/register', $payload);
 
-        $response->assertRedirect(route('admin'));
-        $response->assertSessionHas('success', 'Đăng ký tài khoản thành công!');
+        $response->assertRedirect(route('verification.notice'));
+        $this->assertTrue(session()->has('success') || session()->has('warning'));
 
         $this->assertDatabaseHas('users', [
             'email'       => 'nguyenvanb@example.com',
@@ -145,6 +145,7 @@ class AuthWorkflowTest extends TestCase
             'password'    => Hash::make('customerpass'),
             'role'        => 'user',
             'IsActive'    => 1,
+            'email_verified_at' => now(),
         ]);
 
         $response = $this->post('/login', [
@@ -166,6 +167,7 @@ class AuthWorkflowTest extends TestCase
             'password'    => Hash::make('password123'),
             'role'        => 'user',
             'IsActive'    => 1,
+            'email_verified_at' => now(),
         ]);
 
         $this->actingAs($user);
@@ -173,7 +175,7 @@ class AuthWorkflowTest extends TestCase
 
         $response = $this->get('/logout-admin');
 
-        $response->assertRedirect(route('admin'));
+        $response->assertRedirect(route('login'));
         $this->assertFalse(Auth::check());
     }
 
@@ -195,6 +197,7 @@ class AuthWorkflowTest extends TestCase
             'password'    => Hash::make('password123'),
             'role'        => 'user',
             'IsActive'    => 1,
+            'email_verified_at' => now(),
         ]);
 
         $response = $this->actingAs($user)->get('/show-profile');
@@ -328,5 +331,78 @@ class AuthWorkflowTest extends TestCase
         $response->assertRedirect(route('admin.users'));
         $response->assertSessionHas('success', 'Xóa người dùng thành công!');
         $this->assertDatabaseMissing('users', ['id' => $targetUser->id]);
+    }
+
+    public function test_unverified_user_cannot_access_profile_and_redirects_to_otp_verification(): void
+    {
+        Category::firstOrCreate(['name' => 'Demo Category']);
+
+        $unverifiedUser = User::create([
+            'name'              => 'Unverified User',
+            'email'             => 'unverified@example.com',
+            'phoneNumber'       => '0987654321',
+            'password'          => Hash::make('password123'),
+            'role'              => 'user',
+            'IsActive'          => 1,
+            'email_verified_at' => null,
+        ]);
+
+        $response = $this->actingAs($unverifiedUser)->get('/show-profile');
+
+        $response->assertRedirect(route('verification.notice'));
+        $this->assertNull($unverifiedUser->fresh()->email_verified_at);
+    }
+
+    public function test_user_can_verify_otp_and_unlock_account(): void
+    {
+        $user = User::create([
+            'name'              => 'OTP User',
+            'email'             => 'otp_user@example.com',
+            'phoneNumber'       => '0987654321',
+            'password'          => Hash::make('password123'),
+            'role'              => 'user',
+            'IsActive'          => 1,
+            'email_verified_at' => null,
+        ]);
+
+        \Illuminate\Support\Facades\Cache::put("otp_user_{$user->id}", [
+            'code'       => '654321',
+            'expires_at' => now()->addMinutes(10)->timestamp,
+            'attempts'   => 0,
+        ], now()->addMinutes(10));
+
+        $response = $this->actingAs($user)->post(route('verification.verify_otp'), [
+            'otp' => '654321',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHas('success');
+        $this->assertNotNull($user->fresh()->email_verified_at);
+    }
+
+    public function test_verify_otp_fails_with_invalid_code(): void
+    {
+        $user = User::create([
+            'name'              => 'OTP Fail User',
+            'email'             => 'otp_fail@example.com',
+            'phoneNumber'       => '0987654321',
+            'password'          => Hash::make('password123'),
+            'role'              => 'user',
+            'IsActive'          => 1,
+            'email_verified_at' => null,
+        ]);
+
+        \Illuminate\Support\Facades\Cache::put("otp_user_{$user->id}", [
+            'code'       => '111222',
+            'expires_at' => now()->addMinutes(10)->timestamp,
+            'attempts'   => 0,
+        ], now()->addMinutes(10));
+
+        $response = $this->actingAs($user)->post(route('verification.verify_otp'), [
+            'otp' => '999888',
+        ]);
+
+        $response->assertSessionHas('error');
+        $this->assertNull($user->fresh()->email_verified_at);
     }
 }

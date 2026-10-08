@@ -39,6 +39,7 @@ class AdminCatalogManagementTest extends TestCase
             'password'    => bcrypt('password'),
             'role'        => 'user',
             'IsActive'    => 1,
+            'email_verified_at' => now(),
         ]);
     }
 
