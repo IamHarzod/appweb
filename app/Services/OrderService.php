@@ -173,7 +173,12 @@ class OrderService
                 try {
                     $ghnOrderService = app(GHNOrderService::class);
                     $isPaid = in_array(strtoupper($order->payment_method ?? ''), ['MOMO', 'VNPAY', 'PAID']);
-                    $ghnOrderService->create($order, $isPaid);
+                    $ghnRes = $ghnOrderService->create($order, $isPaid);
+                    if (!empty($ghnRes['data']['order_code'])) {
+                        $order->ghn_order_code = $ghnRes['data']['order_code'];
+                        $order->shipping_status = 'ready_to_pick';
+                        $order->save();
+                    }
                 } catch (\Throwable $ghnError) {
                     Log::warning('GHN auto-create failed for order #' . $order->id . ': ' . $ghnError->getMessage());
                 }

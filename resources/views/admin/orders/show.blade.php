@@ -275,6 +275,16 @@
                         </button>
                     </form>
 
+                    @if (!$isCancelled && $order->payment_status !== 'paid' && strtoupper($order->payment_method ?? '') === 'COD')
+                        <form action="{{ route('admin.orders.confirm_cod', $order->id) }}" method="POST" class="mt-3">
+                            @csrf
+                            <button type="submit" class="btn btn-success btn-block font-weight-bold shadow-sm"
+                                    onclick="return confirm('Xác nhận đã nhận đủ số tiền COD: {{ number_format($order->total_price ?: $order->total_amount, 0, ',', '.') }} đ và hoàn tất đơn hàng?')">
+                                <i class="fa fa-check-circle mr-1"></i> Xác nhận đã thu tiền COD
+                            </button>
+                        </form>
+                    @endif
+
                     <hr>
 
                     {{-- Nút Hủy đơn theo quy tắc --}}
@@ -345,8 +355,15 @@
                     </p>
                     <p class="mb-1"><strong>Cước phí GHN:</strong> {{ number_format($order->ghn_total_fee ?: $order->shipping_fee ?: 0, 0, ',', '.') }} đ</p>
                     <p class="mb-1"><strong>COD cần thu:</strong> {{ number_format($order->cod_amount ?: 0, 0, ',', '.') }} đ</p>
-                    <p class="mb-2"><strong>Trạng thái:</strong>
+                    <p class="mb-2"><strong>Trạng thái VC:</strong>
                         <span class="badge badge-info">{{ $shippingLabels[$order->shipping_status] ?? $order->shipping_status }}</span>
+                    </p>
+                    <p class="mb-2"><strong>Thanh toán COD:</strong>
+                        @if ($order->payment_status === 'paid')
+                            <span class="badge badge-success"><i class="fa fa-check-circle mr-1"></i> ĐÃ THU TIỀN</span>
+                        @else
+                            <span class="badge badge-warning text-dark"><i class="fa fa-clock mr-1"></i> CHỜ THU TIỀN COD</span>
+                        @endif
                     </p>
 
                     @if (empty($order->ghn_order_code) && !$isCancelled && !$isDelivered)
@@ -357,6 +374,10 @@
                             </button>
                         </form>
                     @endif
+
+                    <div class="alert alert-light border small text-muted mt-3 mb-0 p-2" style="font-size: 11px;">
+                        <i class="fa fa-sync-alt text-primary mr-1"></i> <strong>Tự động hóa GHN Webhook:</strong> Khi bưu tá GHN giao thành công, GHN sẽ tự động báo về hệ thống để hoàn tất đơn và ghi nhận đã thu tiền COD.
+                    </div>
                 </div>
             </div>
         </div>

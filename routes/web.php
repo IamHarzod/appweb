@@ -17,8 +17,13 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\GHNController;
+use App\Http\Controllers\GHNWebhookController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
+
+// GHN Webhook (Nhận cập nhật tự động từ GHN)
+Route::post('/ghn/webhook', [GHNWebhookController::class, 'handle'])->name('ghn.webhook');
+Route::post('/api/ghn/webhook', [GHNWebhookController::class, 'handle']);
 
 // GHN API Routes (Location & Fee)
 Route::get('/ghn/provinces', [GHNController::class, 'getProvinces'])->name('ghn.provinces');
@@ -100,6 +105,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
     Route::post('/orders/{id}/cancel', [AdminOrderController::class, 'cancel'])->name('orders.cancel');
     Route::post('/orders/{id}/push-ghn', [AdminOrderController::class, 'pushGhn'])->name('orders.push_ghn');
+    Route::post('/orders/{id}/confirm-cod', [AdminOrderController::class, 'confirmCod'])->name('orders.confirm_cod');
     Route::match(['get', 'delete'], '/orders/delete/{id}', [AdminOrderController::class, 'destroy'])->name('orders.delete');
 });
 

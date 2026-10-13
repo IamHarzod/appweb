@@ -30,6 +30,7 @@ class GHNOrderService
         $codAmount = $isPaid ? 0 : (int) ($order->cod_amount ?? $order->total_price ?? $order->total_amount ?? 0);
 
         return $this->ghn->createOrder([
+            'client_order_code' => 'ORDER-' . $order->id,
             'payment_type_id' => 2, // 2: Người nhận thanh toán phí vận chuyển, 1: Người gửi trả
             'note'            => 'Đơn hàng #' . $order->id,
             'required_note'   => 'KHONGCHOXEMHANG',

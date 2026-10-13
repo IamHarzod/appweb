@@ -41,6 +41,7 @@ return [
         'shop_id' => env('GHN_SHOP_ID'),
         'verify_ssl' => filter_var(env('GHN_VERIFY_SSL', false), FILTER_VALIDATE_BOOLEAN),
         'from_district_id' => env('GHN_FROM_DISTRICT_ID'),
+        'webhook_secret' => env('GHN_WEBHOOK_SECRET'),
     ],
 
     'google' => [

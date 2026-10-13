@@ -195,6 +195,25 @@ class OrderController extends Controller
         $order->shipping_status = $newShippingStatus;
         if ($newShippingStatus === 'delivered') {
             $order->status = 'delivered';
+            if (strtoupper($order->payment_method ?? '') === 'COD') {
+                $order->payment_status = 'paid';
+                \App\Models\PaymentTransaction::updateOrCreate(
+                    [
+                        'order_id' => $order->id,
+                        'gateway' => 'cod',
+                    ],
+                    [
+                        'transaction_code' => 'COD_' . ($order->ghn_order_code ?: $order->id),
+                        'amount' => $order->total_price ?: $order->total_amount ?: 0,
+                        'status' => 'paid',
+                        'payload' => json_encode([
+                            'confirmed_by' => auth()->user()->email ?? 'admin',
+                            'confirmed_at' => Carbon::now()->toIso8601String(),
+                            'source' => 'admin_status_update',
+                        ]),
+                    ]
+                );
+            }
         } elseif ($newShippingStatus === 'cancelled') {
             $order->status = 'cancelled';
         } elseif (in_array($newShippingStatus, $deliveringStatuses)) {
@@ -209,10 +228,50 @@ class OrderController extends Controller
                 'success' => true,
                 'message' => 'Cập nhật trạng thái đơn hàng thành công!',
                 'shipping_status' => $order->shipping_status,
+                'payment_status' => $order->payment_status,
             ]);
         }
 
         return back()->with('success', 'Cập nhật trạng thái đơn hàng thành công!');
+    }
+
+    // Xác nhận đã nhận tiền COD thủ công
+    public function confirmCod(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        if (strtoupper($order->payment_method ?? '') !== 'COD') {
+            return back()->with('error', 'Chỉ có thể xác nhận thu tiền cho đơn hàng COD.');
+        }
+
+        $order->payment_status = 'paid';
+        if ($order->shipping_status !== 'delivered') {
+            $order->shipping_status = 'delivered';
+            $order->status = 'delivered';
+        }
+
+        $collectedAmount = $order->total_price ?: $order->total_amount ?: 0;
+        \App\Models\PaymentTransaction::updateOrCreate(
+            [
+                'order_id' => $order->id,
+                'gateway' => 'cod',
+            ],
+            [
+                'transaction_code' => 'ADMIN_COD_' . ($order->ghn_order_code ?: $order->id),
+                'amount' => $collectedAmount,
+                'status' => 'paid',
+                'payload' => json_encode([
+                    'confirmed_by' => auth()->user()->email ?? 'admin',
+                    'confirmed_at' => Carbon::now()->toIso8601String(),
+                ]),
+            ]
+        );
+
+        $orderNote = "[Admin " . Carbon::now()->format('d/m/Y H:i') . "] Xác nhận đã thu tiền COD & Hoàn tất đơn hàng.";
+        $order->notes = trim(($order->notes ? $order->notes . " | " : "") . $orderNote);
+        $order->save();
+
+        return back()->with('success', 'Xác nhận thu tiền COD và hoàn tất đơn hàng #' . $order->id . ' thành công!');
     }
 
     // Hủy đơn hàng (nút Hủy nhanh)

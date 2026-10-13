@@ -23,6 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'momo-ipn',
             'vnpay-ipn',
+            'ghn/webhook',
+            'api/ghn/webhook',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
