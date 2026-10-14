@@ -298,21 +298,29 @@
                             </table>
                         </div>
 
+                        @php
+                            $maxCodLimit = config('order.cod_max_limit', 300000);
+                            $currentEstimatedTotal = $totalPrice ?? ($subtotal + ($shippingFee ?? 50000) - ($discountAmount ?? 0));
+                            $isCodDisabled = $maxCodLimit !== null && $currentEstimatedTotal > $maxCodLimit;
+                        @endphp
                         <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                             <div class="col-12">
                                 <h2 class="text-start mb-4">Phương thức thanh toán</h2>
 
-                                <div class="form-check text-start my-3">
+                                <div class="form-check text-start my-3" id="cod_payment_wrapper">
                                     <input type="radio" class="form-check-input bg-primary border-0" id="payment_cod"
-                                        name="payment_method" value="COD" checked>
-                                    <label class="form-check-label" for="payment_cod">
+                                        name="payment_method" value="COD" {{ $isCodDisabled ? 'disabled' : 'checked' }}>
+                                    <label class="form-check-label {{ $isCodDisabled ? 'text-muted' : '' }}" for="payment_cod" id="payment_cod_label">
                                         Thanh toán khi nhận hàng (COD)
                                     </label>
+                                    <div id="cod_over_limit_notice" class="text-danger small mt-1 {{ $isCodDisabled ? '' : 'd-none' }}">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>Đơn hàng trên {{ number_format($maxCodLimit, 0, ',', '.') }} VNĐ không hỗ trợ thanh toán khi nhận hàng (COD). Vui lòng chọn thanh toán trực tuyến qua VNPAY hoặc Ví MoMo.
+                                    </div>
                                 </div>
 
                                 <div class="form-check text-start my-3">
                                     <input type="radio" class="form-check-input bg-primary border-0" id="payment_vnpay"
-                                        name="payment_method" value="VNPAY">
+                                        name="payment_method" value="VNPAY" {{ $isCodDisabled ? 'checked' : '' }}>
                                     <label class="form-check-label d-flex align-items-center" for="payment_vnpay">
                                         <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png"
                                             alt="VNPAY" style="height: 30px; margin-right: 10px; object-fit: contain;">
@@ -367,6 +375,32 @@
             const subtotal = parseInt(totalPriceInput ? totalPriceInput.value : "{{ $subtotal ?? 0 }}") || 0;
             const discount = parseInt(discountAmountInput ? discountAmountInput.value : "{{ $discountAmount ?? 0 }}") || 0;
 
+            const maxCodLimit = {{ config('order.cod_max_limit', 300000) ?? 'null' }};
+            const paymentCod = document.getElementById('payment_cod');
+            const paymentCodLabel = document.getElementById('payment_cod_label');
+            const paymentVnpay = document.getElementById('payment_vnpay');
+            const codNotice = document.getElementById('cod_over_limit_notice');
+
+            function checkCodAvailability(totalAmount) {
+                if (!paymentCod) return;
+                const isOverLimit = maxCodLimit !== null && totalAmount > maxCodLimit;
+                if (isOverLimit) {
+                    paymentCod.disabled = true;
+                    if (paymentCodLabel) paymentCodLabel.classList.add('text-muted');
+                    if (codNotice) codNotice.classList.remove('d-none');
+                    if (paymentCod.checked) {
+                        paymentCod.checked = false;
+                        if (paymentVnpay) {
+                            paymentVnpay.checked = true;
+                        }
+                    }
+                } else {
+                    paymentCod.disabled = false;
+                    if (paymentCodLabel) paymentCodLabel.classList.remove('text-muted');
+                    if (codNotice) codNotice.classList.add('d-none');
+                }
+            }
+
             function updateTotals(fee) {
                 const formattedFee = new Intl.NumberFormat('vi-VN').format(fee) + ' VNĐ';
                 if (shippingFeeText) {
@@ -388,7 +422,14 @@
                 if (totalDisplay && totalDisplay !== finalTotalText) {
                     totalDisplay.innerText = formattedTotal;
                 }
+
+                // Cập nhật tình trạng COD theo tổng tiền mới
+                checkCodAvailability(finalAmount);
             }
+
+            // Kiểm tra tình trạng COD khi vừa mở trang
+            const initialShippingFee = parseInt(shippingFeeInput ? shippingFeeInput.value : "{{ $shippingFee ?? 50000 }}") || 0;
+            checkCodAvailability(Math.max(0, subtotal + initialShippingFee - discount));
 
             // Tải Tỉnh/Thành phố từ GHN nếu chưa render sẵn từ server
             if (provinceSelect && provinceSelect.options.length <= 1) {

@@ -323,7 +323,7 @@ class OrderController extends Controller
 
             return redirect()->route('order.success', ['id' => $order->id])->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Lỗi hệ thống: ' . $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

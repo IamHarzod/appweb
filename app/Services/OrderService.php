@@ -104,6 +104,13 @@ class OrderService
 
         $finalTotalAmount = max(0.0, $productTotal + $shippingFee - $discountAmount);
 
+        // Kiểm tra hạn mức thanh toán COD (Đơn trên 300.000 VNĐ bắt buộc thanh toán VNPAY hoặc MoMo)
+        $maxCodLimit = config('order.cod_max_limit');
+        $paymentMethod = strtoupper($shippingData['payment_method'] ?? 'COD');
+        if ($maxCodLimit !== null && $finalTotalAmount > (float) $maxCodLimit && $paymentMethod === 'COD') {
+            throw new \Exception('Đơn hàng trên ' . number_format($maxCodLimit, 0, ',', '.') . ' VNĐ không hỗ trợ thanh toán khi nhận hàng (COD). Vui lòng chọn thanh toán trực tuyến qua VNPAY hoặc Ví MoMo.');
+        }
+
         // 3. Thực thi Database Transaction
         DB::beginTransaction();
         try {

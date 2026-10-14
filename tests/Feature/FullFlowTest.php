@@ -192,6 +192,14 @@ class FullFlowTest extends TestCase
         ];
 
         $initialStock = $data['product']->stockQuantity; // 10
+
+        // Đơn hàng > 300.000 VNĐ bị chặn phương thức COD
+        $rejectedCodResponse = $this->actingAs($user)->post('/dat-hang', $orderData);
+        $rejectedCodResponse->assertSessionHas('error');
+        $this->assertNull(Order::latest()->first());
+
+        // Cho phép COD không giới hạn để kiểm tra đầy đủ các bước tiếp theo của luồng đặt hàng
+        config(['order.cod_max_limit' => null]);
         $placeOrderResponse = $this->actingAs($user)->post('/dat-hang', $orderData);
 
         // Xác minh chuyển hướng sang trang đặt hàng thành công
@@ -444,5 +452,32 @@ class FullFlowTest extends TestCase
             'phone' => '0111222333',
         ]);
         $lookupFailRes->assertSessionHas('error');
+    }
+
+    public function test_13_orders_over_300k_reject_cod_payment(): void
+    {
+        $data = $this->createSampleData();
+        $user = User::factory()->create(['role' => 'user']);
+
+        // Thêm sản phẩm 30.000.000 VNĐ vào giỏ hàng (> 300.000 VNĐ)
+        $this->actingAs($user)->postJson(route('cart.add'), [
+            'product_id' => $data['product']->id,
+            'quantity' => 1,
+        ]);
+
+        $orderData = [
+            'shipping_name' => 'Khách Hàng Test COD',
+            'shipping_phone' => '0988776655',
+            'shipping_email' => 'cod_test@example.com',
+            'shipping_address' => '456 Phố Mới, Hà Nội',
+            'tinh_thanh' => 'Hà Nội',
+            'quan_huyen' => 'Cầu Giấy',
+            'phuong_xa' => 'Dịch Vọng',
+            'payment_method' => 'COD',
+        ];
+
+        $res = $this->actingAs($user)->post('/dat-hang', $orderData);
+        $res->assertSessionHas('error', 'Đơn hàng trên 300.000 VNĐ không hỗ trợ thanh toán khi nhận hàng (COD). Vui lòng chọn thanh toán trực tuyến qua VNPAY hoặc Ví MoMo.');
+        $this->assertDatabaseMissing('orders', ['shipping_email' => 'cod_test@example.com']);
     }
 }
