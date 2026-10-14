@@ -328,6 +328,9 @@ class OrderController extends Controller
         }
 
         $msg = $ghnRes['message'] ?? 'Không thể tạo vận đơn GHN';
+        if (!empty($ghnRes['code_message_value'])) {
+            $msg .= ' - ' . $ghnRes['code_message_value'];
+        }
         return back()->with('error', 'Lỗi tạo vận đơn GHN: ' . $msg);
     }
 
