@@ -156,13 +156,14 @@ class AdminController extends Controller
             'attempts'   => 0,
         ], now()->addMinutes(10));
 
-        // Gửi qua Email API (Port 443 HTTPS - không bao giờ bị chặn bởi tường lửa)
+        // Gửi qua Email Service (SMTP trên Localhost hoặc HTTPS API khi có Key)
         $emailService = app(\App\Services\EmailApiService::class);
         $result = $emailService->sendOtpEmail($user->email, $user->name, $code);
 
         if ($result['success']) {
+            $channel = ($result['provider'] === 'SMTP') ? 'SMTP' : 'kết nối bảo mật HTTPS';
             return redirect()->route('verification.notice')
-                ->with('success', 'Đăng ký tài khoản thành công! Mã OTP xác thực đã được gửi tới email của bạn qua kết nối bảo mật HTTPS.');
+                ->with('success', "Đăng ký tài khoản thành công! Mã OTP xác thực đã được gửi tới email của bạn qua {$channel}.");
         }
 
         return redirect()->route('verification.notice')

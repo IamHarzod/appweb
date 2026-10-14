@@ -405,4 +405,71 @@ class AuthWorkflowTest extends TestCase
         $response->assertSessionHas('error');
         $this->assertNull($user->fresh()->email_verified_at);
     }
+
+    public function test_forgot_password_sends_reset_email_and_generates_token(): void
+    {
+        \Illuminate\Support\Facades\Mail::fake();
+
+        $user = User::create([
+            'name'        => 'Reset User',
+            'email'       => 'reset_me@example.com',
+            'phoneNumber' => '0987654321',
+            'password'    => Hash::make('old_password'),
+            'role'        => 'user',
+            'IsActive'    => 1,
+        ]);
+
+        $response = $this->post(route('password.email'), [
+            'email' => 'reset_me@example.com',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('password_reset_tokens', [
+            'email' => 'reset_me@example.com',
+        ]);
+    }
+
+    public function test_user_can_reset_password_with_valid_token(): void
+    {
+        $user = User::create([
+            'name'        => 'Reset User 2',
+            'email'       => 'reset_me2@example.com',
+            'phoneNumber' => '0987654321',
+            'password'    => Hash::make('old_password'),
+            'role'        => 'user',
+            'IsActive'    => 1,
+        ]);
+
+        $rawToken = 'my_test_reset_token_1234567890';
+        \Illuminate\Support\Facades\DB::table('password_reset_tokens')->insert([
+            'email'      => 'reset_me2@example.com',
+            'token'      => Hash::make($rawToken),
+            'created_at' => now(),
+        ]);
+
+        // Kiểm tra mở form reset
+        $viewResponse = $this->get(route('password.reset', ['token' => $rawToken, 'email' => 'reset_me2@example.com']));
+        $viewResponse->assertStatus(200);
+        $viewResponse->assertSee('reset_me2@example.com');
+
+        // Thực hiện đặt lại mật khẩu mới
+        $response = $this->post(route('password.update'), [
+            'token'                 => $rawToken,
+            'email'                 => 'reset_me2@example.com',
+            'password'              => 'new_secure_pass_123',
+            'password_confirmation' => 'new_secure_pass_123',
+        ]);
+
+        $response->assertRedirect(route('admin'));
+        $response->assertSessionHas('success');
+
+        // Xác thực mật khẩu mới đã được cập nhật
+        $this->assertTrue(Hash::check('new_secure_pass_123', $user->fresh()->password));
+        $this->assertDatabaseMissing('password_reset_tokens', [
+            'email' => 'reset_me2@example.com',
+        ]);
+    }
 }
+

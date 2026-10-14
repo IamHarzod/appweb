@@ -49,23 +49,36 @@ class PasswordResetController extends Controller
             ]
         );
 
-        // Gửi email reset (tạm thời chỉ log, cần cấu hình mail sau)
+        $user = User::where('email', $email)->first();
+        $userName = $user ? $user->name : 'Quý khách';
+        $resetUrl = url("/password/reset/{$token}?email=" . urlencode($email));
+
+        // Gửi email khôi phục mật khẩu (SMTP / API)
         try {
-            // TODO: Cấu hình mail service để gửi email thực tế
-            \Log::info("Password reset link for {$email}: " . url("/password/reset/{$token}"));
-            
-            return back()->with('success', 'Liên kết khôi phục mật khẩu đã được gửi đến email của bạn.');
+            $emailService = app(\App\Services\EmailApiService::class);
+            $sendResult = $emailService->sendPasswordResetEmail($email, $userName, $resetUrl);
+
+            \Log::info("Password reset link for {$email}: {$resetUrl}");
+
+            if ($sendResult['success']) {
+                $channel = ($sendResult['provider'] === 'SMTP') ? 'hộp thư email của bạn (qua SMTP)' : 'email của bạn';
+                return back()->with('success', "Liên kết khôi phục mật khẩu đã được gửi đến {$channel}.");
+            }
+
+            return back()->with('warning', 'Hệ thống đã tạo liên kết đặt lại mật khẩu nhưng không thể gửi email: ' . ($sendResult['message'] ?? 'Vui lòng kiểm tra lại cấu hình SMTP.'));
         } catch (\Exception $e) {
-            return back()->withErrors(['email' => 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau.']);
+            \Log::error("Lỗi khi gửi email reset mật khẩu tới {$email}: " . $e->getMessage());
+            return back()->withErrors(['email' => 'Có lỗi xảy ra khi gửi email: ' . $e->getMessage()]);
         }
     }
 
     /**
      * Hiển thị form reset mật khẩu
      */
-    public function showResetForm($token)
+    public function showResetForm(Request $request, $token)
     {
-        return view('admin.auth.reset_password', compact('token'));
+        $email = $request->query('email');
+        return view('admin.auth.reset_password', compact('token', 'email'));
     }
 
     /**

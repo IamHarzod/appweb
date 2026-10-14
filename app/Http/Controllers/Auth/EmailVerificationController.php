@@ -175,11 +175,12 @@ class EmailVerificationController extends Controller
         // Thiết lập cooldown 60 giây
         Cache::put($cooldownKey, time() + 60, 60);
 
-        // Gửi qua Email API (HTTPS Port 443)
+        // Gửi qua Email Service (SMTP trên Localhost hoặc HTTPS API khi có Key)
         $sendResult = $this->emailService->sendOtpEmail($user->email, $user->name, $code);
 
         if ($sendResult['success']) {
-            return back()->with('success', "Mã OTP mới đã được gửi tới {$user->email} qua kênh bảo mật HTTPS.");
+            $channel = ($sendResult['provider'] === 'SMTP') ? 'SMTP' : 'kênh bảo mật HTTPS';
+            return back()->with('success', "Mã OTP mới đã được gửi tới {$user->email} qua {$channel}.");
         }
 
         return back()->with('warning', 'Đã tạo mã OTP mới. ' . ($sendResult['message'] ?? ''));

@@ -4,12 +4,13 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class EmailApiService
 {
     /**
-     * Gửi email chứa mã OTP qua HTTP API (Port 443) thay vì cổng SMTP truyền thống.
-     * Hỗ trợ tự động cả Resend và Brevo (Sendinblue).
+     * Gửi email chứa mã OTP xác thực tài khoản.
+     * Tự động ưu tiên Resend / Brevo (khi deploy cloud) hoặc fallback gửi qua SMTP (khi chạy localhost).
      *
      * @param string $toEmail   Địa chỉ email người nhận
      * @param string $toName    Tên người nhận
@@ -33,13 +34,79 @@ class EmailApiService
             return $this->sendViaBrevo($brevoKey, $toEmail, $toName, $subject, $htmlContent);
         }
 
-        // 3. Nếu chưa cấu hình API key, fallback cảnh báo và ghi log
-        Log::warning("Chưa cấu hình RESEND_API_KEY hoặc BREVO_API_KEY. Không thể gửi email OTP qua HTTPS API tới {$toEmail}.");
+        // 3. Gửi qua SMTP (hoặc mailer mặc định của Laravel, thích hợp chạy localhost)
+        if (config('mail.default') === 'smtp' || config('mail.default') === 'array' || !empty(env('MAIL_HOST'))) {
+            return $this->sendViaSmtp($toEmail, $toName, $subject, $htmlContent);
+        }
+
+        // 4. Nếu chưa cấu hình, fallback cảnh báo và ghi log
+        Log::warning("Chưa cấu hình API Key hoặc SMTP. Không thể gửi email OTP tới {$toEmail}.");
         return [
             'success' => false,
-            'message' => 'Hệ thống chưa cấu hình RESEND_API_KEY hoặc BREVO_API_KEY trên môi trường.',
+            'message' => 'Hệ thống chưa cấu hình phương thức gửi email (SMTP hoặc API Key).',
             'provider' => null,
         ];
+    }
+
+    /**
+     * Gửi email liên kết khôi phục mật khẩu.
+     *
+     * @param string $toEmail   Địa chỉ email người nhận
+     * @param string $toName    Tên người nhận
+     * @param string $resetUrl  Đường dẫn đặt lại mật khẩu
+     * @return array ['success' => bool, 'message' => string, 'provider' => string|null]
+     */
+    public function sendPasswordResetEmail(string $toEmail, string $toName, string $resetUrl): array
+    {
+        $subject = "[36Shop] Hướng dẫn khôi phục mật khẩu tài khoản";
+        $htmlContent = $this->renderPasswordResetTemplate($toName, $resetUrl);
+
+        // 1. Kiểm tra Resend API Key (re_...)
+        $resendKey = env('RESEND_API_KEY');
+        if (!empty($resendKey)) {
+            return $this->sendViaResend($resendKey, $toEmail, $subject, $htmlContent);
+        }
+
+        // 2. Kiểm tra Brevo API Key (xkeysib-...)
+        $brevoKey = env('BREVO_API_KEY');
+        if (!empty($brevoKey)) {
+            return $this->sendViaBrevo($brevoKey, $toEmail, $toName, $subject, $htmlContent);
+        }
+
+        // 3. Gửi qua SMTP (hoặc mailer mặc định của Laravel, thích hợp chạy localhost)
+        if (config('mail.default') === 'smtp' || config('mail.default') === 'array' || !empty(env('MAIL_HOST'))) {
+            return $this->sendViaSmtp($toEmail, $toName, $subject, $htmlContent);
+        }
+
+        Log::warning("Chưa cấu hình API Key hoặc SMTP. Không thể gửi email reset mật khẩu tới {$toEmail}.");
+        return [
+            'success' => false,
+            'message' => 'Hệ thống chưa cấu hình phương thức gửi email (SMTP hoặc API Key).',
+            'provider' => null,
+        ];
+    }
+
+    /**
+     * Gửi email qua SMTP truyền thống (thích hợp môi trường Localhost)
+     */
+    protected function sendViaSmtp(string $toEmail, string $toName, string $subject, string $html): array
+    {
+        try {
+            $from = config('mail.from.address', env('MAIL_FROM_ADDRESS', 'no-reply@36shop.com'));
+            $fromName = config('mail.from.name', env('MAIL_FROM_NAME', '36Shop'));
+
+            Mail::html($html, function ($message) use ($toEmail, $toName, $subject, $from, $fromName) {
+                $message->from($from, $fromName)
+                        ->to($toEmail, $toName ?: null)
+                        ->subject($subject);
+            });
+
+            Log::info("Đã gửi email thành công qua SMTP tới {$toEmail}. Tiêu đề: {$subject}");
+            return ['success' => true, 'message' => 'Email đã được gửi thành công qua SMTP.', 'provider' => 'SMTP'];
+        } catch (\Throwable $e) {
+            Log::error("Lỗi khi gửi email qua SMTP tới {$toEmail}: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Lỗi kết nối SMTP: ' . $e->getMessage(), 'provider' => 'SMTP'];
+        }
     }
 
     /**
@@ -61,8 +128,8 @@ class EmailApiService
                 ]);
 
             if ($response->successful()) {
-                Log::info("Đã gửi email OTP thành công qua Resend API tới {$toEmail}. Response ID: " . ($response->json('id') ?? 'OK'));
-                return ['success' => true, 'message' => 'Mã OTP đã được gửi thành công qua Resend.', 'provider' => 'Resend'];
+                Log::info("Đã gửi email thành công qua Resend API tới {$toEmail}. Response ID: " . ($response->json('id') ?? 'OK'));
+                return ['success' => true, 'message' => 'Email đã được gửi thành công qua Resend.', 'provider' => 'Resend'];
             }
 
             Log::error("Lỗi khi gửi email qua Resend API: " . $response->body());
@@ -96,8 +163,8 @@ class EmailApiService
                 ]);
 
             if ($response->successful()) {
-                Log::info("Đã gửi email OTP thành công qua Brevo API tới {$toEmail}.");
-                return ['success' => true, 'message' => 'Mã OTP đã được gửi thành công qua Brevo.', 'provider' => 'Brevo'];
+                Log::info("Đã gửi email thành công qua Brevo API tới {$toEmail}.");
+                return ['success' => true, 'message' => 'Email đã được gửi thành công qua Brevo.', 'provider' => 'Brevo'];
             }
 
             Log::error("Lỗi khi gửi email qua Brevo API: " . $response->body());
@@ -153,6 +220,78 @@ class EmailApiService
                             <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #888;">
                                 ⚠️ <em>Lưu ý bảo mật: Tuyệt đối không chia sẻ mã này cho bất kỳ ai, kể cả nhân viên hỗ trợ của 36Shop.</em>
                             </p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" style="padding: 20px; background-color: #f8f9fa; border-top: 1px solid #eeeeee; font-size: 12px; color: #999999;">
+                            © 2026 36Shop. Mọi quyền được bảo lưu.<br>
+                            Đây là email tự động, vui lòng không trả lời thư này.
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+HTML;
+    }
+
+    /**
+     * Mẫu giao diện Email HTML khôi phục mật khẩu
+     */
+    protected function renderPasswordResetTemplate(string $name, string $resetUrl): string
+    {
+        return <<<HTML
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Khôi phục mật khẩu tài khoản</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+        <tr>
+            <td align="center" style="padding: 40px 10px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 540px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); overflow: hidden;">
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="padding: 30px 20px; background: linear-gradient(135deg, #0d6efd, #0b5ed7); color: #ffffff;">
+                            <h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: 1px;">36SHOP</h1>
+                            <p style="margin: 6px 0 0 0; font-size: 14px; opacity: 0.9;">Yêu cầu đặt lại mật khẩu tài khoản</p>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding: 35px 30px;">
+                            <h2 style="margin: 0 0 15px 0; font-size: 20px; color: #1a1a1a;">Xin chào {$name},</h2>
+                            <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; color: #555555;">
+                                Chúng tôi nhận được yêu cầu khôi phục mật khẩu cho tài khoản liên kết với địa chỉ email này trên <strong>36Shop</strong>.
+                            </p>
+                            <p style="margin: 0 0 25px 0; font-size: 15px; line-height: 1.6; color: #555555;">
+                                Vui lòng nhấn vào nút bên dưới để tiến hành đặt mật khẩu mới:
+                            </p>
+                            
+                            <!-- Action Button -->
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="{$resetUrl}" style="display: inline-block; padding: 14px 32px; background-color: #0d6efd; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);">
+                                    Đặt lại mật khẩu
+                                </a>
+                            </div>
+
+                            <p style="margin: 25px 0 10px 0; font-size: 13px; line-height: 1.5; color: #777;">
+                                Nếu nút trên không hoạt động, bạn có thể sao chép và dán liên kết sau vào trình duyệt:
+                            </p>
+                            <p style="margin: 0 0 20px 0; font-size: 12px; word-break: break-all; color: #0d6efd;">
+                                <a href="{$resetUrl}" style="color: #0d6efd;">{$resetUrl}</a>
+                            </p>
+
+                            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 15px; margin: 20px 0; border-radius: 4px;">
+                                <p style="margin: 0; font-size: 13px; color: #856404; line-height: 1.5;">
+                                    ⏱️ <strong>Lưu ý:</strong> Liên kết này có hiệu lực trong vòng <strong>24 giờ</strong>. Nếu bạn không gửi yêu cầu này, vui lòng bỏ qua thư này, mật khẩu hiện tại của bạn vẫn an toàn.
+                                </p>
+                            </div>
                         </td>
                     </tr>
                     <!-- Footer -->

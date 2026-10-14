@@ -47,7 +47,7 @@
                                         <div class="form-group">
                                             <label><strong>Email</strong></label>
                                             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
-                                                value="{{ old('email') }}" placeholder="Nhập địa chỉ email">
+                                                value="{{ old('email', $email ?? '') }}" placeholder="Nhập địa chỉ email">
                                             @error('email')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
