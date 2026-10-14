@@ -62,12 +62,48 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        return view('client.product.detail', compact('product', 'categories', 'relatedProducts'));
+        $canReview = false;
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $canReview = OrderItem::whereHas('order', function ($q) use ($userId) {
+                $q->where('user_id', $userId)
+                  ->where('status', '!=', 'cancelled')
+                  ->where(fn ($order) => $order->whereIn('status', ['completed', 'delivered'])->orWhere('shipping_status', 'delivered'));
+            })->where('product_id', $id)->exists();
+        }
+
+        return view('client.product.detail', compact('product', 'categories', 'relatedProducts', 'canReview'));
     }
 
     public function store_product_review(Request $request, $id)
     {
         $product = Product::findOrFail($id);
+
+        if (!Auth::check()) {
+            $msg = 'Vui lòng đăng nhập để đánh giá sản phẩm!';
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $msg], 403);
+            }
+            return redirect()->back()->with('error', $msg);
+        }
+
+        $user = Auth::user();
+        $userId = $user->id;
+
+        // Nghiệp vụ: Chỉ khách hàng đã mua sản phẩm và nhận hàng thành công mới được phép đánh giá
+        $hasPurchased = OrderItem::whereHas('order', function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+              ->where('status', '!=', 'cancelled')
+              ->where(fn ($order) => $order->whereIn('status', ['completed', 'delivered'])->orWhere('shipping_status', 'delivered'));
+        })->where('product_id', $id)->exists();
+
+        if (!$hasPurchased) {
+            $msg = 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua và nhận hàng thành công!';
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $msg], 403);
+            }
+            return redirect()->back()->with('error', $msg);
+        }
 
         $validated = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
@@ -75,18 +111,7 @@ class HomeController extends Controller
             'author_name' => 'nullable|string|max:100',
         ]);
 
-        $userId = null;
-        $authorName = 'Khách hàng';
-        $isVerified = false;
-
-        if (Auth::check()) {
-            $user = Auth::user();
-            $userId = $user->id;
-            $authorName = $user->name ?: ($user->email ? explode('@', $user->email)[0] : 'Thành viên');
-            $isVerified = OrderItem::whereHas('order', function ($q) use ($userId) {
-                $q->where('user_id', $userId)->where('status', '!=', 'cancelled')->where(fn ($order) => $order->whereIn('status', ['completed', 'delivered'])->orWhere('shipping_status', 'delivered'));
-            })->where('product_id', $id)->exists();
-        }
+        $authorName = $user->name ?: ($user->email ? explode('@', $user->email)[0] : 'Thành viên');
 
         $review = ProductReview::create([
             'product_id' => $product->id,
@@ -94,7 +119,7 @@ class HomeController extends Controller
             'author_name' => $authorName,
             'rating' => (int) $validated['rating'],
             'comment' => trim($validated['comment']),
-            'is_verified_purchase' => $isVerified,
+            'is_verified_purchase' => true,
             'is_approved' => true,
         ]);
 
@@ -107,7 +132,7 @@ class HomeController extends Controller
                     'rating' => $review->rating,
                     'comment' => $review->comment,
                     'created_at' => $review->created_at->diffForHumans(),
-                    'is_verified_purchase' => $review->is_verified_purchase,
+                    'is_verified_purchase' => true,
                 ]
             ]);
         }

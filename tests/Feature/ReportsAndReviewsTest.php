@@ -50,13 +50,17 @@ class ReportsAndReviewsTest extends TestCase
         $this->get('/admin/reports/orders/pdf?date_from=2099-01-01')->assertOk();
     }
     public function test_reviews_use_real_counts_and_moderation(): void {
+        $user = User::factory()->create();
         $product = $this->product();
+        $order = $this->order(['user_id' => $user->id, 'status' => 'completed', 'shipping_status' => 'delivered']);
+        OrderItem::create(['order_id' => $order->id, 'product_id' => $product->id, 'product_name' => $product->name, 'quantity' => 1, 'price' => 100000]);
+
         $this->get('/product/'.$product->id)->assertOk()->assertViewHas('product', fn ($p) => $p->reviews->count() === 0)->assertSee('Chưa có đánh giá.');
-        $this->postJson('/product/'.$product->id.'/review', ['rating' => 6, 'comment' => 'Tốt'])->assertUnprocessable();
-        $this->postJson('/product/'.$product->id.'/review', ['rating' => 4, 'comment' => 'Sản phẩm tốt'])->assertOk();
+        $this->actingAs($user)->postJson('/product/'.$product->id.'/review', ['rating' => 6, 'comment' => 'Tốt'])->assertUnprocessable();
+        $this->actingAs($user)->postJson('/product/'.$product->id.'/review', ['rating' => 4, 'comment' => 'Sản phẩm tốt'])->assertOk();
         $review = ProductReview::first();
         $this->assertEquals(4, $review->rating);
-        $this->assertFalse((bool) $review->is_verified_purchase);
+        $this->assertTrue((bool) $review->is_verified_purchase);
         $this->actingAs($this->admin())->patch('/admin/reviews/'.$review->id, ['is_approved' => 0])->assertRedirect();
         $this->get('/product/'.$product->id)->assertViewHas('product', fn ($p) => $p->reviews->count() === 0);
         $this->patch('/admin/reviews/'.$review->id, ['is_approved' => 1])->assertRedirect();
@@ -64,9 +68,15 @@ class ReportsAndReviewsTest extends TestCase
     }
     public function test_verified_purchase_requires_delivered_order(): void {
         $user = User::factory()->create(); $product = $this->product();
+        // 1. Chưa mua hàng -> Bị từ chối
+        $this->actingAs($user)->postJson('/product/'.$product->id.'/review', ['rating' => 5, 'comment' => 'Chưa mua'])->assertStatus(403);
+
+        // 2. Đơn hàng chưa giao thành công -> Bị từ chối
         $order = $this->order(['user_id' => $user->id, 'status' => 'pending', 'shipping_status' => 'pending']);
         OrderItem::create(['order_id' => $order->id, 'product_id' => $product->id, 'product_name' => $product->name, 'quantity' => 1, 'price' => 100000]);
-        $this->actingAs($user)->postJson('/product/'.$product->id.'/review', ['rating' => 5, 'comment' => 'Chưa nhận hàng'])->assertOk()->assertJsonPath('review.is_verified_purchase', false);
+        $this->actingAs($user)->postJson('/product/'.$product->id.'/review', ['rating' => 5, 'comment' => 'Chưa nhận hàng'])->assertStatus(403);
+
+        // 3. Đã nhận hàng thành công -> Được phép đánh giá
         $order->update(['shipping_status' => 'delivered']);
         $this->postJson('/product/'.$product->id.'/review', ['rating' => 5, 'comment' => 'Đã nhận hàng'])->assertOk()->assertJsonPath('review.is_verified_purchase', true);
     }

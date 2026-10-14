@@ -577,65 +577,89 @@
                         <!-- Cột Phải: Form viết đánh giá & Danh sách nhận xét -->
                         <div class="col-lg-8">
                             <!-- FORM GỬI ĐÁNH GIÁ MỚI -->
-                            <div class="card border rounded-4 p-4 mb-4 shadow-sm bg-white" id="review-form-card">
-                                <h5 class="fw-bold text-dark mb-3 d-flex align-items-center">
-                                    <i class="fas fa-pen-alt me-2 text-warning"></i> Viết đánh giá của bạn
-                                </h5>
-
-                                <form id="formSubmitReview" action="{{ route('product.review.store', $product->id) }}" method="POST">
-                                    @csrf
-                                    <!-- Chọn số sao tương tác -->
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold text-dark small mb-1">
-                                            Mức độ hài lòng: <span id="star-rating-label" class="text-warning fw-bold">Tuyệt vời (5 sao)</span>
-                                        </label>
-                                        <div class="star-rating-selector d-flex align-items-center gap-2 fs-3 text-warning" id="interactive-star-picker" style="cursor: pointer;">
-                                            <i class="fas fa-star star-pick" data-val="1" title="Rất tệ (1 sao)"></i>
-                                            <i class="fas fa-star star-pick" data-val="2" title="Tệ (2 sao)"></i>
-                                            <i class="fas fa-star star-pick" data-val="3" title="Bình thường (3 sao)"></i>
-                                            <i class="fas fa-star star-pick" data-val="4" title="Hài lòng (4 sao)"></i>
-                                            <i class="fas fa-star star-pick" data-val="5" title="Tuyệt vời (5 sao)"></i>
-                                        </div>
-                                        <input type="hidden" name="rating" id="review-rating-input" value="5">
+                            @if (!empty($canReview))
+                                <!-- FORM GỬI ĐÁNH GIÁ MỚI CHO KHÁCH HÀNG ĐÃ MUA HÀNG -->
+                                <div class="card border rounded-4 p-4 mb-4 shadow-sm bg-white" id="review-form-card">
+                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                        <h5 class="fw-bold text-dark mb-0 d-flex align-items-center">
+                                            <i class="fas fa-pen-alt me-2 text-warning"></i> Viết đánh giá của bạn
+                                        </h5>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 small">
+                                            <i class="fas fa-check-circle me-1"></i>Đã mua hàng thành công
+                                        </span>
                                     </div>
 
-                                    <!-- Thông tin tài khoản đánh giá (Tự động lấy tên tài khoản, không cần nhập) -->
-                                    @if (Auth::check())
+                                    <form id="formSubmitReview" action="{{ route('product.review.store', $product->id) }}" method="POST">
+                                        @csrf
+                                        <!-- Chọn số sao tương tác -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold text-dark small mb-1">
+                                                Mức độ hài lòng: <span id="star-rating-label" class="text-warning fw-bold">Tuyệt vời (5 sao)</span>
+                                            </label>
+                                            <div class="star-rating-selector d-flex align-items-center gap-2 fs-3 text-warning" id="interactive-star-picker" style="cursor: pointer;">
+                                                <i class="fas fa-star star-pick" data-val="1" title="Rất tệ (1 sao)"></i>
+                                                <i class="fas fa-star star-pick" data-val="2" title="Tệ (2 sao)"></i>
+                                                <i class="fas fa-star star-pick" data-val="3" title="Bình thường (3 sao)"></i>
+                                                <i class="fas fa-star star-pick" data-val="4" title="Hài lòng (4 sao)"></i>
+                                                <i class="fas fa-star star-pick" data-val="5" title="Tuyệt vời (5 sao)"></i>
+                                            </div>
+                                            <input type="hidden" name="rating" id="review-rating-input" value="5">
+                                        </div>
+
                                         <div class="mb-3 p-2.5 px-3 rounded-3 bg-light border d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center gap-2">
                                                 <i class="fas fa-user-circle text-primary fs-5"></i>
                                                 <span class="small text-muted">Đánh giá với tài khoản: <strong class="text-dark">{{ Auth::user()->name ?? Auth::user()->email }}</strong></span>
                                             </div>
                                             <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill small">
-                                                <i class="fas fa-check-circle me-1"></i>Đã đăng nhập
+                                                <i class="fas fa-shield-alt me-1"></i>Xác thực đơn hàng
                                             </span>
                                         </div>
-                                    @else
-                                        <div class="mb-3 p-2.5 px-3 rounded-3 bg-light border d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="fas fa-user-circle text-secondary fs-5"></i>
-                                                <span class="small text-muted">Đánh giá với tư cách: <strong class="text-dark">Khách hàng</strong></span>
-                                            </div>
-                                            <a href="{{ route('login') }}" class="btn btn-sm btn-outline-orange py-0 px-2 fw-semibold" style="font-size: 12px;">
-                                                <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
-                                            </a>
+
+                                        <!-- Nội dung nhận xét -->
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold text-dark small mb-1">Cảm nhận chi tiết</label>
+                                            <textarea class="form-control" name="comment" id="review-comment-input" rows="3" placeholder="Chia sẻ cảm nhận của bạn về chất âm, thiết kế, thời lượng pin, độ thoải mái khi đeo..." required></textarea>
                                         </div>
-                                    @endif
 
-                                    <!-- Nội dung nhận xét -->
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold text-dark small mb-1">Cảm nhận chi tiết</label>
-                                        <textarea class="form-control" name="comment" id="review-comment-input" rows="3" placeholder="Chia sẻ cảm nhận của bạn về chất âm, thiết kế, thời lượng pin, độ thoải mái khi đeo..." required></textarea>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Đánh giá của bạn sẽ giúp người mua khác có trải nghiệm tốt hơn.</small>
+                                            <button type="submit" class="btn btn-solid-orange text-white px-4 py-2 fw-bold" id="btn-send-review">
+                                                <i class="fas fa-paper-plane me-1.5"></i> Gửi đánh giá
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            @elseif (Auth::check())
+                                <!-- THÔNG BÁO CHO TÀI KHOẢN CHƯA MUA SẢN PHẨM -->
+                                <div class="card border rounded-4 p-4 mb-4 shadow-sm bg-light-subtle text-center" id="review-form-card">
+                                    <div class="py-2">
+                                        <div class="mb-2 text-warning fs-2">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <h6 class="fw-bold text-dark mb-1">Chỉ khách hàng đã mua sản phẩm mới có thể đánh giá</h6>
+                                        <p class="text-muted small mb-0 max-w-md mx-auto">
+                                            Bạn cần đặt mua và nhận sản phẩm này thành công để có thể viết đánh giá & chia sẻ trải nghiệm thực tế.
+                                        </p>
                                     </div>
-
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">Đánh giá của bạn sẽ giúp người mua khác có trải nghiệm tốt hơn.</small>
-                                        <button type="submit" class="btn btn-solid-orange text-white px-4 py-2 fw-bold" id="btn-send-review">
-                                            <i class="fas fa-paper-plane me-1.5"></i> Gửi đánh giá
-                                        </button>
+                                </div>
+                            @else
+                                <!-- THÔNG BÁO CHO KHÁCH CHƯA ĐĂNG NHẬP -->
+                                <div class="card border rounded-4 p-4 mb-4 shadow-sm bg-light-subtle text-center" id="review-form-card">
+                                    <div class="py-2">
+                                        <div class="mb-2 text-primary fs-2">
+                                            <i class="fas fa-user-lock"></i>
+                                        </div>
+                                        <h6 class="fw-bold text-dark mb-1">Đăng nhập để đánh giá</h6>
+                                        <p class="text-muted small mb-3">
+                                            Vui lòng đăng nhập bằng tài khoản đã mua sản phẩm này để gửi đánh giá.
+                                        </p>
+                                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-orange px-3 py-1.5 fw-semibold">
+                                            <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập ngay
+                                        </a>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            @endif
 
                             <!-- DANH SÁCH NHẬN XÉT THỰC TẾ & MẪU -->
                             <div class="reviews-feed-container">
