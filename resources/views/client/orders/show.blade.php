@@ -52,9 +52,13 @@
                 @else
                     @php
                         $step = 1;
-                        if ($order->status == 'processing') $step = 2;
-                        elseif ($order->status == 'shipping') $step = 3;
-                        elseif ($order->status == 'completed' || $order->status == 'success') $step = 4;
+                        if (in_array($order->status, ['completed', 'success', 'delivered']) || $order->shipping_status === 'delivered') {
+                            $step = 4;
+                        } elseif ($order->status == 'shipping' || in_array($order->shipping_status, ['delivering', 'picked', 'storing', 'transporting', 'sorting'])) {
+                            $step = 3;
+                        } elseif ($order->status == 'processing' || $order->shipping_status === 'ready_to_pick' || !empty($order->ghn_order_code)) {
+                            $step = 2;
+                        }
                     @endphp
                     <div class="order-stepper position-relative py-2">
                         <div class="position-absolute top-50 start-0 translate-middle-y w-100" style="height: 4px; background-color: #e9ecef; z-index: 1;">

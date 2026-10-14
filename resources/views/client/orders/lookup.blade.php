@@ -97,12 +97,14 @@
                         <div class="mt-2 mt-sm-0">
                             @if($order->status == 'pending')
                                 <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fs-6">Chờ xử lý</span>
-                            @elseif($order->status == 'completed' || $order->status == 'success')
-                                <span class="badge bg-success px-3 py-2 rounded-pill fs-6">Hoàn thành</span>
-                            @elseif($order->status == 'cancelled')
+                            @elseif(in_array($order->status, ['completed', 'success', 'delivered']) || $order->shipping_status === 'delivered')
+                                <span class="badge bg-success px-3 py-2 rounded-pill fs-6">Giao thành công</span>
+                            @elseif($order->status == 'cancelled' || $order->shipping_status === 'cancelled')
                                 <span class="badge bg-danger px-3 py-2 rounded-pill fs-6">Đã hủy</span>
+                            @elseif($order->status == 'shipping' || in_array($order->shipping_status, ['delivering', 'picked', 'storing', 'transporting', 'sorting']))
+                                <span class="badge bg-info px-3 py-2 rounded-pill fs-6">Đang giao hàng</span>
                             @else
-                                <span class="badge bg-info px-3 py-2 rounded-pill fs-6">{{ ucfirst($order->status ?? 'Đang xử lý') }}</span>
+                                <span class="badge bg-primary px-3 py-2 rounded-pill fs-6">{{ ucfirst($order->status ?? 'Đang xử lý') }}</span>
                             @endif
 
                             @if(Auth::check() && Auth::id() === $order->user_id && $order->status === 'pending')
@@ -119,7 +121,7 @@
                     <!-- Order Stepper Timeline -->
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
                         <div class="card-body py-4 px-3 px-md-5">
-                            @if($order->status === 'cancelled')
+                            @if($order->status === 'cancelled' || $order->shipping_status === 'cancelled')
                                 <div class="alert alert-danger d-flex align-items-center mb-0 border-0 rounded-3 p-3" style="background-color: #fdf2f2; border-left: 5px solid #dc3545 !important;">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 48px; height: 48px; background-color: #fde8e8; color: #dc3545;">
                                         <i class="fas fa-times-circle fa-2x"></i>
@@ -132,9 +134,13 @@
                             @else
                                 @php
                                     $step = 1;
-                                    if ($order->status == 'processing') $step = 2;
-                                    elseif ($order->status == 'shipping') $step = 3;
-                                    elseif ($order->status == 'completed' || $order->status == 'success') $step = 4;
+                                    if (in_array($order->status, ['completed', 'success', 'delivered']) || $order->shipping_status === 'delivered') {
+                                        $step = 4;
+                                    } elseif ($order->status == 'shipping' || in_array($order->shipping_status, ['delivering', 'picked', 'storing', 'transporting', 'sorting'])) {
+                                        $step = 3;
+                                    } elseif ($order->status == 'processing' || $order->shipping_status === 'ready_to_pick' || !empty($order->ghn_order_code)) {
+                                        $step = 2;
+                                    }
                                 @endphp
                                 <div class="order-stepper position-relative py-2">
                                     <div class="position-absolute top-50 start-0 translate-middle-y w-100" style="height: 4px; background-color: #e9ecef; z-index: 1;">
@@ -190,7 +196,17 @@
                                     <div>
                                         <div class="text-muted small">Đơn vị vận chuyển: <strong class="text-primary">Giao Hàng Nhanh (GHN)</strong></div>
                                         <div>Mã vận đơn: <span class="font-monospace fw-bold text-dark fs-5">{{ $order->ghn_order_code }}</span></div>
-                                        <div class="small text-muted">Trạng thái GHN: <span class="badge bg-secondary">{{ $order->shipping_status ?? 'ready_to_pick' }}</span></div>
+                                        <div class="small text-muted">Trạng thái GHN: 
+                                            @if($order->shipping_status === 'delivered')
+                                                <span class="badge bg-success px-2 py-1"><i class="fas fa-check-circle me-1"></i>Đã giao hàng (delivered)</span>
+                                            @elseif(in_array($order->shipping_status, ['delivering', 'money_collect_delivering']))
+                                                <span class="badge bg-primary px-2 py-1"><i class="fas fa-truck me-1"></i>Đang giao hàng</span>
+                                            @elseif(in_array($order->shipping_status, ['ready_to_pick', 'picking']))
+                                                <span class="badge bg-info text-dark px-2 py-1"><i class="fas fa-box me-1"></i>Chờ bưu tá lấy hàng</span>
+                                            @else
+                                                <span class="badge bg-secondary px-2 py-1">{{ $order->shipping_status ?? 'ready_to_pick' }}</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 <div>

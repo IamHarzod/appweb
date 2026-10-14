@@ -60,12 +60,14 @@
                                         <td class="py-3">
                                             @if($order->status == 'pending')
                                                 <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">Chờ xử lý</span>
-                                            @elseif($order->status == 'completed' || $order->status == 'success')
-                                                <span class="badge bg-success px-3 py-2 rounded-pill">Hoàn thành</span>
-                                            @elseif($order->status == 'cancelled')
+                                            @elseif(in_array($order->status, ['completed', 'success', 'delivered']) || $order->shipping_status === 'delivered')
+                                                <span class="badge bg-success px-3 py-2 rounded-pill">Giao thành công</span>
+                                            @elseif($order->status == 'cancelled' || $order->shipping_status === 'cancelled')
                                                 <span class="badge bg-danger px-3 py-2 rounded-pill">Đã hủy</span>
+                                            @elseif($order->status == 'shipping' || in_array($order->shipping_status, ['delivering', 'picked', 'storing', 'transporting', 'sorting']))
+                                                <span class="badge bg-info px-3 py-2 rounded-pill">Đang giao hàng</span>
                                             @else
-                                                <span class="badge bg-info px-3 py-2 rounded-pill">{{ ucfirst($order->status ?? 'Đang xử lý') }}</span>
+                                                <span class="badge bg-primary px-3 py-2 rounded-pill">{{ ucfirst($order->status ?? 'Đang xử lý') }}</span>
                                             @endif
 
                                             @if($order->ghn_order_code)
