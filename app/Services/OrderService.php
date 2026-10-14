@@ -168,17 +168,10 @@ class OrderService
 
             DB::commit();
 
-            // Đẩy đơn tự động sang GHN nếu có thông tin quận huyện
-            if ($order->to_district_id && $order->to_ward_code) {
+            // Đẩy đơn tự động sang GHN ngay lập tức đối với đơn COD
+            if (strtoupper($order->payment_method ?? '') === 'COD') {
                 try {
-                    $ghnOrderService = app(GHNOrderService::class);
-                    $isPaid = in_array(strtoupper($order->payment_method ?? ''), ['MOMO', 'VNPAY', 'PAID']);
-                    $ghnRes = $ghnOrderService->create($order, $isPaid);
-                    if (!empty($ghnRes['data']['order_code'])) {
-                        $order->ghn_order_code = $ghnRes['data']['order_code'];
-                        $order->shipping_status = 'ready_to_pick';
-                        $order->save();
-                    }
+                    app(GHNOrderService::class)->autoCreateForOrder($order);
                 } catch (\Throwable $ghnError) {
                     Log::warning('GHN auto-create failed for order #' . $order->id . ': ' . $ghnError->getMessage());
                 }

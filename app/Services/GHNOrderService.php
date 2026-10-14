@@ -59,4 +59,54 @@ class GHNOrderService
             'items'             => $items,
         ]);
     }
+
+    /**
+     * Tự động tạo vận đơn GHN cho đơn hàng (hỗ trợ cả COD và Online Paid).
+     *
+     * @param Order $order
+     * @return string|null Mã vận đơn GHN nếu thành công
+     */
+    public function autoCreateForOrder(Order $order): ?string
+    {
+        if (!empty($order->ghn_order_code)) {
+            return $order->ghn_order_code;
+        }
+
+        // Tự động fallback district_id & ward_code từ session nếu thiếu
+        if (empty($order->to_district_id) && session('ghn_to_district_id')) {
+            $order->to_district_id = (int) session('ghn_to_district_id');
+        }
+        if (empty($order->to_ward_code) && session('ghn_to_ward_code')) {
+            $order->to_ward_code = (string) session('ghn_to_ward_code');
+        }
+
+        if (!$order->to_district_id || !$order->to_ward_code) {
+            \Illuminate\Support\Facades\Log::warning("Order #{$order->id} lacks district/ward for GHN auto-create");
+            return null;
+        }
+
+        try {
+            $isPaid = in_array(strtoupper($order->payment_method ?? ''), ['MOMO', 'VNPAY', 'PAID']) 
+                      || $order->payment_status === 'paid';
+            $ghnRes = $this->create($order, $isPaid);
+
+            if (!empty($ghnRes['data']['order_code'])) {
+                $order->ghn_order_code = $ghnRes['data']['order_code'];
+                $order->shipping_status = 'ready_to_pick';
+                if ($order->status === 'pending') {
+                    $order->status = 'processing';
+                }
+                $order->save();
+
+                \Illuminate\Support\Facades\Log::info("GHN waybill auto-created for Order #{$order->id}: {$order->ghn_order_code}");
+                return $order->ghn_order_code;
+            } else {
+                \Illuminate\Support\Facades\Log::warning("GHN auto-create returned error for Order #{$order->id}: " . json_encode($ghnRes, JSON_UNESCAPED_UNICODE));
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("GHN auto-create exception for Order #{$order->id}: " . $e->getMessage());
+        }
+
+        return null;
+    }
 }

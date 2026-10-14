@@ -293,8 +293,8 @@ class OrderController extends Controller
                 'phuong_xa_name'   => $request->input('phuong_xa_name', $request->input('phuong_xa')),
                 'latitude'         => $request->input('latitude'),
                 'longitude'        => $request->input('longitude'),
-                'to_district_id'   => $request->input('to_district_id'),
-                'to_ward_code'     => $request->input('to_ward_code'),
+                'to_district_id'   => $request->input('to_district_id') ?: session('ghn_to_district_id'),
+                'to_ward_code'     => $request->input('to_ward_code') ?: session('ghn_to_ward_code'),
                 'ghichu'           => $request->input('ghichu'),
                 'payment_method'   => $paymentMethod,
             ]);
@@ -358,6 +358,12 @@ class OrderController extends Controller
                 'transaction_id' => $transId ?? $orderIdParam,
             ]);
 
+            try {
+                app(\App\Services\GHNOrderService::class)->autoCreateForOrder($order);
+            } catch (\Throwable $e) {
+                Log::warning('GHN auto-create in momoReturn failed: ' . $e->getMessage());
+            }
+
             return redirect()->route('order.success', ['id' => $order->id])
                 ->with('success', 'Thanh toán qua Ví MoMo thành công!');
         } else {
@@ -405,6 +411,12 @@ class OrderController extends Controller
                     'payment_status' => 'paid',
                     'transaction_id' => $transId ?? $orderIdParam,
                 ]);
+
+                try {
+                    app(\App\Services\GHNOrderService::class)->autoCreateForOrder($order);
+                } catch (\Throwable $e) {
+                    Log::warning('GHN auto-create in momoIpn failed: ' . $e->getMessage());
+                }
             } else {
                 $order->update([
                     'payment_status' => 'failed',
@@ -443,6 +455,12 @@ class OrderController extends Controller
                 'payment_status' => 'paid',
                 'transaction_id' => $vnp_TransactionNo ?? $vnp_TxnRef,
             ]);
+
+            try {
+                app(\App\Services\GHNOrderService::class)->autoCreateForOrder($order);
+            } catch (\Throwable $e) {
+                Log::warning('GHN auto-create in vnpayReturn failed: ' . $e->getMessage());
+            }
 
             return redirect()->route('order.success', ['id' => $order->id])
                 ->with('success', 'Thanh toán qua VNPAY thành công!');
@@ -501,6 +519,12 @@ class OrderController extends Controller
                 'payment_status' => 'paid',
                 'transaction_id' => $vnp_TransactionNo ?? $vnp_TxnRef,
             ]);
+
+            try {
+                app(\App\Services\GHNOrderService::class)->autoCreateForOrder($order);
+            } catch (\Throwable $e) {
+                Log::warning('GHN auto-create in vnpayIpn failed: ' . $e->getMessage());
+            }
         } else {
             $order->update([
                 'payment_status' => 'failed',
