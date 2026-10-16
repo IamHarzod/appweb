@@ -41,7 +41,16 @@ class OrderController extends Controller
         if (Auth::user()->role !== 'admin' && $order->user_id !== Auth::id()) {
             abort(403, 'Bạn không có quyền xem đơn hàng này.');
         }
-        return view('client.orders.show', compact('order'));
+
+        $existingReviews = collect();
+        if (Auth::check()) {
+            $existingReviews = \App\Models\ProductReview::where('user_id', Auth::id())
+                ->whereIn('product_id', $order->orderItems->pluck('product_id')->filter())
+                ->get()
+                ->keyBy('product_id');
+        }
+
+        return view('client.orders.show', compact('order', 'existingReviews'));
     }
 
     // Customer cancel own order (only allowed when pending)
@@ -551,7 +560,15 @@ class OrderController extends Controller
         }
         $categories = \App\Models\Category::all();
 
-        return view('client.checkout.checkout_success', compact('order', 'categories'));
+        $existingReviews = collect();
+        if (Auth::check()) {
+            $existingReviews = \App\Models\ProductReview::where('user_id', Auth::id())
+                ->whereIn('product_id', $order->orderItems->pluck('product_id')->filter())
+                ->get()
+                ->keyBy('product_id');
+        }
+
+        return view('client.checkout.checkout_success', compact('order', 'categories', 'existingReviews'));
     }
 
     public function showDetail($id)

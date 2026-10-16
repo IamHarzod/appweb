@@ -141,6 +141,12 @@
                         <a href="{{ route('orders.lookup') }}" class="text-primary fw-bold ms-2">
                             <i class="fas fa-shipping-fast me-1"></i> Tra cứu đơn hàng
                         </a>
+                        @auth
+                            <small class="mx-2"> / </small>
+                            <a href="{{ route('orders.my') }}" class="text-success fw-bold">
+                                <i class="fas fa-box-open me-1"></i> Đơn hàng đã đặt
+                            </a>
+                        @endauth
                     </div>
                 </div>
                 <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
@@ -159,13 +165,13 @@
                                         <a href="{{ route('admin.dashboard') }}" class="dropdown-item"> Admin Dashboard</a>
                                         <div class="dropdown-divider"></div>
                                     @endif
-                                    <a href="{{ url('/show-profile') }}" class="dropdown-item"> Thông tin cá nhân</a>
-                                    <a href="{{ route('orders.my') }}" class="dropdown-item"> Đơn hàng của tôi</a>
-                                    <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
-                                    <a href="{{ url('/logout-admin') }}" class="dropdown-item"> Đăng xuất</a>
+                                    <a href="{{ url('/show-profile') }}" class="dropdown-item"><i class="fas fa-user-circle me-2"></i> Thông tin cá nhân</a>
+                                    <a href="{{ route('orders.my') }}" class="dropdown-item fw-bold text-primary"><i class="fas fa-box-open me-2"></i> Đơn hàng đã đặt</a>
+                                    <a href="{{ route('orders.lookup') }}" class="dropdown-item"><i class="fas fa-search-location me-2"></i> Tra cứu đơn hàng</a>
+                                    <a href="{{ url('/logout-admin') }}" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a>
                                 @else
-                                    <a href="{{ route('orders.lookup') }}" class="dropdown-item"> Tra cứu đơn hàng</a>
-                                    <a href="{{ route('login') }}" class="dropdown-item"> Đăng nhập</a>
+                                    <a href="{{ route('orders.lookup') }}" class="dropdown-item"><i class="fas fa-search-location me-2"></i> Tra cứu đơn hàng</a>
+                                    <a href="{{ route('login') }}" class="dropdown-item"><i class="fas fa-sign-in-alt me-2"></i> Đăng nhập</a>
                                 @endauth
                             </div>
                         </div>
@@ -304,6 +310,27 @@
                                 <i class="fas fa-home"></i>
                                 <span>Trang chủ</span>
                             </a>
+                            @auth
+                                <a href="{{ route('orders.my') }}"
+                                    class="nav-item nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('orders.my*') || request()->routeIs('orders.show*') ? 'active-nav-pill' : 'text-white' }}"
+                                    style="font-size: 13.5px; padding: 6px 14px; white-space: nowrap;">
+                                    <i class="fas fa-box-open"></i>
+                                    <span>Đơn hàng đã đặt</span>
+                                    @php
+                                        $myOrdersCount = \App\Models\Order::where('user_id', auth()->id())->count();
+                                    @endphp
+                                    @if($myOrdersCount > 0)
+                                        <span class="badge bg-warning text-dark rounded-pill ms-1" style="font-size: 11px;">{{ $myOrdersCount }}</span>
+                                    @endif
+                                </a>
+                            @else
+                                <a href="{{ route('orders.lookup') }}"
+                                    class="nav-item nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('orders.my*') ? 'active-nav-pill' : 'text-white' }}"
+                                    style="font-size: 13.5px; padding: 6px 14px; white-space: nowrap;">
+                                    <i class="fas fa-box-open"></i>
+                                    <span>Đơn hàng đã đặt</span>
+                                </a>
+                            @endauth
                             <a href="{{ route('orders.lookup') }}"
                                 class="nav-item nav-link d-inline-flex align-items-center gap-1 {{ request()->routeIs('orders.lookup*') ? 'active-nav-pill' : 'text-white' }}"
                                 style="font-size: 13.5px; padding: 6px 14px; white-space: nowrap;">

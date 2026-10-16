@@ -202,7 +202,8 @@
                                         <th class="py-3 px-4">Sản phẩm</th>
                                         <th class="py-3 text-center">Đơn giá</th>
                                         <th class="py-3 text-center">Số lượng</th>
-                                        <th class="py-3 px-4 text-end">Thành tiền</th>
+                                        <th class="py-3 px-3 text-end">Thành tiền</th>
+                                        <th class="py-3 px-4 text-center" style="width: 170px;">Đánh giá</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -211,26 +212,100 @@
                                         @php
                                             $itemTotal = $item->price * $item->quantity;
                                             $subtotal += $itemTotal;
+                                            $prod = $item->product;
+                                            $prodId = $item->product_id;
+                                            $existingRev = isset($existingReviews) && $prodId ? $existingReviews->get($prodId) : null;
                                         @endphp
                                         <tr>
                                             <td class="py-3 px-4">
                                                 <div class="d-flex align-items-center">
-                                                    @if($item->product && $item->product->imageURL)
-                                                        <img src="{{ asset('uploads/products/' . $item->product->imageURL) }}"
-                                                             alt="{{ $item->product_name ?? ($item->product->name ?? 'SP') }}"
+                                                    @if($prod && $prod->imageURL)
+                                                        <img src="{{ asset('uploads/products/' . $prod->imageURL) }}"
+                                                             alt="{{ $item->product_name ?? ($prod->name ?? 'SP') }}"
                                                              style="width: 50px; height: 50px; object-fit: cover;" class="rounded me-3 border">
                                                     @endif
                                                     <div>
-                                                        <a href="{{ $item->product_id ? route('product.detail', $item->product_id) : '#' }}" class="fw-bold text-dark text-decoration-none">
-                                                            {{ $item->product_name ?? ($item->product->name ?? 'Sản phẩm #' . $item->product_id) }}
+                                                        <a href="{{ $prodId ? route('product.detail', $prodId) : '#' }}" class="fw-bold text-dark text-decoration-none">
+                                                            {{ $item->product_name ?? ($prod->name ?? 'Sản phẩm #' . $prodId) }}
                                                         </a>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="py-3 text-center">{{ number_format($item->price, 0, ',', '.') }} VNĐ</td>
                                             <td class="py-3 text-center">{{ $item->quantity }}</td>
-                                            <td class="py-3 px-4 text-end fw-bold">{{ number_format($itemTotal, 0, ',', '.') }} VNĐ</td>
+                                            <td class="py-3 px-3 text-end fw-bold">{{ number_format($itemTotal, 0, ',', '.') }} VNĐ</td>
+                                            <td class="py-3 px-4 text-center">
+                                                @if($prodId && $order->status !== 'cancelled')
+                                                    <div id="order-review-status-{{ $prodId }}">
+                                                        @if($existingRev)
+                                                            <div class="small mb-1">
+                                                                @for($s = 1; $s <= 5; $s++)
+                                                                    <i class="fas fa-star {{ $s <= $existingRev->rating ? 'text-warning' : 'text-muted' }}" style="font-size: 11px;"></i>
+                                                                @endfor
+                                                            </div>
+                                                            <button class="btn btn-sm btn-outline-secondary rounded-pill py-0 px-2" style="font-size: 11px;"
+                                                                    type="button" data-bs-toggle="collapse" data-bs-target="#order-review-box-{{ $prodId }}">
+                                                                <i class="fas fa-edit me-1"></i>Sửa
+                                                            </button>
+                                                        @else
+                                                            <button class="btn btn-sm btn-outline-warning text-dark rounded-pill py-1 px-3 fw-bold"
+                                                                    type="button" data-bs-toggle="collapse" data-bs-target="#order-review-box-{{ $prodId }}">
+                                                                <i class="fas fa-star text-warning me-1"></i>Đánh giá
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                @else
+                                                    <span class="text-muted small">---</span>
+                                                @endif
+                                            </td>
                                         </tr>
+                                        @if($prodId && $order->status !== 'cancelled')
+                                            <!-- Khối form đánh giá thu gọn ngay dưới sản phẩm -->
+                                            <tr class="collapse" id="order-review-box-{{ $prodId }}">
+                                                <td colspan="5" class="p-0 border-0">
+                                                    <div class="bg-light p-3 p-md-4 border-bottom">
+                                                        <form class="order-detail-review-form" data-product-id="{{ $prodId }}" action="{{ route('product.review.store', $prodId) }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                                            <input type="hidden" name="rating" id="order-rating-input-{{ $prodId }}" value="{{ $existingRev ? $existingRev->rating : 5 }}">
+
+                                                            <div class="row g-3 align-items-center mb-2">
+                                                                <div class="col-md-6 d-flex align-items-center gap-2">
+                                                                    <strong class="small text-dark">Chấm điểm:</strong>
+                                                                    <div class="order-star-picker d-flex gap-1 fs-5 text-warning" style="cursor: pointer;" data-product-id="{{ $prodId }}">
+                                                                        @for($st = 1; $st <= 5; $st++)
+                                                                            <i class="fas fa-star order-star-item {{ ($existingRev ? $existingRev->rating : 5) >= $st ? 'text-warning' : 'text-muted' }}"
+                                                                               data-value="{{ $st }}" title="{{ $st }} sao"></i>
+                                                                        @endfor
+                                                                    </div>
+                                                                    <span class="small fw-bold text-warning ms-1" id="order-star-label-{{ $prodId }}">
+                                                                        {{ $existingRev ? $existingRev->rating . ' sao' : 'Tuyệt vời (5 sao)' }}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="col-md-6 text-md-end">
+                                                                    <small class="text-muted"><i class="fas fa-shield-alt text-success me-1"></i>Xác thực từ đơn hàng #{{ $order->id }}</small>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mb-2">
+                                                                <textarea name="comment" class="form-control" rows="2"
+                                                                          placeholder="Viết nhận xét của bạn về sản phẩm này..." required>{{ $existingRev->comment ?? '' }}</textarea>
+                                                            </div>
+
+                                                            <div class="d-flex justify-content-end gap-2">
+                                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                                                                        data-bs-toggle="collapse" data-bs-target="#order-review-box-{{ $prodId }}">
+                                                                    Đóng
+                                                                </button>
+                                                                <button type="submit" class="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-3 order-review-submit-btn">
+                                                                    <i class="fas fa-paper-plane me-1"></i> Lưu đánh giá
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -262,4 +337,108 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const starLabels = { 1: 'Rất tệ (1 sao)', 2: 'Tệ (2 sao)', 3: 'Bình thường (3 sao)', 4: 'Hài lòng (4 sao)', 5: 'Tuyệt vời (5 sao)' };
+
+    document.querySelectorAll('.order-star-picker').forEach(box => {
+        const prodId = box.getAttribute('data-product-id');
+        const stars = box.querySelectorAll('.order-star-item');
+        const input = document.getElementById('order-rating-input-' + prodId);
+        const label = document.getElementById('order-star-label-' + prodId);
+
+        stars.forEach(star => {
+            star.addEventListener('mouseenter', function () {
+                const val = parseInt(this.getAttribute('data-value'));
+                stars.forEach((s, idx) => {
+                    s.classList.toggle('text-warning', idx < val);
+                    s.classList.toggle('text-muted', idx >= val);
+                });
+                if (label) label.textContent = starLabels[val] || (val + ' sao');
+            });
+
+            star.addEventListener('click', function () {
+                const val = parseInt(this.getAttribute('data-value'));
+                if (input) input.value = val;
+                stars.forEach((s, idx) => {
+                    s.classList.toggle('text-warning', idx < val);
+                    s.classList.toggle('text-muted', idx >= val);
+                });
+                if (label) label.textContent = starLabels[val] || (val + ' sao');
+            });
+        });
+
+        box.addEventListener('mouseleave', function () {
+            const currentVal = parseInt(input ? input.value : 5);
+            stars.forEach((s, idx) => {
+                s.classList.toggle('text-warning', idx < currentVal);
+                s.classList.toggle('text-muted', idx >= currentVal);
+            });
+            if (label) label.textContent = starLabels[currentVal] || (currentVal + ' sao');
+        });
+    });
+
+    document.querySelectorAll('.order-detail-review-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const prodId = this.getAttribute('data-product-id');
+            const submitBtn = this.querySelector('.order-review-submit-btn');
+            const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Đang lưu...';
+            }
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(errData => { throw new Error(errData.message || 'Lỗi gửi đánh giá'); });
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const statusEl = document.getElementById('order-review-status-' + prodId);
+                    if (statusEl && data.review) {
+                        let starsHtml = '<div class="small mb-1">';
+                        for (let s = 1; s <= 5; s++) {
+                            starsHtml += `<i class="fas fa-star ${s <= data.review.rating ? 'text-warning' : 'text-muted'}" style="font-size: 11px;"></i>`;
+                        }
+                        starsHtml += `</div><button class="btn btn-sm btn-outline-secondary rounded-pill py-0 px-2" style="font-size: 11px;" type="button" data-bs-toggle="collapse" data-bs-target="#order-review-box-${prodId}"><i class="fas fa-edit me-1"></i>Sửa</button>`;
+                        statusEl.innerHTML = starsHtml;
+                    }
+                    const collapseEl = document.getElementById('order-review-box-' + prodId);
+                    if (collapseEl && window.bootstrap) {
+                        const bsCollapse = bootstrap.Collapse.getInstance(collapseEl) || new bootstrap.Collapse(collapseEl, { toggle: false });
+                        bsCollapse.hide();
+                    }
+                    alert(data.message || 'Lưu đánh giá thành công!');
+                } else {
+                    alert(data.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            })
+            .catch(err => {
+                alert(err.message || 'Có lỗi xảy ra khi lưu đánh giá.');
+            })
+            .finally(() => {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHtml;
+                }
+            });
+        });
+    });
+});
+</script>
 @endsection
